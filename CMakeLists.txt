@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.1)
+project(qc)
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED True)
+if (MSVC)
+	add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+else()
+	add_compile_options(-Wall -Wextra -pedantic)
+endif()
+
+add_library(qc
+    src/die.c
+    src/emalloc.c
+    src/erealloc.c
+)
+target_include_directories(qc INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/src)
