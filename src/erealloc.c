@@ -3,7 +3,7 @@
 
 void* erealloc(void *ptr, size_t size) {
     void *p;
-    if ((p = erealloc(ptr, size)) == NULL) {
+    if ((p = realloc(ptr, size)) == NULL) {
         die("Out of memory");
     } else {
         return p;
