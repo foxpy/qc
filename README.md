@@ -5,6 +5,12 @@ generating random, reopening stdin/stdout in binary or parsing
 CLI arguments, so I have decided to move them all to this little
 neat and quite manageable repo.
 
+## Docs
+
+All docs are in a single header file.
+Go [check it out](src/qc.h),
+turns out header files may actually be readable!
+
 ## Status
 
 Features:
@@ -17,7 +23,7 @@ Features:
 
 Usability:
 - [x] test coverage
-- [ ] readable documentation
+- [x] readable documentation
 - [ ] convenient Cmake integration
 - [ ] super cool ASCII logo
 - [ ] clang-format
