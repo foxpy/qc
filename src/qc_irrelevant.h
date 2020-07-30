@@ -7,6 +7,7 @@
  */
 
 #include <stddef.h>
+#include <stdbool.h>
 
 #ifdef __GNUC__
 #define __QC_NORETURN __attribute__((noreturn))

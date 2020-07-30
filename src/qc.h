@@ -6,4 +6,6 @@ __QC_NORETURN void die(char const *msg);
 void* emalloc(size_t size);
 void* erealloc(void *ptr, size_t size);
 
+void qc_assert(bool cond, char *err_msg);
+
 #endif
