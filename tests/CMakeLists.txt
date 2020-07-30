@@ -7,9 +7,7 @@ function(qc_add_test target)
 endfunction()
 
 function(qc_add_failing_test target)
-    add_executable(${target} ${target}.c)
-    target_link_libraries(${target} PUBLIC qc)
-    add_test(NAME ${target} COMMAND ${target})
+    qc_add_test(${target})
     set_tests_properties(${target} PROPERTIES WILL_FAIL ON)
 endfunction()
 
