@@ -20,6 +20,7 @@ Usability:
 - [ ] readable documentation
 - [ ] convenient Cmake integration
 - [ ] super cool ASCII logo
+- [ ] clang-format
 
 ## The name
 
