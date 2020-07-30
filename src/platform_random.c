@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include "qc.h"
 
-void rnd_init(qc_rnd *state) {
+void qc_rnd_init(qc_rnd *state) {
 #   ifdef _WIN32
         rand_s(&state->s32[0]);
         rand_s(&state->s32[1]);

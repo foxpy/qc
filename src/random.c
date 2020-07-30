@@ -13,27 +13,27 @@ static void xorshift64(uint64_t *s) {
     *s ^= *s << 29;
 }
 
-uint8_t rnd8(qc_rnd *state) {
+uint8_t qc_rnd8(qc_rnd *state) {
     xorshift64(&state->s64);
     return state->s8[7];
 }
 
-uint16_t rnd16(qc_rnd *state) {
+uint16_t qc_rnd16(qc_rnd *state) {
     xorshift64(&state->s64);
     return state->s16[3];
 }
 
-uint32_t rnd32(qc_rnd *state) {
+uint32_t qc_rnd32(qc_rnd *state) {
     xorshift64(&state->s64);
     return state->s32[1];
 }
 
-uint64_t rnd64(qc_rnd *state) {
+uint64_t qc_rnd64(qc_rnd *state) {
     xorshift64(&state->s64);
     return state->s64;
 }
 
-double rnd_fp64(qc_rnd *state) {
+double qc_rnd_fp64(qc_rnd *state) {
     xorshift64(&state->s64);
     qc_rnd tmp;
     memcpy(&tmp, state, sizeof(qc_rnd));
@@ -43,7 +43,7 @@ double rnd_fp64(qc_rnd *state) {
     return tmp.fp64;
 }
 
-float rnd_fp32(qc_rnd *state) {
+float qc_rnd_fp32(qc_rnd *state) {
     xorshift64(&state->s64);
     qc_rnd tmp;
     memcpy(&tmp, state, sizeof(qc_rnd));
