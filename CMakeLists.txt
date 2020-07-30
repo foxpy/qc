@@ -9,3 +9,9 @@ else()
 endif()
 
 add_subdirectory(src)
+
+option(QC_TESTS "Build tests" OFF)
+if(QC_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
