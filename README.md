@@ -13,7 +13,7 @@ Features:
 - [ ] usable random library (high quality `rand()` replacement)
 - [ ] reopening file streams in binary (apparently, in Microsoft world `freopen()` is not enough)
 - [ ] neat generic math helpers like `lcm()` and `gcm()`
-- [ ] test helpers, because `assert()` is not good enough
+- [x] test helpers, because `assert()` is not good enough
 
 Usability:
 - [x] test coverage
