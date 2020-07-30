@@ -4,7 +4,8 @@
 void iter(size_t n) {
     int *a = (int*) emalloc(sizeof(int) * n);
     for (size_t i = 0; i < n; ++i) {
-        *a = i * i;
+        *a = (int) i * i;
+        qc_assert(*a == (int)(i * i), "emalloc gives bad memory");
     }
     free(a);
 }
