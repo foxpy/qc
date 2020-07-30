@@ -16,7 +16,7 @@ turns out header files may actually be readable!
 Features:
 - [ ] CLI arguments parsing
 - [x] `emalloc()`, `die()` and friends
-- [ ] usable random library (high quality `rand()` replacement)
+- [x] usable random library (high quality `rand()` replacement)
 - [ ] reopening file streams in binary (apparently, in Microsoft world `freopen()` is not enough)
 - [ ] neat generic math helpers like `lcm()` and `gcm()`
 - [x] test helpers, because `assert()` is not good enough
