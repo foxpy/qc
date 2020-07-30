@@ -9,14 +9,14 @@ neat and quite manageable repo.
 
 Features:
 - [ ] CLI arguments parsing
-- [ ] `emalloc()`, `die()` and friends
+- [x] `emalloc()`, `die()` and friends
 - [ ] usable random library (high quality `rand()` replacement)
 - [ ] reopening file streams in binary (apparently, in Microsoft world `freopen()` is not enough)
 - [ ] neat generic math helpers like `lcm()` and `gcm()`
 - [ ] test helpers, because `assert()` is not good enough
 
 Usability:
-- [ ] test coverage
+- [x] test coverage
 - [ ] readable documentation
 - [ ] convenient Cmake integration
 - [ ] super cool ASCII logo
