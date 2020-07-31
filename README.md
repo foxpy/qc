@@ -7,6 +7,9 @@ neat and quite manageable repo.
 
 ## Docs
 
+For how to include this library in your project read
+[tutorial](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
+
 All docs are in a single header file.
 Go [check it out](src/qc.h),
 turns out header files may actually be readable!
@@ -24,7 +27,7 @@ Features:
 Usability:
 - [x] test coverage
 - [x] readable documentation
-- [ ] convenient Cmake integration
+- [x] convenient Cmake integration
 - [ ] super cool ASCII logo
 - [ ] clang-format
 
