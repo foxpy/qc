@@ -5,5 +5,6 @@ add_library(qc
     assert.c
     random.c
     platform_random.c
+    random_range.c
 )
 target_include_directories(qc INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
