@@ -6,6 +6,7 @@
  * to pollute main header
  */
 
+#include <stdio.h>
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -24,5 +25,11 @@ typedef union qc_rnd_state_t {
     double fp64;
     float fp32[2];
 } qc_rnd;
+
+#define __qc_assert(cond, err_msg)                                    \
+if (!(cond)) {                                                        \
+    fprintf(stderr, "Assertion failed: %s:%d, ", __FILE__, __LINE__); \
+    die(err_msg);                                                     \
+}                                                                     \
 
 #endif

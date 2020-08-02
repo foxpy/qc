@@ -2,7 +2,6 @@ add_library(qc
     die.c
     emalloc.c
     erealloc.c
-    assert.c
     random.c
     platform_random.c
     random_range.c

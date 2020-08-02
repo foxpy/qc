@@ -15,7 +15,7 @@ void* erealloc(void *ptr, size_t size);
 // current filename and line. Has several advantages over
 // std assert: prints custom error message and does not depend
 // on NDEBUG macro definition
-void qc_assert(bool cond, char *err_msg);
+#define qc_assert(cond, err_msg) __qc_assert(cond, err_msg)
 
 // Use rnd_init to seed random generator, then get
 // random using qc_rndNN and qc_rnd_fpNN functions.
