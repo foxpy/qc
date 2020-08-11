@@ -1,7 +1,5 @@
 #include "qc.h"
 
-#define ABS(x) ((x >= 0) ? x :-x)
-
 int8_t qc_rnd_range8(qc_rnd *state, int8_t low, int8_t high) {
     return (qc_rnd8(state) % (high - low + 1)) + low;
 }

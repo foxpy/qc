@@ -11,8 +11,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#ifdef __GNUC__
+#if defined(__GNUC__)
 #   define __QC_NORETURN __attribute__((noreturn))
+#elif defined(_MSC_VER)
+#   define __QC_NORETURN __declspec(noreturn)
 #else
 #   define __QC_NORETURN
 #endif
