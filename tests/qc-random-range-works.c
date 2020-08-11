@@ -80,8 +80,8 @@ int main() {
     test_fp32(0.4f, 2.5f);
     test_fp32(-1.2f, 2.6f);
     test_fp32(-16.4f, -3.1f);
-    test_fp32(3.1e+38, 3.2e+38);
-    test_fp32(1.2e-37, 1.3e-37);
+    test_fp32(3.1e+38f, 3.2e+38f);
+    test_fp32(1.2e-37f, 1.3e-37f);
     test_fp64(0.4, 2.5);
     test_fp64(-1.2, 2.6);
     test_fp64(-16.4, -3.1);
