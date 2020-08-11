@@ -1,19 +1,19 @@
 #include <stdlib.h>
 #include "qc.h"
 
-void iter(unsigned n1, unsigned n2, unsigned n3) {
+static void iter(unsigned n1, unsigned n2, unsigned n3) {
     unsigned *a = emalloc(sizeof(unsigned) * n1);
     for (unsigned i = 0; i < n1; ++i) {
         *a = i * i;
         qc_assert(*a == i * i, "emalloc gives bad memory");
     }
     a = erealloc(a, n2);
-    for (unsigned i = 0; i < n1; ++i) {
+    for (unsigned i = 0; i < n2; ++i) {
         *a = i * i;
         qc_assert(*a == i * i, "erealloc gives bad memory");
     }
     a = erealloc(a, n3);
-    for (unsigned i = 0; i < n1; ++i) {
+    for (unsigned i = 0; i < n3; ++i) {
         *a = i * i;
         qc_assert(*a == i * i, "erealloc gives bad memory");
     }
