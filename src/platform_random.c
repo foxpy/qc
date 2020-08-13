@@ -1,18 +1,22 @@
-#ifdef _WIN32
+#ifdef __MINGW32__
+#   include <wincrypt.h>
+#elif defined _WIN32
 #   define _CRT_RAND_S
-#endif
-
-#if defined __linux__ || defined __ANDROID_API__
+#elif defined __linux__ || defined __ANDROID_API__
 #   include <sys/syscall.h>
 #   include <unistd.h>
 #endif
 
+#include "qc.h"
 #include <stdint.h>
 #include <stdlib.h>
-#include "qc.h"
 
 void qc_rnd_init(qc_rnd *state) {
-#   ifdef _WIN32
+#   ifdef __MINGW32__
+        HCRYPTPROV   hCryptProv;
+        CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL, 0);
+        CryptGenRandom(hCryptProv, sizeof(uint64_t), (PBYTE) &state->s64);
+#   elif defined _WIN32
         rand_s(&state->s32[0]);
         rand_s(&state->s32[1]);
 #   elif defined __ANDROID_API__
