@@ -35,4 +35,14 @@ int64_t qc_rnd_range64(qc_rnd *state, int64_t low, int64_t high);
 float qc_rnd_range_fp32(qc_rnd *state, float low, float high);
 double qc_rnd_range_fp64(qc_rnd *state, double low, double high);
 
+// Classic macros, type generic
+#define MIN(a, b) __qc_min(a, b)
+#define MAX(a, b) __qc_max(a, b)
+
+// Greatest Common Divisor, a and b should be different from zero
+size_t gcd(size_t a, size_t b);
+
+// Least Common Multiple, a and b should be different from zero
+size_t lcm(size_t a, size_t b);
+
 #endif

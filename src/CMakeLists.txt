@@ -5,5 +5,6 @@ add_library(qc
     random.c
     platform_random.c
     random_range.c
+    math.c
 )
 target_include_directories(qc INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
