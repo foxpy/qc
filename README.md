@@ -20,7 +20,7 @@ Features:
 - [ ] CLI arguments parsing
 - [x] `emalloc()`, `die()` and friends
 - [x] usable random library (high quality `rand()` replacement)
-- [ ] reopening file streams in binary (apparently, in Microsoft world `freopen()` is not enough)
+- [x] reopening file streams in binary (apparently, in Microsoft world `freopen()` is not enough)
 - [x] neat generic math helpers like `lcm()` and `gcm()`
 - [x] test helpers, because `assert()` is not good enough
 
