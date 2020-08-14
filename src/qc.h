@@ -45,4 +45,12 @@ size_t gcd(size_t a, size_t b);
 // Least Common Multiple, a and b should be different from zero
 size_t lcm(size_t a, size_t b);
 
+// platform independent stream reopen in binary mode
+// these functions would not be needed without Microsoft <3
+void reopen_binary_read(FILE *stream);
+void reopen_binary_write(FILE *stream);
+
+// shortcut for the most useful case of functions above
+void reopen_stdin_stdout_binary();
+
 #endif
