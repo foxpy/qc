@@ -28,11 +28,13 @@ typedef union qc_rnd_state_t {
     float fp32[2];
 } qc_rnd;
 
-#define __qc_assert(cond, err_msg)                                    \
-if (!(cond)) {                                                        \
-    fprintf(stderr, "Assertion failed: %s:%d, ", __FILE__, __LINE__); \
-    die(err_msg);                                                     \
-}                                                                     \
+#define __qc_assert(cond, err_msg)                                        \
+do {                                                                      \
+    if (!(cond)) {                                                        \
+        fprintf(stderr, "Assertion failed: %s:%d, ", __FILE__, __LINE__); \
+        die(err_msg);                                                     \
+    }                                                                     \
+} while (0)                                                               \
 
 #define __qc_min(a, b) ((a) > (b)) ? (b) : (a)
 #define __qc_max(a, b) ((a) > (b)) ? (a) : (b)
