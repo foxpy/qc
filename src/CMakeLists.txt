@@ -7,5 +7,6 @@ add_library(qc
     random_range.c
     math.c
     reopen-binary.c
+    sprintf_alloc.c
 )
 target_include_directories(qc INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

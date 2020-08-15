@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdarg.h>
 
 #if defined(__GNUC__)
 #   define __QC_NORETURN __attribute__((noreturn))
