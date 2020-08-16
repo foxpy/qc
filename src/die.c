@@ -4,5 +4,5 @@
 
 __QC_NORETURN void die(char const *msg) {
     fprintf(stderr, "%s\n", msg);
-    exit(EXIT_FAILURE);
+    abort();
 }

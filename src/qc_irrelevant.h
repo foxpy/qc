@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 #if defined(__GNUC__)
 #   define __QC_NORETURN __attribute__((noreturn))
@@ -33,7 +34,8 @@ typedef union qc_rnd_state_t {
 do {                                                                      \
     if (!(cond)) {                                                        \
         fprintf(stderr, "Assertion failed: %s:%d, ", __FILE__, __LINE__); \
-        die(err_msg);                                                     \
+        fprintf(stderr, "%s\n", err_msg);                                         \
+        exit(EXIT_FAILURE);                                               \
     }                                                                     \
 } while (0)                                                               \
 

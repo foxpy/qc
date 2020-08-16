@@ -11,7 +11,6 @@ function(qc_add_failing_test target)
     set_tests_properties(${target} PROPERTIES WILL_FAIL ON)
 endfunction()
 
-qc_add_failing_test(qc-die-fails)
 qc_add_test(qc-emalloc-usable)
 qc_add_test(qc-erealloc-usable)
 qc_add_test(qc-assert-success)
