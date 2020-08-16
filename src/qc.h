@@ -13,7 +13,7 @@ void* erealloc(void *ptr, size_t size);
 
 // works just like sprintf, but allocates memory on one's own,
 // and if size_hint is not enough, allocates more memory to fit output string in
-char* sprintf_alloc(size_t size_hint, char const* format, ...);
+char* sprintf_alloc(char const* format, ...);
 
 // If condition is false, terminates program and prints
 // current filename and line. Has several advantages over
