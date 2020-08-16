@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #if defined(__GNUC__)
 #   define __QC_NORETURN __attribute__((noreturn))
