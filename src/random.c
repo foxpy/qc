@@ -8,9 +8,9 @@
 #define FLOAT_FRACTION_MASK UINT32_C(0x007fffff)
 
 static void xorshift64(uint64_t *s) {
-    *s ^= *s << 21;
-    *s ^= *s >> 15;
-    *s ^= *s << 29;
+    *s ^= *s << 21u;
+    *s ^= *s >> 15u;
+    *s ^= *s << 29u;
 }
 
 uint8_t qc_rnd8(qc_rnd *state) {
