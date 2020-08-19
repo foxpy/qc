@@ -4,6 +4,7 @@
 
 // print error message and exit with non-zero code
 __QC_NORETURN void die(char const *msg);
+#define UNREACHABLE_CODE() die("Fatal error: execution has reached unreachable code")
 
 // works just like malloc, but terminates program on OOM condition
 void* emalloc(size_t size);
