@@ -8,6 +8,10 @@ else()
     add_compile_options(-Wall -Wextra -pedantic)
 endif()
 
+if (NOT WIN32)
+    link_libraries(m)
+endif()
+
 add_subdirectory(src)
 
 option(QC_TESTS "Build tests" OFF)

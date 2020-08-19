@@ -40,6 +40,18 @@ int64_t qc_rnd_range64(qc_rnd *state, int64_t low, int64_t high);
 float qc_rnd_range_fp32(qc_rnd *state, float low, float high);
 double qc_rnd_range_fp64(qc_rnd *state, double low, double high);
 
+typedef struct qc_args qc_args;
+qc_args* qc_args_new();
+void qc_args_free(qc_args* args);
+void qc_args_set_help(qc_args* args, void (*help) (void));
+int qc_args_parse(qc_args* args, int argc, char** argv, char** err);
+
+void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst);
+void qc_args_unsigned(qc_args* args, char* longname, size_t* dst);
+void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst);
+void qc_args_double(qc_args* args, char* longname, double* dst);
+void qc_args_string(qc_args* args, char* longname, char** dst);
+
 // Classic macros, type generic
 #define MIN(a, b) __qc_min(a, b)
 #define MAX(a, b) __qc_max(a, b)

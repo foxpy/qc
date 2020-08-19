@@ -8,5 +8,6 @@ add_library(qc
     math.c
     reopen-binary.c
     sprintf_alloc.c
+    args.c
 )
 target_include_directories(qc INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
