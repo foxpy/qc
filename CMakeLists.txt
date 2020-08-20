@@ -19,3 +19,8 @@ if(QC_TESTS)
     enable_testing()
     add_subdirectory(tests)
 endif()
+
+option(QC_EXAMPLES "Build examples" OFF)
+if(QC_EXAMPLES)
+    add_subdirectory(examples)
+endif()
