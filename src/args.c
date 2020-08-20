@@ -197,7 +197,7 @@ __QC_NORETURN static void call_help(qc_args* args) {
         args->help();
         exit(EXIT_SUCCESS);
     } else {
-        fputs("Error: no help is available", stderr);
+        fputs("Error: no help is available\n", stderr);
         exit(EXIT_FAILURE);
     }
 }
