@@ -51,6 +51,7 @@ void qc_args_unsigned(qc_args* args, char* longname, size_t* dst);
 void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst);
 void qc_args_double(qc_args* args, char* longname, double* dst);
 void qc_args_string(qc_args* args, char* longname, char** dst);
+void qc_args_positional(qc_args* args, char** dst);
 
 // Classic macros, type generic
 #define MIN(a, b) __qc_min(a, b)

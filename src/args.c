@@ -27,6 +27,10 @@ struct long_opt {
     } dst;
 };
 
+struct positional {
+    char** dst;
+};
+
 struct qc_args {
     struct short_flag* flags;
     size_t flags_count;
@@ -34,17 +38,21 @@ struct qc_args {
     struct long_opt* opts;
     size_t opts_count;
     size_t opts_capacity;
+    struct positional* positionals;
+    size_t positionals_count;
+    size_t positionals_capacity;
     void (*help) (void);
 };
 
 __QC_NORETURN static void call_help(qc_args* args);
 static void array_push_back(void** array, size_t* count, size_t* capacity, size_t size);
+static void add_long_opt(qc_args* args, int type, char* longname, void* dst);
 static bool asked_for_help(int argc, char** argv);
 static bool is_short_opt(char const* str);
 static bool is_long_opt(char const* str);
 static int match_short_opt(qc_args* args, int argn, char** argv, char** err);
 static int match_long_opt(qc_args* args, int argn, char** argv, char** err);
-static int match_pos_opt(qc_args* args, int argn, char** argv, char** err);
+static void match_pos_opt(qc_args* args, size_t num, char* str);
 static int parse_unsigned(char* str, size_t* dst);
 static int parse_signed(char* str, ptrdiff_t* dst);
 static int parse_double(char* str, double* dst);
@@ -58,6 +66,9 @@ qc_args* qc_args_new() {
     ret->opts = emalloc(sizeof(struct long_opt) * DEFAULT_ALLOC_SIZE);
     ret->opts_count = 0;
     ret->opts_capacity = DEFAULT_ALLOC_SIZE;
+    ret->positionals = emalloc(sizeof(struct positional) * DEFAULT_ALLOC_SIZE);
+    ret->positionals_count = 0;
+    ret->positionals_capacity = DEFAULT_ALLOC_SIZE;
     ret->help = NULL;
     return ret;
 }
@@ -67,7 +78,9 @@ void qc_args_free(qc_args* args) {
     for (size_t i = 0; i < args->opts_count; ++i) {
         free(args->opts[i].name);
     }
+    free(args->opts);
     free(args->flags);
+    free(args->positionals);
     free(args);
 }
 
@@ -97,9 +110,7 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
                 }
             } else {
                 ++pos_arg_num;
-                if (match_pos_opt(args, i, argv, err) == -1) {
-                    return -1;
-                }
+                match_pos_opt(args, pos_arg_num - 1, argv[i]);
             }
         } else {
             if (is_short_opt(argv[i]) || is_long_opt(argv[i])) {
@@ -108,9 +119,8 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
                     argv[i], argv[i - 1]);
                 return -1;
             } else {
-                if (match_pos_opt(args, i, argv, err) == -1) {
-                    return -1;
-                }
+                ++pos_arg_num;
+                match_pos_opt(args, pos_arg_num - 1, argv[i]);
             }
         }
     }
@@ -118,6 +128,7 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
 }
 
 void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst) {
+    assert(args != NULL);
     assert(longname != NULL);
     if (shortname == 'h') {
         die("Flag -h is reserved for help");
@@ -125,90 +136,59 @@ void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst) {
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     }
-
     array_push_back((void **) &args->flags, &args->flags_count, &args->flags_capacity, sizeof(struct short_flag));
     struct short_flag *flag = &args->flags[args->flags_count - 1];
     flag->name = shortname;
     flag->dst = dst;
-
-    array_push_back((void **) &args->opts, &args->opts_count, &args->opts_capacity, sizeof(struct long_opt));
-    struct long_opt* opt = &args->opts[args->opts_count - 1];
-    opt->type = OPT_FLAG;
-    opt->name = emalloc(strlen(longname) + 1);
-    strcpy(opt->name, longname);
-    opt->dst.flag_ptr = dst;
+    add_long_opt(args, OPT_FLAG, longname, dst);
 }
 
 void qc_args_unsigned(qc_args* args, char* longname, size_t* dst) {
     assert(args != NULL);
-    if (longname == NULL) {
-        // TODO: pos opt handling
-        die("Positional args are not yet implemented");
-    }
+    assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
+    } else {
+        add_long_opt(args, OPT_UNSIGNED, longname, dst);
     }
-
-    array_push_back((void**) &args->opts, &args->opts_count, &args->opts_capacity, sizeof(struct long_opt));
-    struct long_opt* opt = &args->opts[args->opts_count - 1];
-    opt->type = OPT_UNSIGNED;
-    opt->name = emalloc(strlen(longname) + 1);
-    strcpy(opt->name, longname);
-    opt->dst.unsigned_ptr = dst;
 }
 
 void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst) {
     assert(args != NULL);
-    if (longname == NULL) {
-        // TODO: pos opt handling
-        die("Positional args are not yet implemented");
-    }
+    assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
+    } else {
+        add_long_opt(args, OPT_SIGNED, longname, dst);
     }
-
-    array_push_back((void**) &args->opts, &args->opts_count, &args->opts_capacity, sizeof(struct long_opt));
-    struct long_opt* opt = &args->opts[args->opts_count - 1];
-    opt->type = OPT_SIGNED;
-    opt->name = emalloc(strlen(longname) + 1);
-    strcpy(opt->name, longname);
-    opt->dst.signed_ptr = dst;
 }
 
 void qc_args_double(qc_args* args, char* longname, double* dst) {
     assert(args != NULL);
-    if (longname == NULL) {
-        // TODO: pos opt handling
-        die("Positional args are not yet implemented");
-    }
+    assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
+    } else {
+        add_long_opt(args, OPT_DOUBLE, longname, dst);
     }
-
-    array_push_back((void**) &args->opts, &args->opts_count, &args->opts_capacity, sizeof(struct long_opt));
-    struct long_opt* opt = &args->opts[args->opts_count - 1];
-    opt->type = OPT_DOUBLE;
-    opt->name = emalloc(strlen(longname) + 1);
-    strcpy(opt->name, longname);
-    opt->dst.double_ptr = dst;
 }
 
 void qc_args_string(qc_args* args, char* longname, char** dst) {
     assert(args != NULL);
-    if (longname == NULL) {
-        // TODO: pos opt handling
-        die("Positional args are not yet implemented");
-    }
+    assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
+    } else {
+        add_long_opt(args, OPT_STRING, longname, dst);
     }
+}
 
-    array_push_back((void**) &args->opts, &args->opts_count, &args->opts_capacity, sizeof(struct long_opt));
-    struct long_opt* opt = &args->opts[args->opts_count - 1];
-    opt->type = OPT_STRING;
-    opt->name = emalloc(strlen(longname) + 1);
-    strcpy(opt->name, longname);
-    opt->dst.string_ptr = dst;
+void qc_args_positional(qc_args* args, char** dst) {
+    assert(args != NULL);
+    array_push_back((void**) &args->positionals, &args->positionals_count,
+                    &args->positionals_capacity, sizeof(struct positional));
+    struct positional* pos = &args->positionals[args->positionals_count - 1];
+    pos->dst = dst;
 }
 
 
@@ -230,8 +210,37 @@ static void array_push_back(void** array, size_t* count, size_t* capacity, size_
     }
 }
 
+static void add_long_opt(qc_args* args, int type, char* longname, void* dst) {
+    array_push_back((void**) &args->opts, &args->opts_count, &args->opts_capacity, sizeof(struct long_opt));
+    struct long_opt* opt = &args->opts[args->opts_count - 1];
+    opt->type = type;
+    opt->name = emalloc(strlen(longname) + 1);
+    strcpy(opt->name, longname);
+    switch (type) {
+        case OPT_FLAG:
+            opt->dst.flag_ptr = dst;
+            break;
+        case OPT_UNSIGNED:
+            opt->dst.unsigned_ptr = dst;
+            break;
+        case OPT_SIGNED:
+            opt->dst.signed_ptr = dst;
+            break;
+        case OPT_DOUBLE:
+            opt->dst.double_ptr = dst;
+            break;
+        case OPT_STRING:
+            opt->dst.string_ptr = dst;
+            break;
+        default: UNREACHABLE_CODE();
+    }
+}
+
 static bool asked_for_help(int argc, char** argv) {
     for (int i = 0; i < argc; ++i) {
+        if (strcmp(argv[i], "--") == 0) {
+            break;
+        }
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
             return true;
         }
@@ -318,61 +327,62 @@ static int match_long_opt(qc_args* args, int argn, char** argv, char** err) {
     return -1;
 }
 
-static int match_pos_opt(qc_args* args, int argn, char** argv, char** err) {
-    return 0;
+static void match_pos_opt(qc_args* args, size_t num, char* str) {
+    *args->positionals[num].dst = emalloc(strlen(str) + 1);
+    strcpy(*args->positionals[num].dst, str);
 }
 
 static int parse_unsigned(char* str, size_t* dst) {
     char* val;
     if ((val = strchr(str, '=')) == NULL) {
-        return -1;
+        val = str;
     } else {
         ++val;
-        char* endptr;
-        errno = 0;
-        unsigned long long u = strtoull(val, &endptr, 0);
-        if (errno != 0 || *endptr != '\0') {
-            return -1;
-        } else {
-            *dst = u % SIZE_MAX;
-            return 0;
-        }
+    }
+    char* endptr;
+    errno = 0;
+    unsigned long long u = strtoull(val, &endptr, 0);
+    if (errno != 0 || *endptr != '\0') {
+        return -1;
+    } else {
+        *dst = u % SIZE_MAX;
+        return 0;
     }
 }
 
 static int parse_signed(char* str, ptrdiff_t* dst) {
     char* val;
     if ((val = strchr(str, '=')) == NULL) {
-        return -1;
+        val = str;
     } else {
         ++val;
-        char* endptr;
-        errno = 0;
-        signed long long s = strtoll(val, &endptr, 0);
-        if (errno != 0 || *endptr != '\0') {
-            return -1;
-        } else {
-            *dst = s % PTRDIFF_MAX;
-            return 0;
-        }
+    }
+    char* endptr;
+    errno = 0;
+    signed long long s = strtoll(val, &endptr, 0);
+    if (errno != 0 || *endptr != '\0') {
+        return -1;
+    } else {
+        *dst = s % PTRDIFF_MAX;
+        return 0;
     }
 }
 
 static int parse_double(char* str, double* dst) {
     char* val;
     if ((val = strchr(str, '=')) == NULL) {
-        return -1;
+        val = str;
     } else {
         ++val;
-        char* endptr;
-        errno = 0;
-        double d = strtod(val, &endptr);
-        if (errno != 0 || *endptr != '\0') {
-            return -1;
-        } else {
-            *dst = d;
-            return 0;
-        }
+    }
+    char* endptr;
+    errno = 0;
+    double d = strtod(val, &endptr);
+    if (errno != 0 || *endptr != '\0') {
+        return -1;
+    } else {
+        *dst = d;
+        return 0;
     }
 }
 
@@ -382,15 +392,15 @@ static int parse_string(char* str, char** dst) {
         return -1;
     } else {
         ++val;
-        if (val[0] == '"' && val[strlen(val) - 1] == '"') {
-            ++val;
-            *dst = emalloc(strlen(val));
-            strcpy(*dst, val);
-            (*dst)[strlen(*dst) - 1] = '\0';
-        } else {
-            *dst = emalloc(strlen(val));
-            strcpy(*dst, val);
-        }
-        return 0;
     }
+    if (val[0] == '"' && val[strlen(val) - 1] == '"') {
+        ++val;
+        *dst = emalloc(strlen(val));
+        strcpy(*dst, val);
+        (*dst)[strlen(*dst) - 1] = '\0';
+    } else {
+        *dst = emalloc(strlen(val));
+        strcpy(*dst, val);
+    }
+    return 0;
 }
