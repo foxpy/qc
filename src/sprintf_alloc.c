@@ -13,7 +13,7 @@ char* sprintf_alloc(char const* format, ...) {
         size_t new_size = n + 1;
         ret = erealloc(ret, new_size);
         va_start(args, format);
-        n = vsnprintf(ret, new_size, format, args);
+        vsnprintf(ret, new_size, format, args);
         va_end(args);
     } else {
         ret = erealloc(ret, (size_t) n + 1);
