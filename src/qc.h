@@ -4,11 +4,12 @@
 
 // print error message and exit with non-zero code
 __QC_NORETURN void die(char const *msg);
+// use this whenever you are 100% sure about unreachable code branch
+// and you have to silence compiler warning
 #define UNREACHABLE_CODE() die("Fatal error: execution has reached unreachable code")
 
 // works just like malloc, but terminates program on OOM condition
 void* emalloc(size_t size);
-
 // works just like realloc, but terminates program on OOM condition
 void* erealloc(void *ptr, size_t size);
 
@@ -40,6 +41,7 @@ int64_t qc_rnd_range64(qc_rnd *state, int64_t low, int64_t high);
 float qc_rnd_range_fp32(qc_rnd *state, float low, float high);
 double qc_rnd_range_fp64(qc_rnd *state, double low, double high);
 
+// Argument parsing library, inspired by Golang's `flag` package
 typedef struct qc_args qc_args;
 qc_args* qc_args_new();
 void qc_args_free(qc_args* args);
@@ -50,16 +52,15 @@ void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst);
 void qc_args_unsigned(qc_args* args, char* longname, size_t* dst);
 void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst);
 void qc_args_double(qc_args* args, char* longname, double* dst);
+// returned string should be freed to prevent memory leaks
 void qc_args_string(qc_args* args, char* longname, char** dst);
 void qc_args_positional(qc_args* args, char** dst);
 
 // Classic macros, type generic
 #define MIN(a, b) __qc_min(a, b)
 #define MAX(a, b) __qc_max(a, b)
-
 // Greatest Common Divisor, a and b should be different from zero
 size_t gcd(size_t a, size_t b);
-
 // Least Common Multiple, a and b should be different from zero
 size_t lcm(size_t a, size_t b);
 
