@@ -3,6 +3,8 @@
 
 void help() {
     puts("Computes Least Common Multiple of two operands");
+    puts("\t--left=INTEGER");
+    puts("\t--right=INTEGER");
 }
 
 int main(int argc, char* argv[]) {
