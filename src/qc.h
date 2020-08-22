@@ -26,6 +26,7 @@ char* sprintf_alloc(char const* format, ...);
 // Use rnd_init to seed random generator, then get
 // random using qc_rndNN and qc_rnd_fpNN functions.
 void qc_rnd_init(qc_rnd *state);
+void qc_rnd_seed(qc_rnd *state, uint64_t seed);
 uint8_t qc_rnd8(qc_rnd *state);
 uint16_t qc_rnd16(qc_rnd *state);
 uint32_t qc_rnd32(qc_rnd *state);

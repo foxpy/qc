@@ -13,6 +13,10 @@ static void xorshift64(uint64_t *s) {
     *s ^= *s << 29u;
 }
 
+void qc_rnd_seed(qc_rnd *state, uint64_t seed) {
+    state->s64 = seed;
+}
+
 uint8_t qc_rnd8(qc_rnd *state) {
     xorshift64(&state->s64);
     return state->s8[7];
