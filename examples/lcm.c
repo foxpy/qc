@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     } else if (b == 0) {
         fputs("Right value is required but not set\n", stderr);
     } else {
-        printf("%zu\n", lcm(a, b));
+        printf("%llu\n", (unsigned long long) (lcm(a, b)));
     }
     qc_args_free(args);
 }
