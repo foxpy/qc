@@ -368,6 +368,11 @@ static int parse_unsigned(char* str, size_t* dst) {
     } else {
         ++val;
     }
+    if (val[0] == '-') {
+        // strtoull does not provide any means
+        // of differentiating between signed and unsigned input...
+        return -1;
+    }
     char* endptr;
     errno = 0;
     unsigned long long u = strtoull(val, &endptr, 0);
