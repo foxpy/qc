@@ -56,6 +56,7 @@ int main() {
               strcmp(cfg.k, "another sample text") == 0 &&
               strcmp(cfg.l, "yet another sample text") == 0,
                      "expected values don't match");
+    qc_assert(qc_args_extra_index(args) == 13, "qc_args_extra_index returns wrong value");
     free(cfg.g);
     free(cfg.h);
     free(cfg.k);

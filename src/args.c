@@ -42,6 +42,9 @@ struct qc_args {
     size_t positionals_count;
     size_t positionals_capacity;
     void (*help) (void);
+    size_t positionals_found;
+    int extra_index;
+    bool parsed;
 };
 
 __QC_NORETURN static void call_help(qc_args* args);
@@ -70,6 +73,7 @@ qc_args* qc_args_new() {
     ret->positionals_count = 0;
     ret->positionals_capacity = DEFAULT_ALLOC_SIZE;
     ret->help = NULL;
+    ret->parsed = false;
     return ret;
 }
 
@@ -91,12 +95,18 @@ void qc_args_set_help(qc_args* args, void (*help) (void)) {
 
 int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
     assert(args != NULL);
+    if (args->parsed) {
+        die("qc_args_parse() should be called only once on a single `struct args'");
+    } else {
+        args->parsed = true;
+    }
     if (asked_for_help(argc, argv)) {
         call_help(args);
     }
     size_t pos_arg_num  = 0;
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--") == 0) {
+            args->extra_index = i;
             return 0;
         }
         if (pos_arg_num == 0) {
@@ -124,7 +134,26 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
             }
         }
     }
+    args->positionals_found = pos_arg_num;
     return 0;
+}
+
+size_t qc_args_num_positionals(qc_args* args) {
+    assert(args != NULL);
+    if (!args->parsed) {
+        die("qc_args_num_positionals() should only be called after qc_args_parse()");
+    } else {
+        return args->positionals_found;
+    }
+}
+
+int qc_args_extra_index(qc_args* args) {
+    assert(args != NULL);
+    if (!args->parsed) {
+        die("qc_args_extra_index() should only be called after qc_args_parse()");
+    } else {
+        return args->extra_index;
+    }
 }
 
 void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst) {

@@ -26,43 +26,60 @@ static void encryption_loop(FILE* input, FILE* output) {
     }
 }
 
+static FILE* open_input_file(char* path) {
+    errno = 0;
+    FILE* ret = (strcmp(path, "-") == 0) ? stdin : fopen(path, "rb");
+    if (ret == NULL) {
+        fprintf(stderr, "Failed to open file \"%s\": %s", path, strerror(errno));
+        exit(EXIT_FAILURE);
+    } else {
+        return ret;
+    }
+}
+
+static FILE* open_output_file(char* path) {
+    errno = 0;
+    FILE* ret = (strcmp(path, "-") == 0) ? stdout : fopen(path, "wb");
+    if (ret == NULL) {
+        fprintf(stderr, "Failed to open file \"%s\": %s", path, strerror(errno));
+        exit(EXIT_FAILURE);
+    } else {
+        return ret;
+    }
+}
+
 int main(int argc, char* argv[]) {
     reopen_stdin_stdout_binary();
-    char* input = NULL;
-    char* output = NULL;
+    char* input_str;
+    char* output_str;
+    FILE* input_file;
+    FILE* output_file;
     char* err;
     qc_args* args = qc_args_new();
     qc_args_set_help(args, help);
-    qc_args_positional(args, &input);
-    qc_args_positional(args, &output);
+    qc_args_positional(args, &input_str);
+    qc_args_positional(args, &output_str);
     if (qc_args_parse(args, argc, argv, &err) == -1) {
         fprintf(stderr, "Failed to parse command line: %s", err);
         free(err);
         exit(EXIT_FAILURE);
     }
-    if (input == NULL || output == NULL) {
-        help();
-        exit(EXIT_FAILURE);
+    if (qc_args_num_positionals(args) == 0) {
+        input_file = stdin;
+        output_file = stdout;
+    } else if (qc_args_num_positionals(args) == 1) {
+        input_file = open_input_file(input_str);
+        output_file = stdout;
     } else {
-        errno = 0;
-        FILE* in = (strcmp(input, "-") == 0) ? stdin : fopen(input, "rb");
-        if (in == NULL) {
-            fprintf(stderr, "Failed to open file \"%s\": %s", input, strerror(errno));
-            exit(EXIT_FAILURE);
-        }
-        errno = 0;
-        FILE* out = (strcmp(output, "-") == 0) ? stdout : fopen(output, "wb");
-        if (out == NULL) {
-            fprintf(stderr, "Failed to open file \"%s\": %s", output, strerror(errno));
-            exit(EXIT_FAILURE);
-        }
-        encryption_loop(in, out);
-        if (in != stdin) {
-            fclose(in);
-        }
-        if (out != stdout) {
-            fclose(stdout);
-        }
+        input_file = open_input_file(input_str);
+        output_file = open_output_file(output_str);
+    }
+    encryption_loop(input_file, output_file);
+    if (input_file != stdin) {
+        fclose(input_file);
+    }
+    if (output_file != stdout) {
+        fclose(output_file);
     }
     qc_args_free(args);
 }

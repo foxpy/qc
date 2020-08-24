@@ -48,6 +48,8 @@ qc_args* qc_args_new();
 void qc_args_free(qc_args* args);
 void qc_args_set_help(qc_args* args, void (*help) (void));
 int qc_args_parse(qc_args* args, int argc, char** argv, char** err);
+size_t qc_args_num_positionals(qc_args* args);
+int qc_args_extra_index(qc_args* args);
 
 void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst);
 void qc_args_unsigned(qc_args* args, char* longname, size_t* dst);

@@ -15,6 +15,7 @@ int main() {
     qc_assert(rc == 0, sprintf_alloc("qc_args_parse has failed: %s", err));
     qc_assert(strcmp(first, "test1") == 0 && strcmp(second, "test 2") == 0,
               "expected values don't match");
+    qc_assert(qc_args_num_positionals(args) == 2, "qc_args_num_positionals returns wrong value");
     free(first);
     free(second);
     qc_args_free(args);
