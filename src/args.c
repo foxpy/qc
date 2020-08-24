@@ -55,7 +55,7 @@ static bool is_short_opt(char const* str);
 static bool is_long_opt(char const* str);
 static int match_short_opt(qc_args* args, int argn, char** argv, char** err);
 static int match_long_opt(qc_args* args, int argn, char** argv, char** err);
-static void match_pos_opt(qc_args* args, size_t num, char* str);
+static int match_pos_opt(qc_args* args, size_t num, char* str, char** err);
 static int parse_unsigned(char* str, size_t* dst);
 static int parse_signed(char* str, ptrdiff_t* dst);
 static int parse_double(char* str, double* dst);
@@ -120,7 +120,9 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
                 }
             } else {
                 ++pos_arg_num;
-                match_pos_opt(args, pos_arg_num - 1, argv[i]);
+                if (match_pos_opt(args, pos_arg_num - 1, argv[i], err) == -1) {
+                    return -1;
+                }
             }
         } else {
             if (is_short_opt(argv[i]) || is_long_opt(argv[i])) {
@@ -130,7 +132,9 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
                 return -1;
             } else {
                 ++pos_arg_num;
-                match_pos_opt(args, pos_arg_num - 1, argv[i]);
+                if (match_pos_opt(args, pos_arg_num - 1, argv[i], err) == -1) {
+                    return -1;
+                }
             }
         }
     }
@@ -356,9 +360,15 @@ static int match_long_opt(qc_args* args, int argn, char** argv, char** err) {
     return -1;
 }
 
-static void match_pos_opt(qc_args* args, size_t num, char* str) {
-    *args->positionals[num].dst = emalloc(strlen(str) + 1);
-    strcpy(*args->positionals[num].dst, str);
+static int match_pos_opt(qc_args* args, size_t num, char* str, char** err) {
+    if (num >= args->positionals_count) {
+        *err = sprintf_alloc("Unexpected positional argument \"%s\": too much positional arguments", str);
+        return -1;
+    } else {
+        *args->positionals[num].dst = emalloc(strlen(str) + 1);
+        strcpy(*args->positionals[num].dst, str);
+        return 0;
+    }
 }
 
 static int parse_unsigned(char* str, size_t* dst) {
