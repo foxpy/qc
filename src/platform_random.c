@@ -1,4 +1,5 @@
 #if defined _WIN32
+#   include <windows.h>
 #   include <wincrypt.h>
 #elif defined __linux__ || defined __ANDROID_API__
 #   include <sys/syscall.h>
