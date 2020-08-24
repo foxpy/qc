@@ -41,7 +41,8 @@ struct qc_args {
     struct positional* positionals;
     size_t positionals_count;
     size_t positionals_capacity;
-    void (*help) (void);
+    void (*help) (void*);
+    void* help_data;
     size_t positionals_found;
     int extra_index;
     bool parsed;
@@ -88,9 +89,10 @@ void qc_args_free(qc_args* args) {
     free(args);
 }
 
-void qc_args_set_help(qc_args* args, void (*help) (void)) {
+void qc_args_set_help(qc_args* args, void (*help) (void*), void* help_data) {
     assert(args != NULL);
     args->help = help;
+    args->help_data = help_data;
 }
 
 int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
@@ -227,7 +229,7 @@ void qc_args_positional(qc_args* args, char** dst) {
 
 __QC_NORETURN static void call_help(qc_args* args) {
     if (args->help != NULL) {
-        args->help();
+        args->help(args->help_data);
         exit(EXIT_SUCCESS);
     } else {
         fputs("Error: no help is available\n", stderr);

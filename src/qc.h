@@ -46,7 +46,7 @@ double qc_rnd_range_fp64(qc_rnd *state, double low, double high);
 typedef struct qc_args qc_args;
 qc_args* qc_args_new();
 void qc_args_free(qc_args* args);
-void qc_args_set_help(qc_args* args, void (*help) (void));
+void qc_args_set_help(qc_args* args, void (*help) (void* help_data), void* help_data);
 int qc_args_parse(qc_args* args, int argc, char** argv, char** err);
 size_t qc_args_num_positionals(qc_args* args);
 int qc_args_extra_index(qc_args* args);

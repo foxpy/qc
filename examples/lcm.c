@@ -1,17 +1,16 @@
 #include <stdio.h>
 #include "qc.h"
 
-void help() {
-    puts("Computes Least Common Multiple of two operands");
-    puts("\t--left=INTEGER");
-    puts("\t--right=INTEGER");
+void help(char* program_name) {
+    fputs("Computes Least Common Multiple of two operands\n", stderr);
+    fprintf(stderr, "Usage: %s --left=INTEGER --right=INTEGER\n", program_name);
 }
 
 int main(int argc, char* argv[]) {
     size_t a = 0, b = 0;
     char* err;
     qc_args* args = qc_args_new();
-    qc_args_set_help(args, help);
+    qc_args_set_help(args, (void (*)(void*)) help, argv[0]);
     qc_args_unsigned(args, "left", &a);
     qc_args_unsigned(args, "right", &b);
     if (qc_args_parse(args, argc, argv, &err) == -1) {
