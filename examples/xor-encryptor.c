@@ -6,7 +6,8 @@
 #define KEY UINT64_C(0x087a7454e964756d)
 #define BUFFER_SIZE 1024
 
-static void help(char* program_name) {
+static void help(void* help_data) {
+    char* program_name = help_data;
     fprintf(stderr, "Usage: %s [INPUT [OUTPUT]]\n", program_name);
 }
 
@@ -56,7 +57,7 @@ int main(int argc, char* argv[]) {
     FILE* output_file;
     char* err;
     qc_args* args = qc_args_new();
-    qc_args_set_help(args, (void (*)(void*)) help, argv[0]);
+    qc_args_set_help(args, help, argv[0]);
     qc_args_positional(args, &input_str);
     qc_args_positional(args, &output_str);
     if (qc_args_parse(args, argc, argv, &err) == -1) {
