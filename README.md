@@ -20,6 +20,7 @@ target_link_libraries(hello-world PUBLIC qc)
 All docs are in a single header file.
 Go [check it out](src/qc.h),
 turns out header files may actually be readable!
+Also, there are some [examples](examples/).
 
 
 ## The name
