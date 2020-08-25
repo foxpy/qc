@@ -51,6 +51,7 @@ void test_double() {
     qc_assert(rc == 0, sprintf_alloc("qc_args_parse has failed: %s", err));
     qc_assert(fabs(x - 12.4) < EPS && fabs(y - 0.00006) < EPS && fabs(z + 13.557) < EPS,
               "Expected values don't match");
+    qc_args_free(args);
 }
 
 int main() {
