@@ -50,8 +50,8 @@ static FILE* open_output_file(char* path) {
 
 int main(int argc, char* argv[]) {
     reopen_stdin_stdout_binary();
-    char* input_str;
-    char* output_str;
+    char* input_str = NULL;
+    char* output_str = NULL;
     FILE* input_file;
     FILE* output_file;
     char* err;
@@ -75,6 +75,12 @@ int main(int argc, char* argv[]) {
         output_file = open_output_file(output_str);
     }
     encryption_loop(input_file, output_file);
+    if (input_str != NULL) {
+        free(input_str);
+    }
+    if (output_str != NULL) {
+        free(output_str);
+    }
     if (input_file != stdin) {
         fclose(input_file);
     }
