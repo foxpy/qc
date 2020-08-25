@@ -19,4 +19,5 @@ int main() {
               "--key=\"v a l u e\" syntax does not work");
     free(first_name);
     free(last_name);
+    qc_args_free(args);
 }

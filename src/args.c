@@ -441,11 +441,11 @@ static int parse_string(char* str, char** dst) {
     }
     if (val[0] == '"' && val[strlen(val) - 1] == '"') {
         ++val;
-        *dst = emalloc(strlen(val));
+        *dst = emalloc(strlen(val) + 1);
         strcpy(*dst, val);
         (*dst)[strlen(*dst) - 1] = '\0';
     } else {
-        *dst = emalloc(strlen(val));
+        *dst = emalloc(strlen(val) + 1);
         strcpy(*dst, val);
     }
     return 0;
