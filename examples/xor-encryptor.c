@@ -7,7 +7,7 @@
 #define BUFFER_SIZE 1024
 
 static void help(char* program_name) {
-    fprintf(stderr, "Usage: %s INPUT OUTPUT\n", program_name);
+    fprintf(stderr, "Usage: %s [INPUT [OUTPUT]]\n", program_name);
 }
 
 static void encryption_loop(FILE* input, FILE* output) {
