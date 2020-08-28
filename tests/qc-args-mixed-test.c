@@ -15,8 +15,6 @@ struct config {
     char* h;
     bool i;
     bool j;
-    char* k;
-    char* l;
 } cfg = {0};
 
 int main() {
@@ -31,8 +29,6 @@ int main() {
     qc_args_string(args, "h", &cfg.h);
     qc_args_flag(args, 'i', "i", &cfg.i);
     qc_args_flag(args, 'j', "j", &cfg.j);
-    qc_args_positional(args, &cfg.k);
-    qc_args_positional(args, &cfg.l);
 
     char* err;
     int rc = qc_args_parse(args, 1 + 12 + 3, (char*[]){
@@ -52,14 +48,13 @@ int main() {
               strcmp(cfg.g, "sample") == 0 &&
               strcmp(cfg.h, "sample text") == 0 &&
               cfg.i == true &&
-              cfg.j == true &&
-              strcmp(cfg.k, "another sample text") == 0 &&
-              strcmp(cfg.l, "yet another sample text") == 0,
+              cfg.j == true,
                      "expected values don't match");
-    qc_assert(qc_args_extra_index(args) == 13, "qc_args_extra_index returns wrong value");
+    qc_assert(qc_args_positionals_index(args) == 11, "qc_args_positionals_index() returns wrong value");
+    qc_assert(qc_args_positionals_count(args) == 2, "qc_args_positionals_count() returns wrong value");
+    qc_assert(qc_args_extras_index(args) == 14, "qc_args_extras_index returns wrong value");
+    qc_assert(qc_args_extras_count(args) == 2, "qc_args_extras_count returns wrong value");
     free(cfg.g);
     free(cfg.h);
-    free(cfg.k);
-    free(cfg.l);
     qc_args_free(args);
 }

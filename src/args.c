@@ -27,10 +27,6 @@ struct long_opt {
     } dst;
 };
 
-struct positional {
-    char** dst;
-};
-
 struct qc_args {
     struct short_flag* flags;
     size_t flags_count;
@@ -38,13 +34,12 @@ struct qc_args {
     struct long_opt* opts;
     size_t opts_count;
     size_t opts_capacity;
-    struct positional* positionals;
-    size_t positionals_count;
-    size_t positionals_capacity;
     void (*help) (void*);
     void* help_data;
-    size_t positionals_found;
-    int extra_index;
+    int positionals_index;
+    int positionals_count;
+    int extras_index;
+    int extras_count;
     bool parsed;
 };
 
@@ -56,7 +51,6 @@ static bool is_short_opt(char const* str);
 static bool is_long_opt(char const* str);
 static int match_short_opt(qc_args* args, int argn, char** argv, char** err);
 static int match_long_opt(qc_args* args, int argn, char** argv, char** err);
-static int match_pos_opt(qc_args* args, size_t num, char* str, char** err);
 static int parse_unsigned(char* str, size_t* dst);
 static int parse_signed(char* str, ptrdiff_t* dst);
 static int parse_double(char* str, double* dst);
@@ -70,9 +64,10 @@ qc_args* qc_args_new() {
     ret->opts = emalloc(sizeof(struct long_opt) * DEFAULT_ALLOC_SIZE);
     ret->opts_count = 0;
     ret->opts_capacity = DEFAULT_ALLOC_SIZE;
-    ret->positionals = emalloc(sizeof(struct positional) * DEFAULT_ALLOC_SIZE);
+    ret->positionals_index = 0;
     ret->positionals_count = 0;
-    ret->positionals_capacity = DEFAULT_ALLOC_SIZE;
+    ret->extras_index = 0;
+    ret->extras_count = 0;
     ret->help = NULL;
     ret->parsed = false;
     return ret;
@@ -85,7 +80,6 @@ void qc_args_free(qc_args* args) {
     }
     free(args->opts);
     free(args->flags);
-    free(args->positionals);
     free(args);
 }
 
@@ -98,20 +92,22 @@ void qc_args_set_help(qc_args* args, void (*help) (void*), void* help_data) {
 int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
     assert(args != NULL);
     if (args->parsed) {
-        die("qc_args_parse() should be called only once on a single `struct args'");
+        die("qc_args_parse() should be called only once on a single `args' handle");
     } else {
         args->parsed = true;
     }
     if (asked_for_help(argc, argv)) {
         call_help(args);
     }
-    size_t pos_arg_num  = 0;
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--") == 0) {
-            args->extra_index = i;
+            if (i < argc - 1) {
+                args->extras_index = i + 1;
+                args->extras_count = argc - i - 1;
+            }
             return 0;
         }
-        if (pos_arg_num == 0) {
+        if (args->positionals_count == 0) {
             if (is_short_opt(argv[i])) {
                 if (match_short_opt(args, i, argv, err) == -1) {
                     return -1;
@@ -121,10 +117,8 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
                     return -1;
                 }
             } else {
-                ++pos_arg_num;
-                if (match_pos_opt(args, pos_arg_num - 1, argv[i], err) == -1) {
-                    return -1;
-                }
+                args->positionals_index = i;
+                args->positionals_count += 1;
             }
         } else {
             if (is_short_opt(argv[i]) || is_long_opt(argv[i])) {
@@ -133,32 +127,46 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
                     argv[i], argv[i - 1]);
                 return -1;
             } else {
-                ++pos_arg_num;
-                if (match_pos_opt(args, pos_arg_num - 1, argv[i], err) == -1) {
-                    return -1;
-                }
+                args->positionals_count += 1;
             }
         }
     }
-    args->positionals_found = pos_arg_num;
     return 0;
 }
 
-size_t qc_args_num_positionals(qc_args* args) {
+int qc_args_positionals_index(qc_args* args) {
     assert(args != NULL);
     if (!args->parsed) {
-        die("qc_args_num_positionals() should only be called after qc_args_parse()");
+        die("qc_args_positionals_index() should only be called after qc_args_parse()");
     } else {
-        return args->positionals_found;
+        return args->positionals_index;
     }
 }
 
-int qc_args_extra_index(qc_args* args) {
+int qc_args_positionals_count(qc_args* args) {
     assert(args != NULL);
     if (!args->parsed) {
-        die("qc_args_extra_index() should only be called after qc_args_parse()");
+        die("qc_args_positionals_count() should only be called after qc_args_parse()");
     } else {
-        return args->extra_index;
+        return args->positionals_count;
+    }
+}
+
+int qc_args_extras_index(qc_args* args) {
+    assert(args != NULL);
+    if (!args->parsed) {
+        die("qc_args_extras_index() should only be called after qc_args_parse()");
+    } else {
+        return args->extras_index;
+    }
+}
+
+int qc_args_extras_count(qc_args* args) {
+    assert(args != NULL);
+    if (!args->parsed) {
+        die("qc_args_extras_count() should only be called after qc_args_parse()");
+    } else {
+        return args->extras_count;
     }
 }
 
@@ -217,15 +225,6 @@ void qc_args_string(qc_args* args, char* longname, char** dst) {
         add_long_opt(args, OPT_STRING, longname, dst);
     }
 }
-
-void qc_args_positional(qc_args* args, char** dst) {
-    assert(args != NULL);
-    array_push_back((void**) &args->positionals, &args->positionals_count,
-                    &args->positionals_capacity, sizeof(struct positional));
-    struct positional* pos = &args->positionals[args->positionals_count - 1];
-    pos->dst = dst;
-}
-
 
 __QC_NORETURN static void call_help(qc_args* args) {
     if (args->help != NULL) {
@@ -360,17 +359,6 @@ static int match_long_opt(qc_args* args, int argn, char** argv, char** err) {
     }
     *err = sprintf_alloc("Unknown argument: \"%s\"", argv[argn]);
     return -1;
-}
-
-static int match_pos_opt(qc_args* args, size_t num, char* str, char** err) {
-    if (num >= args->positionals_count) {
-        *err = sprintf_alloc("Unexpected positional argument \"%s\": too much positional arguments", str);
-        return -1;
-    } else {
-        *args->positionals[num].dst = emalloc(strlen(str) + 1);
-        strcpy(*args->positionals[num].dst, str);
-        return 0;
-    }
 }
 
 static int parse_unsigned(char* str, size_t* dst) {

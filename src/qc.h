@@ -48,16 +48,17 @@ qc_args* qc_args_new();
 void qc_args_free(qc_args* args);
 void qc_args_set_help(qc_args* args, void (*help) (void* help_data), void* help_data);
 int qc_args_parse(qc_args* args, int argc, char** argv, char** err);
-size_t qc_args_num_positionals(qc_args* args);
-int qc_args_extra_index(qc_args* args);
+int qc_args_positionals_index(qc_args* args);
+int qc_args_positionals_count(qc_args* args);
+int qc_args_extras_index(qc_args* args);
+int qc_args_extras_count(qc_args* args);
 
 void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst);
 void qc_args_unsigned(qc_args* args, char* longname, size_t* dst);
 void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst);
 void qc_args_double(qc_args* args, char* longname, double* dst);
-// returned string should be freed to prevent memory leaks
+// dst string should be freed to prevent memory leaks
 void qc_args_string(qc_args* args, char* longname, char** dst);
-void qc_args_positional(qc_args* args, char** dst);
 
 // Classic macros, type generic
 #define MIN(a, b) __qc_min(a, b)
