@@ -162,6 +162,7 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
                     *opt->dst.string_ptr = emalloc(strlen(opt->default_value.string_default) + 1);
                     strcpy(*opt->dst.string_ptr, opt->default_value.string_default);
                     break;
+                default: UNREACHABLE_CODE();
                 }
             }
         } else {
