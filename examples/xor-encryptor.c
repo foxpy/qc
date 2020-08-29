@@ -46,7 +46,9 @@ int main(int argc, char* argv[]) {
     qc_args* args = qc_args_new();
     qc_args_set_help(args, help, argv[0]);
     if (qc_args_parse(args, argc, argv, &err) == -1) {
-        fprintf(stderr, "Failed to parse command line: %s\n", err);
+        fprintf(stderr, "Error: %s\n", err);
+        fputc('\n', stderr);
+        help(argv[0]);
         free(err);
         exit(EXIT_FAILURE);
     }

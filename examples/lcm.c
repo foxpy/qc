@@ -15,9 +15,11 @@ int main(int argc, char* argv[]) {
     qc_args_unsigned(args, "left", &a);
     qc_args_unsigned(args, "right", &b);
     if (qc_args_parse(args, argc, argv, &err) == -1) {
-        fprintf(stderr, "%s\n", err);
+        fprintf(stderr, "Error: %s\n", err);
+        fputc('\n', stderr);
+        help(argv[0]);
         free(err);
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     } else if (a == 0) {
         fputs("Left value is required but not set\n", stderr);
     } else if (b == 0) {
