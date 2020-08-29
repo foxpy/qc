@@ -18,6 +18,14 @@ struct short_flag {
 struct long_opt {
     char* name;
     int type;
+    bool mandatory;
+    bool provided;
+    union {
+        size_t unsigned_default;
+        ptrdiff_t signed_default;
+        double double_default;
+        char* string_default;
+    } default_value;
     union {
         bool* flag_ptr;
         size_t* unsigned_ptr;
@@ -45,7 +53,7 @@ struct qc_args {
 
 __QC_NORETURN static void call_help(qc_args* args);
 static void array_push_back(void** array, size_t* count, size_t* capacity, size_t size);
-static void add_long_opt(qc_args* args, int type, char* longname, void* dst);
+static void add_long_opt(qc_args* args, int type, char* longname, void* default_value, void* dst);
 static bool asked_for_help(int argc, char** argv);
 static bool is_short_opt(char const* str);
 static bool is_long_opt(char const* str);
@@ -77,6 +85,9 @@ void qc_args_free(qc_args* args) {
     assert(args != NULL);
     for (size_t i = 0; i < args->opts_count; ++i) {
         free(args->opts[i].name);
+        if (!args->opts[i].mandatory && args->opts[i].type == OPT_STRING) {
+            free(args->opts[i].default_value.string_default);
+        }
     }
     free(args->opts);
     free(args->flags);
@@ -105,7 +116,7 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
                 args->extras_index = i + 1;
                 args->extras_count = argc - i - 1;
             }
-            return 0;
+            break;
         }
         if (args->positionals_count == 0) {
             if (is_short_opt(argv[i])) {
@@ -128,6 +139,35 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
                 return -1;
             } else {
                 args->positionals_count += 1;
+            }
+        }
+    }
+    for (size_t i = 0; i < args->opts_count; ++i) {
+        struct long_opt* opt = &args->opts[i];
+        if (opt->type == OPT_FLAG) {
+            continue;
+        } else if (!opt->mandatory) {
+            if (!opt->provided) {
+                switch (opt->type) {
+                case OPT_UNSIGNED:
+                    *opt->dst.unsigned_ptr = opt->default_value.unsigned_default;
+                    break;
+                case OPT_SIGNED:
+                    *opt->dst.signed_ptr = opt->default_value.signed_default;
+                    break;
+                case OPT_DOUBLE:
+                    *opt->dst.double_ptr = opt->default_value.double_default;
+                    break;
+                case OPT_STRING:
+                    *opt->dst.string_ptr = emalloc(strlen(opt->default_value.string_default) + 1);
+                    strcpy(*opt->dst.string_ptr, opt->default_value.string_default);
+                    break;
+                }
+            }
+        } else {
+            if (!opt->provided) {
+                *err = sprintf_alloc("Argument --%s is required but not provided", opt->name);
+                return -1;
             }
         }
     }
@@ -183,7 +223,7 @@ void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst) {
     struct short_flag *flag = &args->flags[args->flags_count - 1];
     flag->name = shortname;
     flag->dst = dst;
-    add_long_opt(args, OPT_FLAG, longname, dst);
+    add_long_opt(args, OPT_FLAG, longname, NULL, dst);
 }
 
 void qc_args_unsigned(qc_args* args, char* longname, size_t* dst) {
@@ -192,7 +232,17 @@ void qc_args_unsigned(qc_args* args, char* longname, size_t* dst) {
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_UNSIGNED, longname, dst);
+        add_long_opt(args, OPT_UNSIGNED, longname, NULL, dst);
+    }
+}
+
+void qc_args_unsigned_default(qc_args* args, char* longname, size_t default_value, size_t* dst) {
+    assert(args != NULL);
+    assert(longname != NULL);
+    if (strcmp(longname, "help") == 0) {
+        die("Flag --help is reserved for help");
+    } else {
+        add_long_opt(args, OPT_UNSIGNED, longname, &default_value, dst);
     }
 }
 
@@ -202,7 +252,17 @@ void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst) {
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_SIGNED, longname, dst);
+        add_long_opt(args, OPT_SIGNED, longname, NULL, dst);
+    }
+}
+
+void qc_args_signed_default(qc_args* args, char* longname, ptrdiff_t default_value, ptrdiff_t* dst) {
+    assert(args != NULL);
+    assert(longname != NULL);
+    if (strcmp(longname, "help") == 0) {
+        die("Flag --help is reserved for help");
+    } else {
+        add_long_opt(args, OPT_SIGNED, longname, &default_value, dst);
     }
 }
 
@@ -212,7 +272,17 @@ void qc_args_double(qc_args* args, char* longname, double* dst) {
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_DOUBLE, longname, dst);
+        add_long_opt(args, OPT_DOUBLE, longname, NULL, dst);
+    }
+}
+
+void qc_args_double_default(qc_args* args, char* longname, double default_value, double* dst) {
+    assert(args != NULL);
+    assert(longname != NULL);
+    if (strcmp(longname, "help") == 0) {
+        die("Flag --help is reserved for help");
+    } else {
+        add_long_opt(args, OPT_DOUBLE, longname, &default_value, dst);
     }
 }
 
@@ -222,7 +292,17 @@ void qc_args_string(qc_args* args, char* longname, char** dst) {
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_STRING, longname, dst);
+        add_long_opt(args, OPT_STRING, longname, NULL, dst);
+    }
+}
+
+void qc_args_string_default(qc_args* args, char* longname, char* default_value, char** dst) {
+    assert(args != NULL);
+    assert(longname != NULL);
+    if (strcmp(longname, "help") == 0) {
+        die("Flag --help is reserved for help");
+    } else {
+        add_long_opt(args, OPT_STRING, longname, &default_value, dst);
     }
 }
 
@@ -244,7 +324,7 @@ static void array_push_back(void** array, size_t* count, size_t* capacity, size_
     }
 }
 
-static void add_long_opt(qc_args* args, int type, char* longname, void* dst) {
+static void add_long_opt(qc_args* args, int type, char* longname, void* default_value, void* dst) {
     array_push_back((void**) &args->opts, &args->opts_count, &args->opts_capacity, sizeof(struct long_opt));
     struct long_opt* opt = &args->opts[args->opts_count - 1];
     opt->type = type;
@@ -267,6 +347,29 @@ static void add_long_opt(qc_args* args, int type, char* longname, void* dst) {
             opt->dst.string_ptr = dst;
             break;
         default: UNREACHABLE_CODE();
+    }
+    if (default_value == NULL) {
+        opt->mandatory = true;
+        opt->provided = false;
+    } else {
+        opt->mandatory = false;
+        opt->provided = false;
+        switch (type) {
+            case OPT_UNSIGNED:
+                opt->default_value.unsigned_default = *((size_t*) default_value);
+                break;
+            case OPT_SIGNED:
+                opt->default_value.signed_default = *((ptrdiff_t*) default_value);
+                break;
+            case OPT_DOUBLE:
+                opt->default_value.double_default = *((double*) default_value);
+                break;
+            case OPT_STRING:
+                opt->default_value.string_default = emalloc(strlen(*((char**) default_value)) + 1);
+                strcpy(opt->default_value.string_default, *((char**) default_value));
+                break;
+            default: UNREACHABLE_CODE();
+        }
     }
 }
 
@@ -330,6 +433,7 @@ static int match_short_opt(qc_args* args, int argn, char** argv, char** err) {
 static int match_long_opt(qc_args* args, int argn, char** argv, char** err) {
     for (size_t i = 0; i < args->opts_count; ++i) {
         if (strncmp(&argv[argn][2], args->opts[i].name, strlen(args->opts[i].name)) == 0) {
+            args->opts[i].provided = true;
             switch (args->opts[i].type) {
                 case OPT_FLAG:
                     *args->opts[i].dst.flag_ptr = true;

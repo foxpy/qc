@@ -55,10 +55,14 @@ int qc_args_extras_count(qc_args* args);
 
 void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst);
 void qc_args_unsigned(qc_args* args, char* longname, size_t* dst);
+void qc_args_unsigned_default(qc_args* args, char* longname, size_t default_value, size_t* dst);
 void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst);
+void qc_args_signed_default(qc_args* args, char* longname, ptrdiff_t default_value, ptrdiff_t* dst);
 void qc_args_double(qc_args* args, char* longname, double* dst);
+void qc_args_double_default(qc_args* args, char* longname, double default_value, double* dst);
 // dst string should be freed to prevent memory leaks
 void qc_args_string(qc_args* args, char* longname, char** dst);
+void qc_args_string_default(qc_args* args, char* longname, char* default_value, char** dst);
 
 // Classic macros, type generic
 #define MIN(a, b) __qc_min(a, b)
