@@ -275,8 +275,17 @@ static bool asked_for_help(int argc, char** argv) {
         if (strcmp(argv[i], "--") == 0) {
             break;
         }
-        if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-            return true;
+        if (is_long_opt(argv[i])) {
+            if (strcmp(argv[i], "--help") == 0) {
+                return true;
+            }
+        } else if (is_short_opt(argv[i])) {
+            char* short_flags = &argv[i][1];
+            for (size_t j = 0; j < strlen(short_flags); ++j) {
+                if (short_flags[j] == 'h') {
+                    return true;
+                }
+            }
         }
     }
     return false;
