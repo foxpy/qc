@@ -13,7 +13,7 @@ struct test_random_data {
 
 static void populate(struct test_random_data *t) {
     qc_rnd s;
-    qc_rnd_init(&s);
+    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
     t->u8 = qc_rnd8(&s);
     t->u16 = qc_rnd16(&s);
     t->u32 = qc_rnd32(&s);

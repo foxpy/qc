@@ -6,7 +6,7 @@
 
 void test_8(int8_t low, int8_t high) {
     qc_rnd s;
-    qc_rnd_init(&s);
+    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
         int8_t val = qc_rnd_range8(&s, low, high);
         qc_assert(((val >= low) || (val <= high)),
@@ -16,7 +16,7 @@ void test_8(int8_t low, int8_t high) {
 
 void test_16(int16_t low, int16_t high) {
     qc_rnd s;
-    qc_rnd_init(&s);
+    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
         int16_t val = qc_rnd_range16(&s, low, high);
         qc_assert(((val >= low) || (val <= high)),
@@ -26,7 +26,7 @@ void test_16(int16_t low, int16_t high) {
 
 void test_32(int32_t low, int32_t high) {
     qc_rnd s;
-    qc_rnd_init(&s);
+    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
         int32_t val = qc_rnd_range32(&s, low, high);
         qc_assert(((val >= low) || (val <= high)),
@@ -36,7 +36,7 @@ void test_32(int32_t low, int32_t high) {
 
 void test_64(int64_t low, int64_t high) {
     qc_rnd s;
-    qc_rnd_init(&s);
+    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
         int64_t val = qc_rnd_range64(&s, low, high);
         qc_assert(((val >= low) || (val <= high)),
@@ -46,7 +46,7 @@ void test_64(int64_t low, int64_t high) {
 
 void test_fp32(float low, float high) {
     qc_rnd s;
-    qc_rnd_init(&s);
+    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
         float val = qc_rnd_range_fp32(&s, low, high);
         qc_assert(((val >= low) || (val <= high)),
@@ -56,7 +56,7 @@ void test_fp32(float low, float high) {
 
 void test_fp64(double low, double high) {
     qc_rnd s;
-    qc_rnd_init(&s);
+    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
         double val = qc_rnd_range_fp64(&s, low, high);
         qc_assert(((val >= low) || (val <= high)),
