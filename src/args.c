@@ -368,58 +368,64 @@ static void auto_help(qc_args* args) {
     }
     fprintf(stderr, "Usage: %s [OPTIONS...]\n", args->program_name);
 
-    fputs("\n Short flags:\n", stderr);
-    for (size_t i = 0; i < args->flags_count; ++i) {
-        struct short_flag* flag = &args->flags[i];
-        if (flag->hint != NULL) {
-            fprintf(stderr, "  -%c %s\n", flag->name, flag->hint);
-        } else {
-            fprintf(stderr, "  -%c\n", flag->name);
+    if (args->flags_count != 0) {
+        fputs("\n Short flags:\n", stderr);
+        for (size_t i = 0; i < args->flags_count; ++i) {
+            struct short_flag *flag = &args->flags[i];
+            if (flag->hint != NULL) {
+                fprintf(stderr, "  -%c %s\n", flag->name, flag->hint);
+            } else {
+                fprintf(stderr, "  -%c\n", flag->name);
+            }
         }
     }
 
-    fputs("\n Long options:\n", stderr);
-    for (size_t i = 0; i < args->opts_count; ++i) {
-        struct long_opt* opt = &args->opts[i];
-        fprintf(stderr, "  --%s", opt->name);
-        switch (opt->type) {
-            case OPT_FLAG:
-                break;
-            case OPT_UNSIGNED:
-                fputs("=UNSIGNED", stderr);
-                break;
-            case OPT_SIGNED:
-                fputs("=SIGNED", stderr);
-                break;
-            case OPT_DOUBLE:
-                fputs("=REAL", stderr);
-                break;
-            case OPT_STRING:
-                fputs("=\"STRING\"", stderr);
-                break;
-            default: UNREACHABLE_CODE();
-        }
-        if (!opt->mandatory) {
+    if (args->opts_count != 0) {
+        fputs("\n Long options:\n", stderr);
+        for (size_t i = 0; i < args->opts_count; ++i) {
+            struct long_opt *opt = &args->opts[i];
+            fprintf(stderr, "  --%s", opt->name);
             switch (opt->type) {
+                case OPT_FLAG:
+                    break;
                 case OPT_UNSIGNED:
-                    fprintf(stderr, " ( default = %lu)", (unsigned long) opt->default_value.unsigned_default);
+                    fputs("=UNSIGNED", stderr);
                     break;
                 case OPT_SIGNED:
-                    fprintf(stderr, " (default = %li)", (signed long) opt->default_value.signed_default);
+                    fputs("=SIGNED", stderr);
                     break;
                 case OPT_DOUBLE:
-                    fprintf(stderr, " (default = %f)", opt->default_value.double_default);
+                    fputs("=REAL", stderr);
                     break;
                 case OPT_STRING:
-                    fprintf(stderr, " (default = %s)", opt->default_value.string_default);
+                    fputs("=\"STRING\"", stderr);
                     break;
-                default: UNREACHABLE_CODE();
+                default:
+                    UNREACHABLE_CODE();
             }
+            if (!opt->mandatory) {
+                switch (opt->type) {
+                    case OPT_UNSIGNED:
+                        fprintf(stderr, " ( default = %lu)", (unsigned long) opt->default_value.unsigned_default);
+                        break;
+                    case OPT_SIGNED:
+                        fprintf(stderr, " (default = %li)", (signed long) opt->default_value.signed_default);
+                        break;
+                    case OPT_DOUBLE:
+                        fprintf(stderr, " (default = %f)", opt->default_value.double_default);
+                        break;
+                    case OPT_STRING:
+                        fprintf(stderr, " (default = %s)", opt->default_value.string_default);
+                        break;
+                    default:
+                        UNREACHABLE_CODE();
+                }
+            }
+            if (opt->hint != NULL) {
+                fprintf(stderr, " %s", opt->hint);
+            }
+            fputc('\n', stderr);
         }
-        if (opt->hint != NULL) {
-            fprintf(stderr, " %s", opt->hint);
-        }
-        fputc('\n', stderr);
     }
 }
 
