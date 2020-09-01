@@ -2,7 +2,7 @@
 #include "qc.h"
 
 int main(int argc, char* argv[]) {
-    size_t a = 0, b = 0;
+    size_t a , b;
     char* err;
     qc_args* args = qc_args_new();
     qc_args_brief(args, "Computes Least Common Multiple of two integers");
@@ -14,10 +14,9 @@ int main(int argc, char* argv[]) {
         qc_args_call_help(args);
         free(err);
         exit(EXIT_FAILURE);
-    } else if (a == 0) {
-        fputs("Left value is required but not set\n", stderr);
-    } else if (b == 0) {
-        fputs("Right value is required but not set\n", stderr);
+    } else if (a == 0 && b == 0) {
+        fputs("Both arguments should not be 0 at the same time\n", stderr);
+        exit(EXIT_FAILURE);
     } else {
         printf("%lu\n", (unsigned long) (lcm(a, b)));
     }
