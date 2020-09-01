@@ -5,6 +5,7 @@ int main(int argc, char* argv[]) {
     size_t a = 0, b = 0;
     char* err;
     qc_args* args = qc_args_new();
+    qc_args_brief(args, "Computes Least Common Multiple of two integers");
     qc_args_unsigned(args, "left", &a, NULL);
     qc_args_unsigned(args, "right", &b, NULL);
     if (qc_args_parse(args, argc, argv, &err) == -1) {

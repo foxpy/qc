@@ -45,6 +45,7 @@ struct qc_args {
     size_t opts_count;
     size_t opts_capacity;
     char* program_name;
+    char* brief;
     void (*help) (void*);
     void* help_data;
     int positionals_index;
@@ -81,6 +82,8 @@ qc_args* qc_args_new() {
     ret->extras_index = 0;
     ret->extras_count = 0;
     ret->help = NULL;
+    ret->program_name = NULL;
+    ret->brief = NULL;
     ret->parsed = false;
     return ret;
 }
@@ -103,6 +106,12 @@ void qc_args_free(qc_args* args) {
             free(opt->default_value.string_default);
         }
     }
+    if (args->program_name != NULL) {
+        free(args->program_name);
+    }
+    if (args->brief != NULL) {
+        free(args->brief);
+    }
     free(args->opts);
     free(args->flags);
     free(args);
@@ -112,6 +121,13 @@ void qc_args_set_help(qc_args* args, void (*help) (void*), void* help_data) {
     assert(args != NULL);
     args->help = help;
     args->help_data = help_data;
+}
+
+void qc_args_brief(qc_args* args, char* brief) {
+    assert(args != NULL);
+    assert(brief != NULL);
+    args->brief = emalloc(strlen(brief) + 1);
+    strcpy(args->brief, brief);
 }
 
 void qc_args_call_help(qc_args* args) {
@@ -129,7 +145,8 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
     } else {
         args->parsed = true;
     }
-    args->program_name = argv[0];
+    args->program_name = emalloc(strlen(argv[0]) + 1);
+    strcpy(args->program_name, argv[0]);
     if (asked_for_help(argc, argv)) {
         call_help(args);
     }
@@ -346,6 +363,9 @@ __QC_NORETURN static void call_help(qc_args* args) {
 }
 
 static void auto_help(qc_args* args) {
+    if (args->brief != NULL) {
+        fprintf(stderr, "%s\n", args->brief);
+    }
     fprintf(stderr, "Usage: %s [OPTIONS...]\n", args->program_name);
 
     fputs("\n Short flags:\n", stderr);
