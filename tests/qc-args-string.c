@@ -5,8 +5,8 @@ int main() {
     char* first_name = NULL;
     char* last_name = NULL;
     qc_args* args = qc_args_new();
-    qc_args_string(args, "first-name", &first_name);
-    qc_args_string(args, "last-name", &last_name);
+    qc_args_string(args, "first-name", &first_name, NULL);
+    qc_args_string(args, "last-name", &last_name, NULL);
 
     char* err;
     int rc = qc_args_parse(args, 3, (char*[]){

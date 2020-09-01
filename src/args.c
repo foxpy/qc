@@ -12,11 +12,13 @@ enum {
 
 struct short_flag {
     char name;
+    char* hint;
     bool* dst;
 };
 
 struct long_opt {
     char* name;
+    char* hint;
     int type;
     bool mandatory;
     bool provided;
@@ -42,6 +44,7 @@ struct qc_args {
     struct long_opt* opts;
     size_t opts_count;
     size_t opts_capacity;
+    char* program_name;
     void (*help) (void*);
     void* help_data;
     int positionals_index;
@@ -52,8 +55,9 @@ struct qc_args {
 };
 
 __QC_NORETURN static void call_help(qc_args* args);
+static void auto_help(qc_args* args);
 static void array_push_back(void** array, size_t* count, size_t* capacity, size_t size);
-static void add_long_opt(qc_args* args, int type, char* longname, void* default_value, void* dst);
+static void add_long_opt(qc_args* args, int type, char* longname, void* default_value, void* dst, char* hint);
 static bool asked_for_help(int argc, char** argv);
 static bool is_short_opt(char const* str);
 static bool is_long_opt(char const* str);
@@ -83,10 +87,20 @@ qc_args* qc_args_new() {
 
 void qc_args_free(qc_args* args) {
     assert(args != NULL);
+    for (size_t i = 0; i < args->flags_count; ++i) {
+        struct short_flag* flag = &args->flags[i];
+        if (flag->hint != NULL) {
+            free(flag->hint);
+        }
+    }
     for (size_t i = 0; i < args->opts_count; ++i) {
-        free(args->opts[i].name);
-        if (!args->opts[i].mandatory && args->opts[i].type == OPT_STRING) {
-            free(args->opts[i].default_value.string_default);
+        struct long_opt* opt = &args->opts[i];
+        free(opt->name);
+        if (opt->hint != NULL) {
+            free(opt->hint);
+        }
+        if (!opt->mandatory && opt->type == OPT_STRING) {
+            free(opt->default_value.string_default);
         }
     }
     free(args->opts);
@@ -100,6 +114,14 @@ void qc_args_set_help(qc_args* args, void (*help) (void*), void* help_data) {
     args->help_data = help_data;
 }
 
+void qc_args_call_help(qc_args* args) {
+    assert(args != NULL);
+    if (!args->parsed) {
+        die("Fatal error: qc_args_call_help() should be called after qc_args_parse()");
+    }
+    call_help(args);
+}
+
 int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
     assert(args != NULL);
     if (args->parsed) {
@@ -107,6 +129,7 @@ int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
     } else {
         args->parsed = true;
     }
+    args->program_name = argv[0];
     if (asked_for_help(argc, argv)) {
         call_help(args);
     }
@@ -211,7 +234,7 @@ int qc_args_extras_count(qc_args* args) {
     }
 }
 
-void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst) {
+void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst, char* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (shortname == 'h') {
@@ -223,97 +246,160 @@ void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst) {
     array_push_back((void **) &args->flags, &args->flags_count, &args->flags_capacity, sizeof(struct short_flag));
     struct short_flag *flag = &args->flags[args->flags_count - 1];
     flag->name = shortname;
+    if (hint != NULL) {
+        flag->hint = emalloc(strlen(hint) + 1);
+        strcpy(flag->hint, hint);
+    } else {
+        flag->hint = NULL;
+    }
     flag->dst = dst;
-    add_long_opt(args, OPT_FLAG, longname, NULL, dst);
+    add_long_opt(args, OPT_FLAG, longname, NULL, dst, hint);
 }
 
-void qc_args_unsigned(qc_args* args, char* longname, size_t* dst) {
+void qc_args_unsigned(qc_args* args, char* longname, size_t* dst, char* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_UNSIGNED, longname, NULL, dst);
+        add_long_opt(args, OPT_UNSIGNED, longname, NULL, dst, hint);
     }
 }
 
-void qc_args_unsigned_default(qc_args* args, char* longname, size_t default_value, size_t* dst) {
+void qc_args_unsigned_default(qc_args* args, char* longname, size_t default_value, size_t* dst, char* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_UNSIGNED, longname, &default_value, dst);
+        add_long_opt(args, OPT_UNSIGNED, longname, &default_value, dst, hint);
     }
 }
 
-void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst) {
+void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst, char* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_SIGNED, longname, NULL, dst);
+        add_long_opt(args, OPT_SIGNED, longname, NULL, dst, hint);
     }
 }
 
-void qc_args_signed_default(qc_args* args, char* longname, ptrdiff_t default_value, ptrdiff_t* dst) {
+void qc_args_signed_default(qc_args* args, char* longname, ptrdiff_t default_value, ptrdiff_t* dst, char* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_SIGNED, longname, &default_value, dst);
+        add_long_opt(args, OPT_SIGNED, longname, &default_value, dst, hint);
     }
 }
 
-void qc_args_double(qc_args* args, char* longname, double* dst) {
+void qc_args_double(qc_args* args, char* longname, double* dst, char* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_DOUBLE, longname, NULL, dst);
+        add_long_opt(args, OPT_DOUBLE, longname, NULL, dst, hint);
     }
 }
 
-void qc_args_double_default(qc_args* args, char* longname, double default_value, double* dst) {
+void qc_args_double_default(qc_args* args, char* longname, double default_value, double* dst, char* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_DOUBLE, longname, &default_value, dst);
+        add_long_opt(args, OPT_DOUBLE, longname, &default_value, dst, hint);
     }
 }
 
-void qc_args_string(qc_args* args, char* longname, char** dst) {
+void qc_args_string(qc_args* args, char* longname, char** dst, char* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_STRING, longname, NULL, dst);
+        add_long_opt(args, OPT_STRING, longname, NULL, dst, hint);
     }
 }
 
-void qc_args_string_default(qc_args* args, char* longname, char* default_value, char** dst) {
+void qc_args_string_default(qc_args* args, char* longname, char* default_value, char** dst, char* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
         die("Flag --help is reserved for help");
     } else {
-        add_long_opt(args, OPT_STRING, longname, &default_value, dst);
+        add_long_opt(args, OPT_STRING, longname, &default_value, dst, hint);
     }
 }
 
 __QC_NORETURN static void call_help(qc_args* args) {
     if (args->help != NULL) {
         args->help(args->help_data);
-        exit(EXIT_SUCCESS);
     } else {
-        fputs("Error: no help is available\n", stderr);
-        exit(EXIT_FAILURE);
+        auto_help(args);
+    }
+    exit(EXIT_SUCCESS);
+}
+
+static void auto_help(qc_args* args) {
+    fprintf(stderr, "Usage: %s [OPTIONS...]\n", args->program_name);
+
+    fputs("\n Short flags:\n", stderr);
+    for (size_t i = 0; i < args->flags_count; ++i) {
+        struct short_flag* flag = &args->flags[i];
+        if (flag->hint != NULL) {
+            fprintf(stderr, "  -%c %s\n", flag->name, flag->hint);
+        } else {
+            fprintf(stderr, "  -%c\n", flag->name);
+        }
+    }
+
+    fputs("\n Long options:\n", stderr);
+    for (size_t i = 0; i < args->opts_count; ++i) {
+        struct long_opt* opt = &args->opts[i];
+        fprintf(stderr, "  --%s", opt->name);
+        switch (opt->type) {
+            case OPT_FLAG:
+                break;
+            case OPT_UNSIGNED:
+                fputs("=UNSIGNED", stderr);
+                break;
+            case OPT_SIGNED:
+                fputs("=SIGNED", stderr);
+                break;
+            case OPT_DOUBLE:
+                fputs("=REAL", stderr);
+                break;
+            case OPT_STRING:
+                fputs("=\"STRING\"", stderr);
+                break;
+            default: UNREACHABLE_CODE();
+        }
+        if (!opt->mandatory) {
+            switch (opt->type) {
+                case OPT_UNSIGNED:
+                    fprintf(stderr, " ( default = %lu)", (unsigned long) opt->default_value.unsigned_default);
+                    break;
+                case OPT_SIGNED:
+                    fprintf(stderr, " (default = %li)", (signed long) opt->default_value.signed_default);
+                    break;
+                case OPT_DOUBLE:
+                    fprintf(stderr, " (default = %f)", opt->default_value.double_default);
+                    break;
+                case OPT_STRING:
+                    fprintf(stderr, " (default = %s)", opt->default_value.string_default);
+                    break;
+                default: UNREACHABLE_CODE();
+            }
+        }
+        if (opt->hint != NULL) {
+            fprintf(stderr, " %s", opt->hint);
+        }
+        fputc('\n', stderr);
     }
 }
 
@@ -325,12 +411,18 @@ static void array_push_back(void** array, size_t* count, size_t* capacity, size_
     }
 }
 
-static void add_long_opt(qc_args* args, int type, char* longname, void* default_value, void* dst) {
+static void add_long_opt(qc_args* args, int type, char* longname, void* default_value, void* dst, char* hint) {
     array_push_back((void**) &args->opts, &args->opts_count, &args->opts_capacity, sizeof(struct long_opt));
     struct long_opt* opt = &args->opts[args->opts_count - 1];
     opt->type = type;
     opt->name = emalloc(strlen(longname) + 1);
     strcpy(opt->name, longname);
+    if (hint != NULL) {
+        opt->hint = emalloc(strlen(hint) + 1);
+        strcpy(opt->hint, hint);
+    } else {
+        opt->hint = NULL;
+    }
     switch (type) {
         case OPT_FLAG:
             opt->dst.flag_ptr = dst;

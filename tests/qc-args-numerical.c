@@ -6,9 +6,9 @@
 void test_unsigned() {
     size_t length = 0, width = 0, depth = 0;
     qc_args* args = qc_args_new();
-    qc_args_unsigned(args, "length", &length);
-    qc_args_unsigned(args, "width", &width);
-    qc_args_unsigned(args, "depth", &depth);
+    qc_args_unsigned(args, "length", &length, NULL);
+    qc_args_unsigned(args, "width", &width, NULL);
+    qc_args_unsigned(args, "depth", &depth, NULL);
 
     char* err;
     int rc = qc_args_parse(args, 4, (char*[]){
@@ -23,9 +23,9 @@ void test_unsigned() {
 void test_signed() {
     ptrdiff_t latitude = 0, longitude = 0, altitude = 0;
     qc_args* args = qc_args_new();
-    qc_args_signed(args, "latitude", &latitude);
-    qc_args_signed(args, "longitude", &longitude);
-    qc_args_signed(args, "altitude", &altitude);
+    qc_args_signed(args, "latitude", &latitude, NULL);
+    qc_args_signed(args, "longitude", &longitude, NULL);
+    qc_args_signed(args, "altitude", &altitude, NULL);
 
     char* err;
     int rc = qc_args_parse(args, 4, (char*[]){
@@ -40,9 +40,9 @@ void test_signed() {
 void test_double() {
     double x = 0.0, y = 0.0, z = 0.0;
     qc_args* args = qc_args_new();
-    qc_args_double(args, "x", &x);
-    qc_args_double(args, "y", &y);
-    qc_args_double(args, "z", &z);
+    qc_args_double(args, "x", &x, NULL);
+    qc_args_double(args, "y", &y, NULL);
+    qc_args_double(args, "z", &z, NULL);
 
     char* err;
     int rc = qc_args_parse(args, 4, (char*[]){

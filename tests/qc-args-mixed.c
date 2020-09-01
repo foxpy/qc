@@ -19,16 +19,16 @@ struct config {
 
 int main() {
     qc_args* args = qc_args_new();
-    qc_args_unsigned(args, "a", &cfg.a);
-    qc_args_unsigned_default(args, "b", 2, &cfg.b);
-    qc_args_signed_default(args, "c", -56, &cfg.c);
-    qc_args_signed(args, "d", &cfg.d);
-    qc_args_double(args, "e", &cfg.e);
-    qc_args_double_default(args, "f", 126.513, &cfg.f);
-    qc_args_string_default(args, "g", "sample", &cfg.g);
-    qc_args_string(args, "h", &cfg.h);
-    qc_args_flag(args, 'i', "i", &cfg.i);
-    qc_args_flag(args, 'j', "j", &cfg.j);
+    qc_args_unsigned(args, "a", &cfg.a, NULL);
+    qc_args_unsigned_default(args, "b", 2, &cfg.b, NULL);
+    qc_args_signed_default(args, "c", -56, &cfg.c, NULL);
+    qc_args_signed(args, "d", &cfg.d, NULL);
+    qc_args_double(args, "e", &cfg.e, NULL);
+    qc_args_double_default(args, "f", 126.513, &cfg.f, NULL);
+    qc_args_string_default(args, "g", "sample", &cfg.g, NULL);
+    qc_args_string(args, "h", &cfg.h, NULL);
+    qc_args_flag(args, 'i', "i", &cfg.i, NULL);
+    qc_args_flag(args, 'j', "j", &cfg.j, NULL);
 
     char* err;
     int rc = qc_args_parse(args, 1 + 10 + 3, (char*[]){
