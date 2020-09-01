@@ -1,5 +1,5 @@
-#ifndef __QC_H
-#define __QC_H
+#ifndef QC_H
+#define QC_H
 #include "qc_irrelevant.h"
 
 // print error message and exit with non-zero code
