@@ -22,7 +22,7 @@ Go [check it out](src/qc.h),
 turns out header files may actually be readable!
 Also, there are some [examples](examples/).
 Finally, check out
-[this project](https://github.com/foxpy/inaccurate-pi) (**outdated**),
+[this project](https://github.com/foxpy/inaccurate-pi),
 it depends on qc.
 
 
