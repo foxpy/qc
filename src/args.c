@@ -1,7 +1,7 @@
 #include "qc.h"
+#include "qc_impl.h"
 #include "string.h"
 
-#define DEFAULT_ALLOC_SIZE 4
 enum {
     OPT_FLAG,
     OPT_UNSIGNED,
@@ -57,7 +57,6 @@ struct qc_args {
 
 __QC_NORETURN static void call_help(qc_args* args);
 static void auto_help(qc_args* args);
-static void array_push_back(void** array, size_t* count, size_t* capacity, size_t size);
 static void add_long_opt(qc_args* args, int type, char* longname, void* default_value, void* dst, char* hint);
 static bool asked_for_help(int argc, char** argv);
 static bool is_short_opt(char const* str);
@@ -426,14 +425,6 @@ static void auto_help(qc_args* args) {
             }
             fputc('\n', stderr);
         }
-    }
-}
-
-static void array_push_back(void** array, size_t* count, size_t* capacity, size_t size) {
-    *count += 1;
-    if (*count == *capacity) {
-        *capacity *= 2;
-        *array = erealloc(*array, *capacity * size);
     }
 }
 
