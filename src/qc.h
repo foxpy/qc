@@ -3,7 +3,7 @@
 #include "qc_irrelevant.h"
 
 // print error message and exit with non-zero code
-__QC_NORETURN void die(char const *msg);
+noreturn void die(char const *msg);
 // use this whenever you are 100% sure about unreachable code branch
 // and you have to silence compiler warning
 #define UNREACHABLE_CODE() die("Fatal error: execution has reached unreachable code")

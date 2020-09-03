@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
         fputs("Both arguments should not be 0 at the same time\n", stderr);
         exit(EXIT_FAILURE);
     } else {
-        printf("%lu\n", (unsigned long) (lcm(a, b)));
+        printf("%zu\n", lcm(a, b));
     }
     qc_args_free(args);
 }

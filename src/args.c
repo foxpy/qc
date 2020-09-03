@@ -55,7 +55,7 @@ struct qc_args {
     bool parsed;
 };
 
-__QC_NORETURN static void call_help(qc_args* args);
+noreturn static void call_help(qc_args* args);
 static void auto_help(qc_args* args);
 static void add_long_opt(qc_args* args, int type, char* longname, void* default_value, void* dst, char* hint);
 static bool asked_for_help(int argc, char** argv);
@@ -352,7 +352,7 @@ void qc_args_string_default(qc_args* args, char* longname, char* default_value, 
     }
 }
 
-__QC_NORETURN static void call_help(qc_args* args) {
+noreturn static void call_help(qc_args* args) {
     if (args->help != NULL) {
         args->help(args->help_data);
     } else {
@@ -405,10 +405,10 @@ static void auto_help(qc_args* args) {
             if (!opt->mandatory) {
                 switch (opt->type) {
                     case OPT_UNSIGNED:
-                        fprintf(stderr, " ( default = %lu)", (unsigned long) opt->default_value.unsigned_default);
+                        fprintf(stderr, " ( default = %zu)", opt->default_value.unsigned_default);
                         break;
                     case OPT_SIGNED:
-                        fprintf(stderr, " (default = %li)", (signed long) opt->default_value.signed_default);
+                        fprintf(stderr, " (default = %ti)", opt->default_value.signed_default);
                         break;
                     case OPT_DOUBLE:
                         fprintf(stderr, " (default = %f)", opt->default_value.double_default);

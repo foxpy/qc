@@ -14,14 +14,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <errno.h>
-
-#if defined(__GNUC__)
-#   define __QC_NORETURN __attribute__((noreturn))
-#elif defined(_MSC_VER)
-#   define __QC_NORETURN __declspec(noreturn)
-#else
-#   define __QC_NORETURN
-#endif
+#include <stdnoreturn.h>
 
 typedef union qc_rnd_state_t {
     uint64_t s64;
