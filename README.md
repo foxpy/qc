@@ -5,6 +5,15 @@ generating random, reopening stdin/stdout in binary or parsing
 CLI arguments, so I have decided to move them all into this little
 neat and quite manageable repo.
 
+**Warning**: this library is in active development. Documentation
+might be srarce, hard to understand, nasty bugs might be chilling around,
+and public API is unstable as hell. If you have found this library quite
+neat and you are willing to use it in your project - feel free to include
+it as git submodule as submodules are fixed to commit hash and anything
+I do with this unversioned-mess library will not affect you. Just don't
+expect everything to work correctly whenever you sync git submodule to
+match upstream :p 
+
 ## Docs
 
 For how to include this library in your project read this
