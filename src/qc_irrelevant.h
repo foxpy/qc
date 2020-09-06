@@ -1,5 +1,4 @@
-#ifndef __QC_IRRELEVANT_H
-#define __QC_IRRELEVANT_H
+#pragma once
 
 /*
  * Irrelevant: makes very little sense
@@ -36,5 +35,3 @@ do {                                                                      \
 
 #define __qc_min(a, b) ((a) > (b)) ? (b) : (a)
 #define __qc_max(a, b) ((a) > (b)) ? (a) : (b)
-
-#endif

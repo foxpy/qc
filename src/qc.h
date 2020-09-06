@@ -1,5 +1,4 @@
-#ifndef QC_H
-#define QC_H
+#pragma once
 #include "qc_irrelevant.h"
 
 // print error message and exit with non-zero code
@@ -82,5 +81,3 @@ void reopen_binary_write(FILE *stream);
 
 // shortcut for the most useful case of functions above
 void reopen_stdin_stdout_binary();
-
-#endif
