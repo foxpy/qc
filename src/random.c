@@ -7,37 +7,37 @@
 #define FLOAT_ONE_EXPONENT UINT32_C(0x3f800000)
 #define FLOAT_FRACTION_MASK UINT32_C(0x007fffff)
 
-static void xorshift64(uint64_t *s) {
+static void xorshift64(uint64_t* s) {
     *s ^= *s << 21u;
     *s ^= *s >> 15u;
     *s ^= *s << 29u;
 }
 
-void qc_rnd_seed(qc_rnd *state, uint64_t seed) {
+void qc_rnd_seed(qc_rnd* state, uint64_t seed) {
     state->s64 = seed;
 }
 
-uint8_t qc_rnd8(qc_rnd *state) {
+uint8_t qc_rnd8(qc_rnd* state) {
     xorshift64(&state->s64);
     return state->s8[7];
 }
 
-uint16_t qc_rnd16(qc_rnd *state) {
+uint16_t qc_rnd16(qc_rnd* state) {
     xorshift64(&state->s64);
     return state->s16[3];
 }
 
-uint32_t qc_rnd32(qc_rnd *state) {
+uint32_t qc_rnd32(qc_rnd* state) {
     xorshift64(&state->s64);
     return state->s32[1];
 }
 
-uint64_t qc_rnd64(qc_rnd *state) {
+uint64_t qc_rnd64(qc_rnd* state) {
     xorshift64(&state->s64);
     return state->s64;
 }
 
-double qc_rnd_fp64(qc_rnd *state) {
+double qc_rnd_fp64(qc_rnd* state) {
     xorshift64(&state->s64);
     qc_rnd tmp;
     memcpy(&tmp, state, sizeof(qc_rnd));
@@ -47,7 +47,7 @@ double qc_rnd_fp64(qc_rnd *state) {
     return tmp.fp64;
 }
 
-float qc_rnd_fp32(qc_rnd *state) {
+float qc_rnd_fp32(qc_rnd* state) {
     xorshift64(&state->s64);
     qc_rnd tmp;
     memcpy(&tmp, state, sizeof(qc_rnd));

@@ -27,7 +27,7 @@ static void encryption_loop(FILE* input, FILE* output) {
     }
 }
 
-static FILE* open_file(char* path, char* mode, FILE* fallback) {
+static FILE* open_file(char const* path, char const* mode, FILE* fallback) {
     errno = 0;
     FILE* ret = (strcmp(path, "-") == 0) ? fallback : fopen(path, mode);
     if (ret == NULL) {

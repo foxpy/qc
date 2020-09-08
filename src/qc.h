@@ -2,7 +2,7 @@
 #include "qc_irrelevant.h"
 
 // print error message and exit with non-zero code
-noreturn void die(char const *msg);
+noreturn void die(char const* msg);
 // use this whenever you are 100% sure about unreachable code branch
 // and you have to silence compiler warning
 #define UNREACHABLE_CODE() die("Fatal error: execution has reached unreachable code")
@@ -10,7 +10,7 @@ noreturn void die(char const *msg);
 // works just like malloc, but terminates program on OOM condition
 void* emalloc(size_t size);
 // works just like realloc, but terminates program on OOM condition
-void* erealloc(void *ptr, size_t size);
+void* erealloc(void* ptr, size_t size);
 
 // works just like sprintf, but allocates memory on one's own,
 // and if size_hint is not enough, allocates more memory to fit output string in
@@ -25,46 +25,46 @@ char* sprintf_alloc(char const* format, ...);
 // Use rnd_init to seed random generator, then get
 // random using qc_rndNN and qc_rnd_fpNN functions.
 // qc_rnd_init returns nonzero (true) on success and zero (false) on failure
-int qc_rnd_init(qc_rnd *state);
-void qc_rnd_seed(qc_rnd *state, uint64_t seed);
-uint8_t qc_rnd8(qc_rnd *state);
-uint16_t qc_rnd16(qc_rnd *state);
-uint32_t qc_rnd32(qc_rnd *state);
-uint64_t qc_rnd64(qc_rnd *state);
-double qc_rnd_fp64(qc_rnd *state);
-float qc_rnd_fp32(qc_rnd *state);
+int qc_rnd_init(qc_rnd* state);
+void qc_rnd_seed(qc_rnd* state, uint64_t seed);
+uint8_t qc_rnd8(qc_rnd* state);
+uint16_t qc_rnd16(qc_rnd* state);
+uint32_t qc_rnd32(qc_rnd* state);
+uint64_t qc_rnd64(qc_rnd* state);
+double qc_rnd_fp64(qc_rnd* state);
+float qc_rnd_fp32(qc_rnd* state);
 
 // these functions return random in specified range if you need so
-int8_t qc_rnd_range8(qc_rnd *state, int8_t low, int8_t high);
-int16_t qc_rnd_range16(qc_rnd *state, int16_t low, int16_t high);
-int32_t qc_rnd_range32(qc_rnd *state, int32_t low, int32_t high);
-int64_t qc_rnd_range64(qc_rnd *state, int64_t low, int64_t high);
-float qc_rnd_range_fp32(qc_rnd *state, float low, float high);
-double qc_rnd_range_fp64(qc_rnd *state, double low, double high);
+int8_t qc_rnd_range8(qc_rnd* state, int8_t low, int8_t high);
+int16_t qc_rnd_range16(qc_rnd* state, int16_t low, int16_t high);
+int32_t qc_rnd_range32(qc_rnd* state, int32_t low, int32_t high);
+int64_t qc_rnd_range64(qc_rnd* state, int64_t low, int64_t high);
+float qc_rnd_range_fp32(qc_rnd* state, float low, float high);
+double qc_rnd_range_fp64(qc_rnd* state, double low, double high);
 
 // Argument parsing library, inspired by Golang's `flag` package
 typedef struct qc_args qc_args;
 qc_args* qc_args_new();
 void qc_args_free(qc_args* args);
 void qc_args_set_help(qc_args* args, void (*help) (void* help_data), void* help_data);
-void qc_args_brief(qc_args* args, char* brief);
-void qc_args_call_help(qc_args* args);
-int qc_args_parse(qc_args* args, int argc, char** argv, char** err);
+void qc_args_brief(qc_args* args, char const* brief);
+noreturn void qc_args_call_help(qc_args* args);
+int qc_args_parse(qc_args* args, int argc, char* const* argv, char** err);
 int qc_args_positionals_index(qc_args* args);
 int qc_args_positionals_count(qc_args* args);
 int qc_args_extras_index(qc_args* args);
 int qc_args_extras_count(qc_args* args);
 
-void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst, char* hint);
-void qc_args_unsigned(qc_args* args, char* longname, size_t* dst, char* hint);
-void qc_args_unsigned_default(qc_args* args, char* longname, size_t default_value, size_t* dst, char* hint);
-void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst, char* hint);
-void qc_args_signed_default(qc_args* args, char* longname, ptrdiff_t default_value, ptrdiff_t* dst, char* hint);
-void qc_args_double(qc_args* args, char* longname, double* dst, char* hint);
-void qc_args_double_default(qc_args* args, char* longname, double default_value, double* dst, char* hint);
+void qc_args_flag(qc_args* args, char shortname, char const* longname, bool* dst, char const* hint);
+void qc_args_unsigned(qc_args* args, char const* longname, size_t* dst, char const* hint);
+void qc_args_unsigned_default(qc_args* args, char const* longname, size_t default_value, size_t* dst, char const* hint);
+void qc_args_signed(qc_args* args, char const* longname, ptrdiff_t* dst, char const* hint);
+void qc_args_signed_default(qc_args* args, char const* longname, ptrdiff_t default_value, ptrdiff_t* dst, char const* hint);
+void qc_args_double(qc_args* args, char const* longname, double* dst, char const* hint);
+void qc_args_double_default(qc_args* args, char const* longname, double default_value, double* dst, char const* hint);
 // dst string should be freed to prevent memory leaks
-void qc_args_string(qc_args* args, char* longname, char** dst, char* hint);
-void qc_args_string_default(qc_args* args, char* longname, char* default_value, char** dst, char* hint);
+void qc_args_string(qc_args* args, char const* longname, char** dst, char const* hint);
+void qc_args_string_default(qc_args* args, char const* longname, char* default_value, char** dst, char const* hint);
 
 // Classic macros, type generic
 #define MIN(a, b) __qc_min(a, b)

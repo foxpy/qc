@@ -57,12 +57,12 @@ struct qc_args {
 
 noreturn static void call_help(qc_args* args);
 static void auto_help(qc_args* args);
-static void add_long_opt(qc_args* args, int type, char* longname, void* default_value, void* dst, char* hint);
-static bool asked_for_help(int argc, char** argv);
+static void add_long_opt(qc_args* args, int type, char const* longname, void* default_value, void* dst, char const* hint);
+static bool asked_for_help(int argc, char* const* argv);
 static bool is_short_opt(char const* str);
 static bool is_long_opt(char const* str);
-static int match_short_opt(qc_args* args, int argn, char** argv, char** err);
-static int match_long_opt(qc_args* args, int argn, char** argv, char** err);
+static int match_short_opt(qc_args* args, int argn, char* const* argv, char** err);
+static int match_long_opt(qc_args* args, int argn, char* const* argv, char** err);
 static int parse_unsigned(char* str, size_t* dst);
 static int parse_signed(char* str, ptrdiff_t* dst);
 static int parse_double(char* str, double* dst);
@@ -122,14 +122,14 @@ void qc_args_set_help(qc_args* args, void (*help) (void*), void* help_data) {
     args->help_data = help_data;
 }
 
-void qc_args_brief(qc_args* args, char* brief) {
+void qc_args_brief(qc_args* args, char const* brief) {
     assert(args != NULL);
     assert(brief != NULL);
     args->brief = emalloc(strlen(brief) + 1);
     strcpy(args->brief, brief);
 }
 
-void qc_args_call_help(qc_args* args) {
+noreturn void qc_args_call_help(qc_args* args) {
     assert(args != NULL);
     if (!args->parsed) {
         die("Fatal error: qc_args_call_help() should be called after qc_args_parse()");
@@ -137,7 +137,7 @@ void qc_args_call_help(qc_args* args) {
     call_help(args);
 }
 
-int qc_args_parse(qc_args* args, int argc, char** argv, char** err) {
+int qc_args_parse(qc_args* args, int argc, char* const* argv, char** err) {
     assert(args != NULL);
     if (args->parsed) {
         die("qc_args_parse() should be called only once on a single `args' handle");
@@ -250,7 +250,7 @@ int qc_args_extras_count(qc_args* args) {
     }
 }
 
-void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst, char* hint) {
+void qc_args_flag(qc_args* args, char shortname, char const* longname, bool* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (shortname == 'h') {
@@ -272,7 +272,7 @@ void qc_args_flag(qc_args* args, char shortname, char* longname, bool* dst, char
     add_long_opt(args, OPT_FLAG, longname, NULL, dst, hint);
 }
 
-void qc_args_unsigned(qc_args* args, char* longname, size_t* dst, char* hint) {
+void qc_args_unsigned(qc_args* args, char const* longname, size_t* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -282,7 +282,7 @@ void qc_args_unsigned(qc_args* args, char* longname, size_t* dst, char* hint) {
     }
 }
 
-void qc_args_unsigned_default(qc_args* args, char* longname, size_t default_value, size_t* dst, char* hint) {
+void qc_args_unsigned_default(qc_args* args, char const* longname, size_t default_value, size_t* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -292,7 +292,7 @@ void qc_args_unsigned_default(qc_args* args, char* longname, size_t default_valu
     }
 }
 
-void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst, char* hint) {
+void qc_args_signed(qc_args* args, char const* longname, ptrdiff_t* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -302,7 +302,7 @@ void qc_args_signed(qc_args* args, char* longname, ptrdiff_t* dst, char* hint) {
     }
 }
 
-void qc_args_signed_default(qc_args* args, char* longname, ptrdiff_t default_value, ptrdiff_t* dst, char* hint) {
+void qc_args_signed_default(qc_args* args, char const* longname, ptrdiff_t default_value, ptrdiff_t* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -312,7 +312,7 @@ void qc_args_signed_default(qc_args* args, char* longname, ptrdiff_t default_val
     }
 }
 
-void qc_args_double(qc_args* args, char* longname, double* dst, char* hint) {
+void qc_args_double(qc_args* args, char const* longname, double* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -322,7 +322,7 @@ void qc_args_double(qc_args* args, char* longname, double* dst, char* hint) {
     }
 }
 
-void qc_args_double_default(qc_args* args, char* longname, double default_value, double* dst, char* hint) {
+void qc_args_double_default(qc_args* args, char const* longname, double default_value, double* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -332,7 +332,7 @@ void qc_args_double_default(qc_args* args, char* longname, double default_value,
     }
 }
 
-void qc_args_string(qc_args* args, char* longname, char** dst, char* hint) {
+void qc_args_string(qc_args* args, char const* longname, char** dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -342,7 +342,7 @@ void qc_args_string(qc_args* args, char* longname, char** dst, char* hint) {
     }
 }
 
-void qc_args_string_default(qc_args* args, char* longname, char* default_value, char** dst, char* hint) {
+void qc_args_string_default(qc_args* args, char const* longname, char* default_value, char** dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -428,7 +428,7 @@ static void auto_help(qc_args* args) {
     }
 }
 
-static void add_long_opt(qc_args* args, int type, char* longname, void* default_value, void* dst, char* hint) {
+static void add_long_opt(qc_args* args, int type, char const* longname, void* default_value, void* dst, char const* hint) {
     array_push_back((void**) &args->opts, &args->opts_count, &args->opts_capacity, sizeof(struct long_opt));
     struct long_opt* opt = &args->opts[args->opts_count - 1];
     opt->type = type;
@@ -483,7 +483,7 @@ static void add_long_opt(qc_args* args, int type, char* longname, void* default_
     }
 }
 
-static bool asked_for_help(int argc, char** argv) {
+static bool asked_for_help(int argc, char* const* argv) {
     for (int i = 0; i < argc; ++i) {
         if (strcmp(argv[i], "--") == 0) {
             break;
@@ -518,7 +518,7 @@ static bool is_long_opt(char const* str) {
     return str[0] == '-' && str[1] == '-';
 }
 
-static int match_short_opt(qc_args* args, int argn, char** argv, char** err) {
+static int match_short_opt(qc_args* args, int argn, char* const* argv, char** err) {
     for (size_t to = strlen(argv[argn]), i = 1; i < to; ++i) {
         char c = argv[argn][i];
         if (c == 'h') {
@@ -540,7 +540,7 @@ static int match_short_opt(qc_args* args, int argn, char** argv, char** err) {
     return 0;
 }
 
-static int match_long_opt(qc_args* args, int argn, char** argv, char** err) {
+static int match_long_opt(qc_args* args, int argn, char* const* argv, char** err) {
     for (size_t i = 0; i < args->opts_count; ++i) {
         if (strncmp(&argv[argn][2], args->opts[i].name, strlen(args->opts[i].name)) == 0) {
             args->opts[i].provided = true;

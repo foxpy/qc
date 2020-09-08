@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-int qc_rnd_init(qc_rnd *state) {
+int qc_rnd_init(qc_rnd* state) {
     bool ret = true;
 #   if defined _WIN32
         HCRYPTPROV hCryptProv;
