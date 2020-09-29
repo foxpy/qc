@@ -20,7 +20,9 @@ char* sprintf_alloc(char const* format, ...);
 // current filename and line. Has several advantages over
 // std assert: prints custom error message and does not depend
 // on NDEBUG macro definition
+// qc_assert_format also allows you to format error message if necessary
 #define qc_assert(cond, err_msg) __qc_assert(cond, err_msg)
+#define qc_assert_format(cond, format, ...) __qc_assert_format(cond, format, __VA_ARGS__)
 
 // Use rnd_init to seed random generator, then get
 // random using qc_rnd64 and qc_rnd_fp64 functions.

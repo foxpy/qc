@@ -29,5 +29,15 @@ do {                                                                      \
     }                                                                     \
 } while (0)                                                               \
 
+#define __qc_assert_format(cond, format, ...)                             \
+do {                                                                      \
+    if (!(cond)) {                                                        \
+        fprintf(stderr, "Assertion failed: %s:%d, ", __FILE__, __LINE__); \
+        fprintf(stderr, format, __VA_ARGS__);                             \
+        fputc('\n', stderr);                                              \
+        abort();                                                          \
+    }                                                                     \
+} while (0)                                                               \
+
 #define __qc_min(a, b) ((a) > (b)) ? (b) : (a)
 #define __qc_max(a, b) ((a) > (b)) ? (a) : (b)
