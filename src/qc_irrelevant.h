@@ -17,11 +17,7 @@
 
 typedef union qc_rnd_state_t {
     uint64_t s64;
-    uint32_t s32[2];
-    uint16_t s16[4];
-    uint8_t s8[8];
     double fp64;
-    float fp32[2];
 } qc_rnd;
 
 #define __qc_assert(cond, err_msg)                                        \
