@@ -1,7 +1,7 @@
 #include "qc.h"
 
 void test_flag_short() {
-    bool verbose = false;
+    bool verbose;
     char* err;
     qc_args* args = qc_args_new();
     qc_args_flag(args, 'v', "verbose", &verbose, NULL);
@@ -12,7 +12,7 @@ void test_flag_short() {
 }
 
 void test_flag_short_multiple() {
-    bool a = false, b = false, c = false;
+    bool a, b, c;
     char* err;
     qc_args* args = qc_args_new();
     qc_args_flag(args, 'a', "flag-a", &a, NULL);
@@ -25,7 +25,7 @@ void test_flag_short_multiple() {
 }
 
 void test_flag_long() {
-    bool verbose = false;
+    bool verbose;
     char* err;
     qc_args* args = qc_args_new();
     qc_args_flag(args, 'v', "verbose", &verbose, NULL);
@@ -36,7 +36,7 @@ void test_flag_long() {
 }
 
 void test_flag_none() {
-    bool verbose = false;
+    bool verbose;
     char* err;
     qc_args* args = qc_args_new();
     qc_args_flag(args, 'v', "verbose", &verbose, NULL);
