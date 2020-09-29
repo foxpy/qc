@@ -29,7 +29,7 @@ do {                                                                      \
     if (!(cond)) {                                                        \
         fprintf(stderr, "Assertion failed: %s:%d, ", __FILE__, __LINE__); \
         fprintf(stderr, "%s\n", err_msg);                                 \
-        exit(EXIT_FAILURE);                                               \
+        abort();                                                          \
     }                                                                     \
 } while (0)                                                               \
 
