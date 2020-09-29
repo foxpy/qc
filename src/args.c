@@ -269,6 +269,7 @@ void qc_args_flag(qc_args* args, char shortname, char const* longname, bool* dst
         flag->hint = NULL;
     }
     flag->dst = dst;
+    *dst = false;
     add_long_opt(args, OPT_FLAG, longname, NULL, dst, hint);
 }
 
