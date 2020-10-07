@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "qc.h"
 #include "qc_impl.h"
 #include "string.h"
@@ -137,7 +138,7 @@ noreturn void qc_args_call_help(qc_args* args) {
     call_help(args);
 }
 
-int qc_args_parse(qc_args* args, int argc, char* const* argv, char** err) {
+bool qc_args_parse(qc_args* args, int argc, char* const* argv, char** err) {
     assert(args != NULL);
     if (args->parsed) {
         die("qc_args_parse() should be called only once on a single `args' handle");
@@ -160,11 +161,11 @@ int qc_args_parse(qc_args* args, int argc, char* const* argv, char** err) {
         if (args->positionals_count == 0) {
             if (is_short_opt(argv[i])) {
                 if (match_short_opt(args, i, argv, err) == -1) {
-                    return -1;
+                    return false;
                 }
             } else if (is_long_opt(argv[i])) {
                 if (match_long_opt(args, i, argv, err) == -1) {
-                    return -1;
+                    return false;
                 }
             } else {
                 args->positionals_index = i;
@@ -175,7 +176,7 @@ int qc_args_parse(qc_args* args, int argc, char* const* argv, char** err) {
                 *err = sprintf_alloc(
                     "Unexpected opt \"%s\" after positional argument \"%s\"",
                     argv[i], argv[i - 1]);
-                return -1;
+                return false;
             } else {
                 args->positionals_count += 1;
             }
@@ -207,11 +208,11 @@ int qc_args_parse(qc_args* args, int argc, char* const* argv, char** err) {
         } else {
             if (!opt->provided) {
                 *err = sprintf_alloc("Argument --%s is required but not provided", opt->name);
-                return -1;
+                return false;
             }
         }
     }
-    return 0;
+    return true;
 }
 
 int qc_args_positionals_index(qc_args* args) {

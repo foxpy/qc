@@ -4,9 +4,9 @@
 int main() {
     qc_args* args = qc_args_new();
     char *err;
-    if (qc_args_parse(args, 5, (char*[]) {
+    if (!qc_args_parse(args, 5, (char*[]) {
             "/path/to/exe", "--suspicious-flag", "-vhcn", "--", "--qwerty", NULL
-    }, &err) != 0) {
+    }, &err)) {
         fprintf(stderr, "qc_args: %s\n", err);
         free(err);
     }

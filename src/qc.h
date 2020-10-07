@@ -26,8 +26,8 @@ char* sprintf_alloc(char const* format, ...);
 
 // Use rnd_init to seed random generator, then get
 // random using qc_rnd64 and qc_rnd_fp64 functions.
-// qc_rnd_init returns nonzero (true) on success and zero (false) on failure
-int qc_rnd_init(qc_rnd* state);
+// qc_rnd_init returns true on success and zero on failure
+bool qc_rnd_init(qc_rnd* state);
 void qc_rnd_seed(qc_rnd* state, uint64_t seed);
 uint64_t qc_rnd64(qc_rnd* state);
 double qc_rnd_fp64(qc_rnd* state);
@@ -43,7 +43,7 @@ void qc_args_free(qc_args* args);
 void qc_args_set_help(qc_args* args, void (*help) (void* help_data), void* help_data);
 void qc_args_brief(qc_args* args, char const* brief);
 noreturn void qc_args_call_help(qc_args* args);
-int qc_args_parse(qc_args* args, int argc, char* const* argv, char** err);
+bool qc_args_parse(qc_args* args, int argc, char* const* argv, char** err);
 int qc_args_positionals_index(qc_args* args);
 int qc_args_positionals_count(qc_args* args);
 int qc_args_extras_index(qc_args* args);

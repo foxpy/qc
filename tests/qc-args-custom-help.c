@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "qc.h"
 
 static void help(void* help_data) {
@@ -9,10 +10,10 @@ int main() {
     qc_args* args = qc_args_new();
     qc_args_set_help(args, help, "/path/to/exe");
     char* err;
-    int rc = qc_args_parse(args, 3, (char*[]){
+    bool rc = qc_args_parse(args, 3, (char*[]){
         "/path/to/exe", "hello", "--help", NULL
     }, &err);
-    qc_assert(rc == 0, sprintf_alloc("qc_args_parse has failed: %s", err));
+    qc_assert(rc, sprintf_alloc("qc_args_parse has failed: %s", err));
     qc_args_free(args);
 
     // this test should call help and exit

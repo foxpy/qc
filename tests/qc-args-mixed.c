@@ -31,14 +31,14 @@ int main() {
     qc_args_flag(args, 'j', "j", &cfg.j, NULL);
 
     char* err;
-    int rc = qc_args_parse(args, 1 + 10 + 3, (char*[]){
+    bool rc = qc_args_parse(args, 1 + 10 + 3, (char*[]){
         "/path/to/exe",
         "--a=25", "--c=-200", "--d=12500",
         "--e=156.75", "--f=-213.666", "--h=\"sample text\"",
         "-i", "--j", "another sample text", "yet another sample text",
         "--", "--some-unrelated-arg", "--help", NULL
     }, &err);
-    qc_assert(rc == 0, sprintf_alloc("qc_args_parse has failed: %s", err));
+    qc_assert(rc, sprintf_alloc("qc_args_parse has failed: %s", err));
     qc_assert(cfg.a == 25 &&
               cfg.b == 2 &&
               cfg.c == -200 &&

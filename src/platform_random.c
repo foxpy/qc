@@ -8,9 +8,10 @@
 
 #include "qc.h"
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
-int qc_rnd_init(qc_rnd* state) {
+bool qc_rnd_init(qc_rnd* state) {
     bool ret = true;
 #   if defined _WIN32
         HCRYPTPROV hCryptProv;
@@ -38,9 +39,9 @@ int qc_rnd_init(qc_rnd* state) {
 #       endif
 #   elif defined __linux__
         if (syscall(SYS_getrandom, &state->s64, sizeof(uint64_t), 0) != sizeof(uint64_t)) {
-                ret = false;
-                goto exit;
-            }
+            ret = false;
+            goto exit;
+        }
 #   elif defined(unix) || defined(__unix__) || defined(__unix)
         arc4random_buf(&state->s64, sizeof(uint64_t)); // always successful
         goto exit;
