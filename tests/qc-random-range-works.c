@@ -4,7 +4,17 @@
 // it is hard to make a reliable test of random, but we will try our best
 #define ITERATIONS 1000
 
-void test_64(int64_t low, int64_t high) {
+static void test_64_uniform(uint64_t upper) {
+    qc_rnd s;
+    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
+    for (size_t i = 0; i < ITERATIONS; ++i) {
+        uint64_t val = qc_rnd64_uniform(&s, upper);
+        qc_assert(val < upper,
+                  "qc_rnd64_uniform falls out of specified range");
+    }
+}
+
+static void test_64(int64_t low, int64_t high) {
     qc_rnd s;
     qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
@@ -14,7 +24,7 @@ void test_64(int64_t low, int64_t high) {
     }
 }
 
-void test_fp64(double low, double high) {
+static void test_fp64(double low, double high) {
     qc_rnd s;
     qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
@@ -25,6 +35,11 @@ void test_fp64(double low, double high) {
 }
 
 int main() {
+    test_64_uniform(2);
+    test_64_uniform(3);
+    test_64_uniform(7);
+    test_64_uniform(8191);
+    test_64_uniform(4294967295);
     test_64(2, 8);
     test_64(-2, 4);
     test_64(-10, -2);

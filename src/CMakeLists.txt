@@ -4,7 +4,6 @@ add_library(qc
     erealloc.c
     random.c
     platform_random.c
-    random_range.c
     math.c
     reopen-binary.c
     sprintf_alloc.c

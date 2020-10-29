@@ -30,6 +30,7 @@ char* sprintf_alloc(char const* format, ...);
 bool qc_rnd_init(qc_rnd* state);
 void qc_rnd_seed(qc_rnd* state, uint64_t seed);
 uint64_t qc_rnd64(qc_rnd* state);
+uint64_t qc_rnd64_uniform(qc_rnd* state, uint64_t upper);
 double qc_rnd_fp64(qc_rnd* state);
 
 // these functions return random in specified range if you need so
