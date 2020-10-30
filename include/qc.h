@@ -7,7 +7,7 @@ typedef union qc_rnd_state_t {
 } qc_rnd;
 
 // print error message and exit with non-zero code
-noreturn void die(char const* msg);
+#define die(err_msg) __qc_die(err_msg)
 // use this whenever you are 100% sure about unreachable code branch
 // and you have to silence compiler warning
 #define UNREACHABLE_CODE() die("Fatal error: execution has reached unreachable code")

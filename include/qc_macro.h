@@ -9,6 +9,13 @@
 #include <errno.h>
 #include <stdnoreturn.h>
 
+#define __qc_die(err_msg)                                                 \
+do {                                                                      \
+    fprintf(stderr, "Fatal error: %s:%d, ", __FILE__, __LINE__);          \
+    fprintf(stderr, "%s\n", err_msg);                                     \
+    abort();                                                              \
+} while (0)                                                               \
+
 #define __qc_assert(cond, err_msg)                                        \
 do {                                                                      \
     if (!(cond)) {                                                        \

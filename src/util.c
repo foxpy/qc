@@ -4,11 +4,6 @@
 
 #define FIRST_ATTEMPT_ALLOC_SIZE 256
 
-noreturn void die(char const* msg) {
-    fprintf(stderr, "%s\n", msg);
-    abort();
-}
-
 void* emalloc(size_t size) {
     void *p;
     if ((p = malloc(size)) == NULL) {
