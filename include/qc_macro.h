@@ -1,10 +1,4 @@
 #pragma once
-
-/*
- * Irrelevant: makes very little sense
- * to pollute main header
- */
-
 #include <stdio.h>
 #include <stddef.h>
 #include <stdbool.h>
@@ -14,11 +8,6 @@
 #include <assert.h>
 #include <errno.h>
 #include <stdnoreturn.h>
-
-typedef union qc_rnd_state_t {
-    uint64_t s64;
-    double fp64;
-} qc_rnd;
 
 #define __qc_assert(cond, err_msg)                                        \
 do {                                                                      \

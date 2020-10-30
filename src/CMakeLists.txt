@@ -7,4 +7,4 @@ add_library(qc
     util.c
     qc_impl.c
 )
-target_include_directories(qc INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(qc PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)

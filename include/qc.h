@@ -1,5 +1,10 @@
 #pragma once
-#include "qc_irrelevant.h"
+#include "qc_macro.h"
+
+typedef union qc_rnd_state_t {
+    uint64_t s64;
+    double fp64;
+} qc_rnd;
 
 // print error message and exit with non-zero code
 noreturn void die(char const* msg);
