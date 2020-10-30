@@ -37,8 +37,8 @@ void qc_err_set_error(qc_err* err, char const* str) {
         err->buf = erealloc(err->buf, error_size);
         err->size = error_size;
     }
-    strcpy(&err->buf[err->size - error_size], str);
-    err->start = err->size - error_size;
+    err->start = err->size - error_size - 1;
+    strcpy(&err->buf[err->start], str);
 }
 
 void qc_err_append_error_front(qc_err* err, char const* str) {
