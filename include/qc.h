@@ -32,6 +32,15 @@ char* sprintf_alloc(char const* format, ...);
 #define qc_assert(cond, err_msg) __qc_assert(cond, err_msg)
 #define qc_assert_format(cond, format, ...) __qc_assert_format(cond, format, __VA_ARGS__)
 
+// Error handling abstraction
+// Makes error handling much easier
+typedef struct qc_error qc_err;
+qc_err* qc_err_new();
+void qc_err_free(qc_err* err);
+char const* qc_err_get_error(qc_err const* err);
+void qc_err_set_error(qc_err* err, char const* str);
+void qc_err_append_error_front(qc_err* err, char const* str);
+
 // Use rnd_init to seed random generator, then get
 // random using qc_rnd64 and qc_rnd_fp64 functions.
 // qc_rnd_init returns true on success and zero on failure
