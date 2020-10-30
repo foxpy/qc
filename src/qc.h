@@ -6,6 +6,9 @@ noreturn void die(char const* msg);
 // use this whenever you are 100% sure about unreachable code branch
 // and you have to silence compiler warning
 #define UNREACHABLE_CODE() die("Fatal error: execution has reached unreachable code")
+// use this as a placeholder for API functions, it is
+// cleaner than just returning 0 or NULL
+#define UNIMPLEMENTED() die("Fatal error: call to unimplemented function")
 
 // works just like malloc, but terminates program on OOM condition
 void* emalloc(size_t size);
