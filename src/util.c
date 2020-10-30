@@ -1,5 +1,31 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "qc.h"
+
 #define FIRST_ATTEMPT_ALLOC_SIZE 256
+
+noreturn void die(char const* msg) {
+    fprintf(stderr, "%s\n", msg);
+    abort();
+}
+
+void* emalloc(size_t size) {
+    void *p;
+    if ((p = malloc(size)) == NULL) {
+        die("Out of memory");
+    } else {
+        return p;
+    }
+}
+
+void* erealloc(void* ptr, size_t size) {
+    void *p;
+    if ((p = realloc(ptr, size)) == NULL) {
+        die("Out of memory");
+    } else {
+        return p;
+    }
+}
 
 char* sprintf_alloc(char const* format, ...) {
     va_list args;
