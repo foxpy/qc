@@ -31,6 +31,14 @@ char const* qc_err_get_error(qc_err const* err) {
     return &err->buf[err->start];
 }
 
+char* qc_err_to_c_str(qc_err* err) {
+    char const* msg = qc_err_get_error(err);
+    char* ret = emalloc(strlen(msg) + 1);
+    strcpy(ret, msg);
+    qc_err_free(err);
+    return ret;
+}
+
 void qc_err_set_error(qc_err* err, char const* str) {
     size_t error_size = strlen(str);
     if (error_size > err->size) {
