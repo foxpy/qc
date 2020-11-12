@@ -20,8 +20,7 @@ void* emalloc(size_t size);
 // works just like realloc, but terminates program on OOM condition
 void* erealloc(void* ptr, size_t size);
 
-// works just like sprintf, but allocates memory on one's own,
-// and if size_hint is not enough, allocates more memory to fit output string in
+// works just like sprintf, but allocates memory on one's own
 char* sprintf_alloc(char const* format, ...);
 
 // If condition is false, terminates program and prints
