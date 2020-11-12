@@ -19,7 +19,7 @@ static void test_64(int64_t low, int64_t high) {
     qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
         int64_t val = qc_rnd_range64(&s, low, high);
-        qc_assert(((val >= low) && (val <= high)),
+        qc_assert(((val >= low) && (val < high)),
                   "qc_rnd_range64 falls out of specified range");
     }
 }
@@ -29,7 +29,7 @@ static void test_fp64(double low, double high) {
     qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
         double val = qc_rnd_range_fp64(&s, low, high);
-        qc_assert(((val >= low) && (val <= high)),
+        qc_assert(((val >= low) && (val < high)),
                   "qc_rnd_range_fp64 falls out of specified range");
     }
 }

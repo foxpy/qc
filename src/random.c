@@ -31,7 +31,7 @@ uint64_t qc_rnd64_uniform(qc_rnd* state, uint64_t upper) {
 
 int64_t qc_rnd_range64(qc_rnd* state, int64_t low, int64_t high) {
     assert(high > low);
-    return (qc_rnd64_uniform(state, high - low + 1)) + low;
+    return (qc_rnd64_uniform(state, high - low)) + low;
 }
 
 double qc_rnd_fp64(qc_rnd* state) {
