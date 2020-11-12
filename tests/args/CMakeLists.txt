@@ -1,0 +1,8 @@
+qc_add_test(qc-args-help-test)
+qc_add_test(qc-args-flag-test)
+qc_add_test(qc-args-numerical-test)
+qc_add_test(qc-args-string-test)
+qc_add_test(qc-args-positional-test)
+qc_add_test(qc-args-mixed-test)
+qc_add_test(qc-args-help-short-test)
+qc_add_test(qc-args-custom-help-test)
