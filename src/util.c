@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include "qc.h"
 
 #define FIRST_ATTEMPT_ALLOC_SIZE 256

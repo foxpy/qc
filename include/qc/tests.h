@@ -1,31 +1,23 @@
 #pragma once
 #include <stdio.h>
-#include <stddef.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdarg.h>
 #include <stdlib.h>
-#include <assert.h>
-#include <errno.h>
-#include <stdnoreturn.h>
 
-#define __qc_die(err_msg)                                                 \
-do {                                                                      \
-    fprintf(stderr, "Fatal error: %s:%d, ", __FILE__, __LINE__);          \
-    fprintf(stderr, "%s\n", err_msg);                                     \
-    abort();                                                              \
-} while (0)                                                               \
+// If condition is false, terminates program and prints
+// current filename and line. Has several advantages over
+// std assert: prints custom error message and does not depend
+// on NDEBUG macro definition
+// qc_assert_format also allows you to format error message if necessary
 
-#define __qc_assert(cond, err_msg)                                        \
+#define qc_assert(cond, err_msg)                                          \
 do {                                                                      \
     if (!(cond)) {                                                        \
         fprintf(stderr, "Assertion failed: %s:%d, ", __FILE__, __LINE__); \
         fprintf(stderr, "%s\n", err_msg);                                 \
         abort();                                                          \
     }                                                                     \
-} while (0)                                                               \
+} while (0)
 
-#define __qc_assert_format(cond, format, ...)                             \
+#define qc_assert_format(cond, format, ...)                               \
 do {                                                                      \
     if (!(cond)) {                                                        \
         fprintf(stderr, "Assertion failed: %s:%d, ", __FILE__, __LINE__); \
@@ -33,7 +25,4 @@ do {                                                                      \
         fputc('\n', stderr);                                              \
         abort();                                                          \
     }                                                                     \
-} while (0)                                                               \
-
-#define __qc_min(a, b) ((a) > (b)) ? (b) : (a)
-#define __qc_max(a, b) ((a) > (b)) ? (a) : (b)
+} while (0)

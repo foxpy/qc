@@ -1,4 +1,5 @@
 #include "qc.h"
+#include <assert.h>
 
 size_t gcd(size_t a, size_t b) {
     assert(!(a == 0 && b == 0));

@@ -1,4 +1,6 @@
 #include <stdbool.h>
+#include <assert.h>
+#include <errno.h>
 #include "qc.h"
 #include "qc_impl.h"
 #include "string.h"
