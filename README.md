@@ -5,8 +5,8 @@ generating random, reopening stdin/stdout in binary or parsing
 CLI arguments, so I have decided to move them all into this little
 neat and quite manageable repo.
 
-**Warning**: this library is in active development. Documentation
-might be srarce, hard to understand, nasty bugs might be chilling around,
+**Warning**: this library is in active development. Documentation might be 
+srarce, hard to understand and outdated, nasty bugs might be chilling around,
 and public API is unstable as hell. If you have found this library quite
 neat and you are willing to use it in your project - feel free to include
 it as git submodule as submodules are fixed to commit hash and anything
@@ -26,12 +26,11 @@ add_executable(hello-world hello_world.c)
 target_link_libraries(hello-world PUBLIC qc)
 ```
 
-All docs are in a single header file.
-Go [check it out](src/qc.h),
-turns out header files may actually be readable!
-Also, there are some [examples](examples/).
+Currently there are now adequate docs.
+I have plans to add doxygen documentation though.
+For now, just chek out some [examples](examples/).
 Finally, check out
-[this project](https://github.com/foxpy/inaccurate-pi),
+[this project](https://github.com/foxpy/inaccurate-pi) (**outdated!!!**),
 it depends on qc.
 
 
