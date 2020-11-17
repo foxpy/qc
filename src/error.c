@@ -25,7 +25,7 @@ void qc_err_free(qc_err* err) {
     free(err);
 }
 
-char const* qc_err_get_error(qc_err const* err) {
+char const* qc_err_get(qc_err const* err) {
     assert(err != NULL);
     if (err->buf == NULL) {
         return "";
@@ -41,7 +41,7 @@ char* qc_err_to_owned_c_str(qc_err* err) {
     return ret;
 }
 
-void qc_err_set_error(qc_err* err, char const* str, ...) {
+void qc_err_set(qc_err* err, char const* str, ...) {
     assert(err != NULL);
     assert(str != NULL);
     va_list args;
@@ -54,7 +54,7 @@ void qc_err_set_error(qc_err* err, char const* str, ...) {
     err->buf = msg;
 }
 
-void qc_err_append_error_front(qc_err* err, char const* str, ...) {
+void qc_err_append_front(qc_err* err, char const* str, ...) {
     assert(err != NULL);
     assert(str != NULL);
     va_list args;
