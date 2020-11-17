@@ -6,7 +6,7 @@
 
 static char const* delimiter = ": ";
 
-struct qc_error {
+struct qc_err {
     char* buf;
 };
 

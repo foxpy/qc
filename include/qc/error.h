@@ -2,7 +2,7 @@
 
 // Error handling abstraction
 // Makes error handling much easier
-typedef struct qc_error qc_err;
+typedef struct qc_err qc_err;
 qc_err* qc_err_new();
 void qc_err_free(qc_err* err);
 char const* qc_err_get_error(qc_err const* err);
