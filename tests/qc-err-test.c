@@ -35,7 +35,7 @@ int main() {
     {
         qc_err* err = qc_err_new();
         qc_err_set_error(err, sample_error);
-        char* str_err = qc_err_to_c_str(err);
+        char* str_err = qc_err_to_owned_c_str(err);
         qc_assert_format(strcmp(str_err, sample_error) == 0, "Expected: \"%s\", got: \"%s\"", sample_error, str_err);
         free(str_err);
     }
