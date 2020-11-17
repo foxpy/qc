@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include "qc.h"
 
-static char const* sample_error = "UwU I made a fucky wucky";
-static char const* chain = "Some function";
-static char const* chain_error = "Some function: UwU I made a fucky wucky";
-static char const* big_chain = "Some extremely verbose errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrror messsage";
-static char const* big_chain_error = "Some extremely verbose errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrror messsage: Some function: UwU I made a fucky wucky";
-
-int main() {
+void basic_test() {
+    char const* sample_error = "UwU I made a fucky wucky";
+    char const* chain = "Some function";
+    char const* chain_error = "Some function: UwU I made a fucky wucky";
+    char const* big_chain = "Some extremely verbose errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrror messsage";
+    char const* big_chain_error = "Some extremely verbose errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrror messsage: Some function: UwU I made a fucky wucky";
     {
         qc_err *err = qc_err_new();
         qc_assert(strcmp(qc_err_get_error(err), "") == 0, "Expected empty error string");
@@ -39,4 +38,26 @@ int main() {
         qc_assert_format(strcmp(str_err, sample_error) == 0, "Expected: \"%s\", got: \"%s\"", sample_error, str_err);
         free(str_err);
     }
+}
+
+void formatting_test() {
+    qc_err* err = qc_err_new();
+    {
+        char const* expected_error = "Failed to open file: /path/to/file";
+        qc_err_set_error(err, "Failed to open file: %s", "/path/to/file");
+        qc_assert_format(strcmp(expected_error, qc_err_get_error(err)),
+                  "Expected: \"%s\", got: \"%s\"", expected_error, qc_err_get_error(err));
+    }
+    {
+        char const* expected_error = "Module 12: Failed to open file: /path/to/file";
+        qc_err_append_error_front(err, "Module %d", 12);
+        qc_assert_format(strcmp(expected_error, qc_err_get_error(err)),
+                         "Expected: \"%s\", got: \"%s\"", expected_error, qc_err_get_error(err));
+    }
+    qc_err_free(err);
+}
+
+int main() {
+    basic_test();
+    formatting_test();
 }
