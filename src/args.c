@@ -140,7 +140,7 @@ noreturn void qc_args_call_help(qc_args* args) {
     call_help(args);
 }
 
-bool qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err) {
+qc_result qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err) {
     assert(args != NULL);
     if (args->parsed) {
         die("qc_args_parse() should be called only once on a single `args' handle");
@@ -163,11 +163,11 @@ bool qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err) {
         if (args->positionals_count == 0) {
             if (is_short_opt(argv[i])) {
                 if (match_short_opt(args, i, argv, err) == -1) {
-                    return false;
+                    return QC_FAILURE;
                 }
             } else if (is_long_opt(argv[i])) {
                 if (match_long_opt(args, i, argv, err) == -1) {
-                    return false;
+                    return QC_FAILURE;
                 }
             } else {
                 args->positionals_index = i;
@@ -176,7 +176,7 @@ bool qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err) {
         } else {
             if (is_short_opt(argv[i]) || is_long_opt(argv[i])) {
                 qc_err_set(err, "Unexpected opt \"%s\" after positional argument \"%s\"", argv[i], argv[i - 1]);
-                return false;
+                return QC_FAILURE;
             } else {
                 args->positionals_count += 1;
             }
@@ -208,11 +208,11 @@ bool qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err) {
         } else {
             if (!opt->provided) {
                 qc_err_set(err, "Argument --%s is required but not provided", opt->name);
-                return false;
+                return QC_FAILURE;
             }
         }
     }
-    return true;
+    return QC_SUCCESS;
 }
 
 int qc_args_positionals_index(qc_args* args) {

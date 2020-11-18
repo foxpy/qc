@@ -8,7 +8,7 @@ int main(int argc, char* argv[]) {
     qc_args_brief(args, "Computes Least Common Multiple of two integers");
     qc_args_unsigned(args, "left", &a, NULL);
     qc_args_unsigned(args, "right", &b, NULL);
-    if (!qc_args_parse(args, argc, argv, err)) {
+    if (qc_args_parse(args, argc, argv, err) == QC_FAILURE) {
         fprintf(stderr, "Failed to parse arguments: %s\n", qc_err_get(err));
         fputc('\n', stderr);
         qc_args_call_help(args);

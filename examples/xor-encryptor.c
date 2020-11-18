@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
     qc_args* args = qc_args_new();
     qc_err* err = qc_err_new();
     qc_args_set_help(args, help, argv[0]);
-    if (!qc_args_parse(args, argc, argv, err)) {
+    if (qc_args_parse(args, argc, argv, err) == QC_FAILURE) {
         fprintf(stderr, "Failed to parse arguments: %s\n", qc_err_get(err));
         fputc('\n', stderr);
         help(argv[0]);
