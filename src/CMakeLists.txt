@@ -2,7 +2,7 @@ add_library(qc
     random.c
     math.c
     args.c
-    util.c
+    utils.c
     qc_impl.c
     error.c
     platform/random.c
