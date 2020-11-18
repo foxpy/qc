@@ -8,10 +8,12 @@ struct test_random_data {
 };
 
 static void populate(struct test_random_data *t) {
+    qc_err* err = qc_err_new();
     qc_rnd s;
-    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
+    qc_assert(qc_rnd_init(&s, err) == QC_SUCCESS, "Failed to initialize random");
     t->u64 = qc_rnd64(&s);
     t->f64 = qc_rnd_fp64(&s);
+    qc_err_free(err);
 }
 
 static size_t compare(struct test_random_data *t1, struct test_random_data *t2) {

@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include <stdbool.h>
+#include "qc/error.h"
 
 typedef union qc_rnd_state_t {
     uint64_t s64;
@@ -10,7 +11,7 @@ typedef union qc_rnd_state_t {
 // Use rnd_init to seed random generator, then get
 // random using qc_rnd64 and qc_rnd_fp64 functions.
 // qc_rnd_init returns true on success and zero on failure
-bool qc_rnd_init(qc_rnd* state);
+qc_result qc_rnd_init(qc_rnd* state, qc_err* err);
 void qc_rnd_seed(qc_rnd* state, uint64_t seed);
 uint64_t qc_rnd64(qc_rnd* state);
 uint64_t qc_rnd64_uniform(qc_rnd* state, uint64_t upper);

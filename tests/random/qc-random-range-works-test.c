@@ -5,33 +5,39 @@
 #define ITERATIONS 1000
 
 static void test_64_uniform(uint64_t upper) {
+    qc_err* err = qc_err_new();
     qc_rnd s;
-    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
+    qc_assert(qc_rnd_init(&s, err) == QC_SUCCESS, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
         uint64_t val = qc_rnd64_uniform(&s, upper);
         qc_assert(val < upper,
                   "qc_rnd64_uniform falls out of specified range");
     }
+    qc_err_free(err);
 }
 
 static void test_64(int64_t low, int64_t high) {
+    qc_err* err = qc_err_new();
     qc_rnd s;
-    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
+    qc_assert(qc_rnd_init(&s, err) == QC_SUCCESS, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
         int64_t val = qc_rnd_range64(&s, low, high);
         qc_assert(((val >= low) && (val < high)),
                   "qc_rnd_range64 falls out of specified range");
     }
+    qc_err_free(err);
 }
 
 static void test_fp64(double low, double high) {
+    qc_err* err = qc_err_new();
     qc_rnd s;
-    qc_assert(qc_rnd_init(&s) == true, "Failed to initialize random");
+    qc_assert(qc_rnd_init(&s, err) == QC_SUCCESS, "Failed to initialize random");
     for (size_t i = 0; i < ITERATIONS; ++i) {
         double val = qc_rnd_range_fp64(&s, low, high);
         qc_assert(((val >= low) && (val < high)),
                   "qc_rnd_range_fp64 falls out of specified range");
     }
+    qc_err_free(err);
 }
 
 int main() {
