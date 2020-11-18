@@ -125,7 +125,7 @@ void qc_args_set_help(qc_args* args, void (*help) (void*), void* help_data) {
     args->help_data = help_data;
 }
 
-void qc_args_brief(qc_args* args, char const* brief) {
+void qc_args_set_brief(qc_args* args, char const* brief) {
     assert(args != NULL);
     assert(brief != NULL);
     args->brief = emalloc(strlen(brief) + 1);
