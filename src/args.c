@@ -58,7 +58,6 @@ struct qc_args {
     bool parsed;
 };
 
-noreturn static void call_help(qc_args* args);
 static void auto_help(qc_args* args);
 static void add_long_opt(qc_args* args, int type, char const* longname, void* default_value, void* dst, char const* hint);
 static bool asked_for_help(int argc, char* const* argv);
@@ -132,12 +131,15 @@ void qc_args_set_brief(qc_args* args, char const* brief) {
     strcpy(args->brief, brief);
 }
 
-noreturn void qc_args_call_help(qc_args* args) {
+void qc_args_call_help(qc_args* args) {
     assert(args != NULL);
     if (!args->parsed) {
         die("Fatal error: qc_args_call_help() should be called after qc_args_parse()");
+    } else if (args->help != NULL) {
+        args->help(args->help_data);
+    } else {
+        auto_help(args);
     }
-    call_help(args);
 }
 
 qc_result qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err) {
@@ -150,7 +152,8 @@ qc_result qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err)
     args->program_name = emalloc(strlen(argv[0]) + 1);
     strcpy(args->program_name, argv[0]);
     if (asked_for_help(argc, argv)) {
-        call_help(args);
+        qc_args_call_help(args);
+        exit(EXIT_SUCCESS);
     }
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--") == 0) {
@@ -352,15 +355,6 @@ void qc_args_string_default(qc_args* args, char const* longname, char* default_v
     } else {
         add_long_opt(args, OPT_STRING, longname, &default_value, dst, hint);
     }
-}
-
-noreturn static void call_help(qc_args* args) {
-    if (args->help != NULL) {
-        args->help(args->help_data);
-    } else {
-        auto_help(args);
-    }
-    exit(EXIT_SUCCESS);
 }
 
 static void auto_help(qc_args* args) {
