@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include "qc.h"
 
 static void help(void* help_data) {
