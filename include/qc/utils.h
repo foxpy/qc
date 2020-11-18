@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 // print error message and exit with non-zero code
 #define die(err_msg)                                                      \
@@ -25,6 +26,7 @@ void* erealloc(void* ptr, size_t size);
 
 // works just like sprintf, but allocates memory on one's own
 char* sprintf_alloc(char const* format, ...);
+char* vsprintf_alloc(char const* format, va_list ap);
 
 // platform independent stream reopen in binary mode
 // these functions would not be needed without Microsoft <3
