@@ -8,7 +8,6 @@
 
 #include "qc.h"
 #include <stdint.h>
-#include <stdbool.h>
 #include <stdlib.h>
 
 qc_result qc_rnd_init(qc_rnd* state, qc_err* err) {
@@ -33,7 +32,7 @@ qc_result qc_rnd_init(qc_rnd* state, qc_err* err) {
         }
 #   elif defined __ANDROID_API__
 #       if __ANDROID_API__ < 28
-            (void) err; // unused
+            UNUSED(err);
             arc4random_buf(&state->s64, sizeof(uint64_t)); // always successful
             goto exit;
 #       else
@@ -50,7 +49,7 @@ qc_result qc_rnd_init(qc_rnd* state, qc_err* err) {
             goto exit;
         }
 #   elif defined(unix) || defined(__unix__) || defined(__unix) || defined(__APPLE__) || defined(__APPLE_CC__) || defined(__OSX__) || defined(__MACH__)
-        (void) err; // unused
+        UNUSED(err);
         arc4random_buf(&state->s64, sizeof(uint64_t)); // always successful
         goto exit;
 #   else

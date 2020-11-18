@@ -19,6 +19,8 @@ do {                                                                      \
 // cleaner than just returning 0 or NULL
 #define UNIMPLEMENTED() die("Fatal error: call to unimplemented function")
 
+#define UNUSED(x) ((void)(x))
+
 // works just like malloc, but terminates program on OOM condition
 void* emalloc(size_t size);
 // works just like realloc, but terminates program on OOM condition
