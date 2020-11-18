@@ -41,12 +41,12 @@ char* qc_err_to_owned_c_str(qc_err* err) {
     return ret;
 }
 
-void qc_err_set(qc_err* err, char const* str, ...) {
+void qc_err_set(qc_err* err, char const* format, ...) {
     assert(err != NULL);
-    assert(str != NULL);
+    assert(format != NULL);
     va_list args;
-    va_start(args, str);
-    char* msg = vsprintf_alloc(str, args);
+    va_start(args, format);
+    char* msg = vsprintf_alloc(format, args);
     va_end(args);
     if (err->buf != NULL) {
         free(err->buf);
@@ -54,12 +54,12 @@ void qc_err_set(qc_err* err, char const* str, ...) {
     err->buf = msg;
 }
 
-void qc_err_append_front(qc_err* err, char const* str, ...) {
+void qc_err_append_front(qc_err* err, char const* format, ...) {
     assert(err != NULL);
-    assert(str != NULL);
+    assert(format != NULL);
     va_list args;
-    va_start(args, str);
-    char* msg = vsprintf_alloc(str, args);
+    va_start(args, format);
+    char* msg = vsprintf_alloc(format, args);
     va_end(args);
     size_t new_size = 0;
     if (err->buf != NULL) {

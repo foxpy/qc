@@ -12,5 +12,5 @@ qc_err* qc_err_new();
 void qc_err_free(qc_err* err);
 char const* qc_err_get(qc_err const* err);
 char* qc_err_to_owned_c_str(qc_err* err);
-void qc_err_set(qc_err* err, char const* str, ...);
-void qc_err_append_front(qc_err* err, char const* str, ...);
+void qc_err_set(qc_err* err, char const* format, ...);
+void qc_err_append_front(qc_err* err, char const* format, ...);
