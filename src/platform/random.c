@@ -1,3 +1,7 @@
+#ifdef __ANDROID__
+#   include <android/api-level.h>
+#endif
+
 #if defined _WIN32
 #   include <windows.h>
 #   include <wincrypt.h>
@@ -30,7 +34,7 @@ qc_result qc_rnd_init(qc_rnd* state, qc_err* err) {
             ret = QC_FAILURE;
             goto exit;
         }
-#   elif defined __ANDROID_API__
+#   elif defined __ANDROID__
 #       if __ANDROID_API__ < 28
             UNUSED(err);
             arc4random_buf(&state->s64, sizeof(uint64_t)); // always successful

@@ -8,7 +8,7 @@
 void reopen_binary_read(FILE *stream) {
 #   ifdef _WIN32
         _setmode(_fileno(stream), _O_BINARY);
-#   elif defined __ANDROID_API__
+#   elif defined __ANDROID__
         UNUSED(stream);
 #   else
         freopen(NULL, "rb", stream);
@@ -18,7 +18,7 @@ void reopen_binary_read(FILE *stream) {
 void reopen_binary_write(FILE *stream) {
 #   ifdef _WIN32
         _setmode(_fileno(stream), _O_BINARY);
-#   elif defined __ANDROID_API__
+#   elif defined __ANDROID__
         UNUSED(stream);
 #   else
         freopen(NULL, "wb", stream);
