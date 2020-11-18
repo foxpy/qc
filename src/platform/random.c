@@ -49,7 +49,7 @@ qc_result qc_rnd_init(qc_rnd* state, qc_err* err) {
             ret = QC_FAILURE;
             goto exit;
         }
-#   elif defined(unix) || defined(__unix__) || defined(__unix)
+#   elif defined(unix) || defined(__unix__) || defined(__unix) || defined(__APPLE__) || defined(__APPLE_CC__) || defined(__OSX__) || defined(__MACH__)
         (void) err; // unused
         arc4random_buf(&state->s64, sizeof(uint64_t)); // always successful
         goto exit;
