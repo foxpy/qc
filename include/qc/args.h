@@ -10,7 +10,7 @@ void qc_args_free(qc_args* args);
 void qc_args_set_help(qc_args* args, void (*help) (void* help_data), void* help_data);
 void qc_args_brief(qc_args* args, char const* brief);
 noreturn void qc_args_call_help(qc_args* args);
-bool qc_args_parse(qc_args* args, int argc, char* const* argv, char** err);
+bool qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err);
 int qc_args_positionals_index(qc_args* args);
 int qc_args_positionals_count(qc_args* args);
 int qc_args_extras_index(qc_args* args);

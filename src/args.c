@@ -64,8 +64,8 @@ static void add_long_opt(qc_args* args, int type, char const* longname, void* de
 static bool asked_for_help(int argc, char* const* argv);
 static bool is_short_opt(char const* str);
 static bool is_long_opt(char const* str);
-static int match_short_opt(qc_args* args, int argn, char* const* argv, char** err);
-static int match_long_opt(qc_args* args, int argn, char* const* argv, char** err);
+static int match_short_opt(qc_args* args, int argn, char* const* argv, qc_err* err);
+static int match_long_opt(qc_args* args, int argn, char* const* argv, qc_err* err);
 static int parse_unsigned(char* str, size_t* dst);
 static int parse_signed(char* str, ptrdiff_t* dst);
 static int parse_double(char* str, double* dst);
@@ -140,7 +140,7 @@ noreturn void qc_args_call_help(qc_args* args) {
     call_help(args);
 }
 
-bool qc_args_parse(qc_args* args, int argc, char* const* argv, char** err) {
+bool qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err) {
     assert(args != NULL);
     if (args->parsed) {
         die("qc_args_parse() should be called only once on a single `args' handle");
@@ -175,9 +175,7 @@ bool qc_args_parse(qc_args* args, int argc, char* const* argv, char** err) {
             }
         } else {
             if (is_short_opt(argv[i]) || is_long_opt(argv[i])) {
-                *err = sprintf_alloc(
-                    "Unexpected opt \"%s\" after positional argument \"%s\"",
-                    argv[i], argv[i - 1]);
+                qc_err_set(err, "Unexpected opt \"%s\" after positional argument \"%s\"", argv[i], argv[i - 1]);
                 return false;
             } else {
                 args->positionals_count += 1;
@@ -209,7 +207,7 @@ bool qc_args_parse(qc_args* args, int argc, char* const* argv, char** err) {
             }
         } else {
             if (!opt->provided) {
-                *err = sprintf_alloc("Argument --%s is required but not provided", opt->name);
+                qc_err_set(err, "Argument --%s is required but not provided", opt->name);
                 return false;
             }
         }
@@ -522,7 +520,7 @@ static bool is_long_opt(char const* str) {
     return str[0] == '-' && str[1] == '-';
 }
 
-static int match_short_opt(qc_args* args, int argn, char* const* argv, char** err) {
+static int match_short_opt(qc_args* args, int argn, char* const* argv, qc_err* err) {
     for (size_t to = strlen(argv[argn]), i = 1; i < to; ++i) {
         char c = argv[argn][i];
         if (c == 'h') {
@@ -537,14 +535,14 @@ static int match_short_opt(qc_args* args, int argn, char* const* argv, char** er
             }
         }
         if (!found) {
-            *err = sprintf_alloc("Unknown flag: \"%c\"", argv[argn][i]);
+            qc_err_set(err, "Unknown flag: \"%c\"", argv[argn][i]);
             return -1;
         }
     }
     return 0;
 }
 
-static int match_long_opt(qc_args* args, int argn, char* const* argv, char** err) {
+static int match_long_opt(qc_args* args, int argn, char* const* argv, qc_err* err) {
     for (size_t i = 0; i < args->opts_count; ++i) {
         if (strncmp(&argv[argn][2], args->opts[i].name, strlen(args->opts[i].name)) == 0) {
             args->opts[i].provided = true;
@@ -554,28 +552,28 @@ static int match_long_opt(qc_args* args, int argn, char* const* argv, char** err
                     return 0;
                 case OPT_UNSIGNED:
                     if (parse_unsigned(argv[argn], args->opts[i].dst.unsigned_ptr) == -1) {
-                        *err = sprintf_alloc("Could not parse \"%s\" as unsigned integer", argv[argn]);
+                        qc_err_set(err, "Could not parse \"%s\" as unsigned integer", argv[argn]);
                         return -1;
                     } else {
                         return 0;
                     }
                 case OPT_SIGNED:
                     if (parse_signed(argv[argn], args->opts[i].dst.signed_ptr) == -1) {
-                        *err = sprintf_alloc("Could not parse \"%s\" as signed integer", argv[argn]);
+                        qc_err_set(err, "Could not parse \"%s\" as signed integer", argv[argn]);
                         return -1;
                     } else {
                         return 0;
                     }
                 case OPT_DOUBLE:
                     if (parse_double(argv[argn], args->opts[i].dst.double_ptr) == -1) {
-                        *err = sprintf_alloc("Could not parse \"%s\" as floating point value", argv[argn]);
+                        qc_err_set(err, "Could not parse \"%s\" as floating point value", argv[argn]);
                         return -1;
                     } else {
                         return 0;
                     }
                 case OPT_STRING:
                     if (parse_string(argv[argn], args->opts[i].dst.string_ptr) == -1) {
-                        *err = sprintf_alloc("Could not parse string from \"%s\"", argv[argn]);
+                        qc_err_set(err, "Could not parse string from \"%s\"", argv[argn]);
                         return -1;
                     } else {
                         return 0;
@@ -584,7 +582,7 @@ static int match_long_opt(qc_args* args, int argn, char* const* argv, char** err
             }
         }
     }
-    *err = sprintf_alloc("Unknown argument: \"%s\"", argv[argn]);
+    qc_err_set(err, "Unknown argument: \"%s\"", argv[argn]);
     return -1;
 }
 

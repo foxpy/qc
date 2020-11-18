@@ -42,14 +42,13 @@ int main(int argc, char* argv[]) {
     reopen_stdin_stdout_binary();
     FILE* input;
     FILE* output;
-    char* err;
     qc_args* args = qc_args_new();
+    qc_err* err = qc_err_new();
     qc_args_set_help(args, help, argv[0]);
-    if (!qc_args_parse(args, argc, argv, &err)) {
-        fprintf(stderr, "Error: %s\n", err);
+    if (!qc_args_parse(args, argc, argv, err)) {
+        fprintf(stderr, "Failed to parse arguments: %s\n", qc_err_get(err));
         fputc('\n', stderr);
         help(argv[0]);
-        free(err);
         exit(EXIT_FAILURE);
     }
     if (qc_args_positionals_count(args) == 0) {
@@ -69,5 +68,6 @@ int main(int argc, char* argv[]) {
     if (output != stdout) {
         fclose(output);
     }
+    qc_err_free(err);
     qc_args_free(args);
 }
