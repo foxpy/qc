@@ -45,13 +45,13 @@ void formatting_test() {
     {
         char const* expected_error = "Failed to open file: /path/to/file";
         qc_err_set(err, "Failed to open file: %s", "/path/to/file");
-        qc_assert_format(strcmp(expected_error, qc_err_get(err)),
+        qc_assert_format(strcmp(expected_error, qc_err_get(err)) == 0,
                          "Expected: \"%s\", got: \"%s\"", expected_error, qc_err_get(err));
     }
     {
         char const* expected_error = "Module 12: Failed to open file: /path/to/file";
         qc_err_append_front(err, "Module %d", 12);
-        qc_assert_format(strcmp(expected_error, qc_err_get(err)),
+        qc_assert_format(strcmp(expected_error, qc_err_get(err)) == 0,
                          "Expected: \"%s\", got: \"%s\"", expected_error, qc_err_get(err));
     }
     qc_err_free(err);
