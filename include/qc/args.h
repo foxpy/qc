@@ -24,6 +24,5 @@ void qc_args_signed(qc_args* args, char const* longname, ptrdiff_t* dst, char co
 void qc_args_signed_default(qc_args* args, char const* longname, ptrdiff_t default_value, ptrdiff_t* dst, char const* hint);
 void qc_args_double(qc_args* args, char const* longname, double* dst, char const* hint);
 void qc_args_double_default(qc_args* args, char const* longname, double default_value, double* dst, char const* hint);
-// dst string should be freed to prevent memory leaks
-void qc_args_string(qc_args* args, char const* longname, char** dst, char const* hint);
-void qc_args_string_default(qc_args* args, char const* longname, char* default_value, char** dst, char const* hint);
+void qc_args_string(qc_args* args, char const* longname, char const** dst, char const* hint);
+void qc_args_string_default(qc_args* args, char const* longname, char* default_value, char const** dst, char const* hint);

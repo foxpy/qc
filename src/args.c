@@ -103,8 +103,11 @@ void qc_args_free(qc_args* args) {
         if (opt->hint != NULL) {
             free(opt->hint);
         }
-        if (!opt->mandatory && opt->type == OPT_STRING) {
-            free(opt->default_value.string_default);
+        if (opt->type == OPT_STRING) {
+            free(*opt->dst.string_ptr);
+            if (!opt->mandatory) {
+                free(opt->default_value.string_default);
+            }
         }
     }
     if (args->program_name != NULL) {
@@ -337,7 +340,7 @@ void qc_args_double_default(qc_args* args, char const* longname, double default_
     }
 }
 
-void qc_args_string(qc_args* args, char const* longname, char** dst, char const* hint) {
+void qc_args_string(qc_args* args, char const* longname, char const** dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -347,7 +350,7 @@ void qc_args_string(qc_args* args, char const* longname, char** dst, char const*
     }
 }
 
-void qc_args_string_default(qc_args* args, char const* longname, char* default_value, char** dst, char const* hint) {
+void qc_args_string_default(qc_args* args, char const* longname, char* default_value, char const** dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -428,6 +431,7 @@ static void add_long_opt(qc_args* args, int type, char const* longname, void* de
     array_push_back((void**) &args->opts, &args->opts_count, &args->opts_capacity, sizeof(struct long_opt));
     struct long_opt* opt = &args->opts[args->opts_count - 1];
     opt->type = type;
+    opt->provided = false;
     opt->name = emalloc(strlen(longname) + 1);
     strcpy(opt->name, longname);
     if (hint != NULL) {
@@ -456,10 +460,8 @@ static void add_long_opt(qc_args* args, int type, char const* longname, void* de
     }
     if (default_value == NULL) {
         opt->mandatory = true;
-        opt->provided = false;
     } else {
         opt->mandatory = false;
-        opt->provided = false;
         switch (type) {
             case OPT_UNSIGNED:
                 opt->default_value.unsigned_default = *((size_t*) default_value);

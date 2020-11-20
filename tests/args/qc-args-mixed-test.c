@@ -11,8 +11,8 @@ struct config {
     ptrdiff_t d;
     double e;
     double f;
-    char* g;
-    char* h;
+    char const* g;
+    char const* h;
     bool i;
     bool j;
 } cfg = {0};
@@ -54,8 +54,6 @@ int main() {
     qc_assert(qc_args_positionals_count(args) == 2, "qc_args_positionals_count() returns wrong value");
     qc_assert(qc_args_extras_index(args) == 12, "qc_args_extras_index returns wrong value");
     qc_assert(qc_args_extras_count(args) == 2, "qc_args_extras_count returns wrong value");
-    free(cfg.g);
-    free(cfg.h);
     qc_err_free(err);
     qc_args_free(args);
 }
