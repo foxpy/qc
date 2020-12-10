@@ -1,8 +1,9 @@
-add_executable(lcm lcm.c)
-target_link_libraries(lcm PUBLIC qc)
+function(qc_add_example target)
+    add_executable(${target} ${target}.c)
+    target_link_libraries(${target} PUBLIC qc)
+endfunction()
 
-add_executable(xor-encryptor xor-encryptor.c)
-target_link_libraries(xor-encryptor PUBLIC qc)
-
-add_executable(urandom-fast urandom-fast.c)
-target_link_libraries(urandom-fast PUBLIC qc)
+qc_add_example(lcm)
+qc_add_example(xor-encryptor)
+qc_add_example(urandom-fast)
+qc_add_example(normal-distribution)

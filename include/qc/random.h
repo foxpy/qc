@@ -20,3 +20,10 @@ double qc_rnd_fp64(qc_rnd* state);
 // these functions return random in specified range if you need so
 int64_t qc_rnd_range64(qc_rnd* state, int64_t low, int64_t high);
 double qc_rnd_range_fp64(qc_rnd* state, double low, double high);
+
+// Normal distribution
+typedef struct qc_distr_normal qc_distr_normal;
+qc_distr_normal* qc_distr_normal_init(double mu, double sigma, qc_err* err);
+void qc_distr_normal_settings(qc_distr_normal* state, double mu, double sigma);
+double qc_distr_normal_gen(qc_distr_normal* state);
+void qc_distr_normal_free(qc_distr_normal* state);

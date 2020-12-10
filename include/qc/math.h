@@ -1,6 +1,8 @@
 #pragma once
 #include <stddef.h>
 
+#define QC_PI 3.14159265358979323846
+
 // Classic macros, type generic
 #define MIN(a, b) ((a) > (b)) ? (b) : (a)
 #define MAX(a, b) ((a) > (b)) ? (a) : (b)
