@@ -540,7 +540,9 @@ static int match_short_opt(qc_args* args, int argn, char* const* argv, qc_err* e
 
 static int match_long_opt(qc_args* args, int argn, char* const* argv, qc_err* err) {
     for (size_t i = 0; i < args->opts_count; ++i) {
-        if (strncmp(&argv[argn][2], args->opts[i].name, strlen(args->opts[i].name)) == 0) {
+        size_t argname_length = strlen(args->opts[i].name);
+        if (strncmp(&argv[argn][2], args->opts[i].name, argname_length) == 0 &&
+           (argv[argn][2 + argname_length] == '\0' || argv[argn][2 + argname_length] == '=')) {
             args->opts[i].provided = true;
             switch (args->opts[i].type) {
                 case OPT_FLAG:
