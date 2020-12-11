@@ -13,7 +13,7 @@ void test_unsigned(qc_err* err) {
     qc_result result = qc_args_parse(args, 4, (char*[]){
         "/path/to/exe", "--length=15", "--depth=15", "--width=30", NULL
     }, err);
-    qc_assert(result == QC_SUCCESS, qc_sprintf_alloc("qc_args_parse has failed: %s", err));
+    qc_assert_format(result == QC_SUCCESS, "qc_args_parse has failed: %s", qc_err_get(err));
     qc_assert(length == 15 && width == 30 && depth == 15,
               "Expected values don't match");
     qc_args_free(args);
@@ -29,7 +29,7 @@ void test_signed(qc_err* err) {
     qc_result result = qc_args_parse(args, 4, (char*[]){
         "/path/to/exe", "--altitude=0", "--longitude=250", "--latitude=-115", NULL
     }, err);
-    qc_assert(result == QC_SUCCESS, qc_sprintf_alloc("qc_args_parse has failed: %s", err));
+    qc_assert_format(result == QC_SUCCESS, "qc_args_parse has failed: %s", qc_err_get(err));
     qc_assert(latitude == -115 && longitude == 250 && altitude == 0,
               "Expected values don't match");
     qc_args_free(args);
@@ -45,7 +45,7 @@ void test_double(qc_err* err) {
     qc_result result = qc_args_parse(args, 4, (char*[]){
         "/path/to/exe", "--x=12.4", "--z=-13.557", "--y=0.00006", NULL
     }, err);
-    qc_assert(result == QC_SUCCESS, qc_sprintf_alloc("qc_args_parse has failed: %s", err));
+    qc_assert_format(result == QC_SUCCESS, "qc_args_parse has failed: %s", qc_err_get(err));
     qc_assert(fabs(x - 12.4) < EPS && fabs(y - 0.00006) < EPS && fabs(z + 13.557) < EPS,
               "Expected values don't match");
     qc_args_free(args);
