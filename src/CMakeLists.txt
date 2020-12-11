@@ -5,6 +5,7 @@ add_library(qc
     utils.c
     qc_impl.c
     error.c
+    string.c
     platform/random.c
     platform/reopen-binary.c
 )

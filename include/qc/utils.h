@@ -25,14 +25,6 @@ void* qc_malloc(size_t size);
 // works just like realloc, but terminates program on OOM condition
 void* qc_realloc(void* ptr, size_t size);
 
-// these functions act like [v]asprintf from GNU C standard library,
-// they allocate memory automatically
-// qc_[v]asnprintf functions accept a maximum allocation size limit
-ptrdiff_t qc_asprintf(char** dst, char const* format, ...);
-ptrdiff_t qc_asnprintf(char** dst, size_t mlimit, char const* format, ...);
-ptrdiff_t qc_vasprintf(char** dst, char const* format, va_list ap);
-ptrdiff_t qc_vasnprintf(char** dst, size_t mlimit, char const* format, va_list ap);
-
 // platform independent stream reopen in binary mode
 // these functions would not be needed without Microsoft <3
 void qc_reopen_binary_read(FILE *stream);

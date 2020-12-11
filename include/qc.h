@@ -6,3 +6,4 @@
 #include "qc/utils.h"
 #include "qc/error.h"
 #include "qc/args.h"
+#include "qc/string.h"
