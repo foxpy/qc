@@ -1,5 +1,9 @@
 #include <stdarg.h>
 #include <limits.h>
+#include <string.h>
+#include <errno.h>
+#include <assert.h>
+#include <ctype.h>
 #include "qc.h"
 
 static ptrdiff_t qc_vasnprintf_impl(char** dst, size_t guess, size_t max, char const* format, va_list ap) {
@@ -56,4 +60,79 @@ ptrdiff_t qc_vasprintf(char** dst, char const* format, va_list ap) {
 
 ptrdiff_t qc_vasnprintf(char** dst, size_t mlimit, char const* format, va_list ap) {
     return qc_vasnprintf_impl(dst, 256, mlimit, format, ap);
+}
+
+qc_result qc_str_to_unsigned(char const* str, size_t* dst, char const** tail) {
+    assert(str != NULL);
+    assert(dst != NULL);
+    if (!isdigit(str[0])) {
+        goto error;
+    }
+    char* endptr;
+    errno = 0;
+    unsigned long long u = strtoull(str, &endptr, 0);
+    if (errno != 0) {
+        goto error;
+    } else {
+        *dst = u % SIZE_MAX;
+        if (tail != NULL) {
+            *tail = endptr;
+        }
+        return QC_SUCCESS;
+    }
+error:
+    if (tail != NULL) {
+        *tail = NULL;
+    }
+    return QC_FAILURE;
+}
+
+qc_result qc_str_to_signed(char const* str, ptrdiff_t * dst, char const** tail) {
+    assert(str != NULL);
+    assert(dst != NULL);
+    if (!isdigit(str[0]) && str[0] != '-') {
+        goto error;
+    }
+    char* endptr;
+    errno = 0;
+    long long l = strtoll(str, &endptr, 0);
+    if (errno != 0) {
+        goto error;
+    } else {
+        *dst = l;
+        if (tail != NULL) {
+            *tail = endptr;
+        }
+        return QC_SUCCESS;
+    }
+error:
+    if (tail != NULL) {
+        *tail = NULL;
+    }
+    return QC_FAILURE;
+}
+
+qc_result qc_str_to_double(char const* str, double* dst, char const** tail) {
+    assert(str != NULL);
+    assert(dst != NULL);
+    if (!isdigit(str[0]) && str[0] != '-' && str[1] != '+') {
+        goto error;
+    }
+    char* endptr;
+    errno = 0;
+    double d = strtod(str, &endptr);
+    if (errno != 0) {
+        goto error;
+    } else {
+        *dst =d ;
+        if (tail != NULL) {
+            *tail = endptr;
+        }
+        return QC_SUCCESS;
+    }
+error:
+    if (tail != NULL) {
+        *tail = NULL;
+    }
+    return QC_FAILURE;
 }

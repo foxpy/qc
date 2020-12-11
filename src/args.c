@@ -591,19 +591,10 @@ static int parse_unsigned(char* str, size_t* dst) {
     } else {
         ++val;
     }
-    if (val[0] == '-') {
-        // strtoull does not provide any means
-        // of differentiating between signed and unsigned input...
-        return -1;
-    }
-    char* endptr;
-    errno = 0;
-    unsigned long long u = strtoull(val, &endptr, 0);
-    if (errno != 0 || *endptr != '\0') {
-        return -1;
-    } else {
-        *dst = u % SIZE_MAX;
+    if (qc_str_to_unsigned(val, dst, NULL) == QC_SUCCESS) {
         return 0;
+    } else {
+        return -1;
     }
 }
 
@@ -614,14 +605,10 @@ static int parse_signed(char* str, ptrdiff_t* dst) {
     } else {
         ++val;
     }
-    char* endptr;
-    errno = 0;
-    signed long long s = strtoll(val, &endptr, 0);
-    if (errno != 0 || *endptr != '\0') {
-        return -1;
-    } else {
-        *dst = s % PTRDIFF_MAX;
+    if (qc_str_to_signed(val, dst, NULL) == QC_SUCCESS) {
         return 0;
+    } else {
+        return -1;
     }
 }
 
@@ -632,14 +619,10 @@ static int parse_double(char* str, double* dst) {
     } else {
         ++val;
     }
-    char* endptr;
-    errno = 0;
-    double d = strtod(val, &endptr);
-    if (errno != 0 || *endptr != '\0') {
-        return -1;
-    } else {
-        *dst = d;
+    if (qc_str_to_double(val, dst, NULL) == QC_SUCCESS) {
         return 0;
+    } else {
+        return -1;
     }
 }
 
