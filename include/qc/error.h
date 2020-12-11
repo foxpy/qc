@@ -1,4 +1,5 @@
 #pragma once
+#include <stdnoreturn.h>
 
 // Error handling abstraction
 // Makes error handling much easier
@@ -14,3 +15,4 @@ char const* qc_err_get(qc_err const* err);
 char* qc_err_to_owned_c_str(qc_err* err);
 void qc_err_set(qc_err* err, char const* format, ...);
 void qc_err_append_front(qc_err* err, char const* format, ...);
+noreturn void qc_err_fatal(qc_err* err, char const* format, ...);
