@@ -40,4 +40,4 @@ it depends on qc.
 Whenever you include this library in your project,
 you should hear **Quad Damage** announcement.
 Unlike Quake's power-up, this one is not time-limited,
-and you don't loose it after you `die()`!
+and you don't lose it after you `die()`!
