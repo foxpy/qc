@@ -46,7 +46,8 @@ void qc_err_set(qc_err* err, char const* format, ...) {
     assert(format != NULL);
     va_list args;
     va_start(args, format);
-    char* msg = qc_vsprintf_alloc(format, args);
+    char* msg;
+    qc_vasprintf(&msg, format, args);
     va_end(args);
     if (err->buf != NULL) {
         free(err->buf);
@@ -59,7 +60,8 @@ void qc_err_append_front(qc_err* err, char const* format, ...) {
     assert(format != NULL);
     va_list args;
     va_start(args, format);
-    char* msg = qc_vsprintf_alloc(format, args);
+    char* msg;
+    qc_vasprintf(&msg, format, args);
     va_end(args);
     size_t new_size = 0;
     if (err->buf != NULL) {
