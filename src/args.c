@@ -71,11 +71,11 @@ static int parse_double(char* str, double* dst);
 static int parse_string(char* str, char** dst);
 
 qc_args* qc_args_new() {
-    qc_args* ret = emalloc(sizeof(qc_args));
-    ret->flags = emalloc(sizeof(struct short_flag) * DEFAULT_ALLOC_SIZE);
+    qc_args* ret = qc_malloc(sizeof(qc_args));
+    ret->flags = qc_malloc(sizeof(struct short_flag) * DEFAULT_ALLOC_SIZE);
     ret->flags_count = 0;
     ret->flags_capacity = DEFAULT_ALLOC_SIZE;
-    ret->opts = emalloc(sizeof(struct long_opt) * DEFAULT_ALLOC_SIZE);
+    ret->opts = qc_malloc(sizeof(struct long_opt) * DEFAULT_ALLOC_SIZE);
     ret->opts_count = 0;
     ret->opts_capacity = DEFAULT_ALLOC_SIZE;
     ret->positionals_index = 0;
@@ -130,14 +130,14 @@ void qc_args_set_help(qc_args* args, void (*help) (void*), void* help_data) {
 void qc_args_set_brief(qc_args* args, char const* brief) {
     assert(args != NULL);
     assert(brief != NULL);
-    args->brief = emalloc(strlen(brief) + 1);
+    args->brief = qc_malloc(strlen(brief) + 1);
     strcpy(args->brief, brief);
 }
 
 void qc_args_call_help(qc_args* args) {
     assert(args != NULL);
     if (!args->parsed) {
-        die("Fatal error: qc_args_call_help() should be called after qc_args_parse()");
+        qc_die("Fatal error: qc_args_call_help() should be called after qc_args_parse()");
     } else if (args->help != NULL) {
         args->help(args->help_data);
     } else {
@@ -148,11 +148,11 @@ void qc_args_call_help(qc_args* args) {
 qc_result qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err) {
     assert(args != NULL);
     if (args->parsed) {
-        die("qc_args_parse() should be called only once on a single `args' handle");
+        qc_die("qc_args_parse() should be called only once on a single `args' handle");
     } else {
         args->parsed = true;
     }
-    args->program_name = emalloc(strlen(argv[0]) + 1);
+    args->program_name = qc_malloc(strlen(argv[0]) + 1);
     strcpy(args->program_name, argv[0]);
     if (asked_for_help(argc, argv)) {
         qc_args_call_help(args);
@@ -205,10 +205,10 @@ qc_result qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err)
                     *opt->dst.double_ptr = opt->default_value.double_default;
                     break;
                 case OPT_STRING:
-                    *opt->dst.string_ptr = emalloc(strlen(opt->default_value.string_default) + 1);
+                    *opt->dst.string_ptr = qc_malloc(strlen(opt->default_value.string_default) + 1);
                     strcpy(*opt->dst.string_ptr, opt->default_value.string_default);
                     break;
-                default: UNREACHABLE_CODE();
+                default: QC_UNREACHABLE_CODE();
                 }
             }
         } else {
@@ -224,7 +224,7 @@ qc_result qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err)
 int qc_args_positionals_index(qc_args* args) {
     assert(args != NULL);
     if (!args->parsed) {
-        die("qc_args_positionals_index() should only be called after qc_args_parse()");
+        qc_die("qc_args_positionals_index() should only be called after qc_args_parse()");
     } else {
         return args->positionals_index;
     }
@@ -233,7 +233,7 @@ int qc_args_positionals_index(qc_args* args) {
 int qc_args_positionals_count(qc_args* args) {
     assert(args != NULL);
     if (!args->parsed) {
-        die("qc_args_positionals_count() should only be called after qc_args_parse()");
+        qc_die("qc_args_positionals_count() should only be called after qc_args_parse()");
     } else {
         return args->positionals_count;
     }
@@ -242,7 +242,7 @@ int qc_args_positionals_count(qc_args* args) {
 int qc_args_extras_index(qc_args* args) {
     assert(args != NULL);
     if (!args->parsed) {
-        die("qc_args_extras_index() should only be called after qc_args_parse()");
+        qc_die("qc_args_extras_index() should only be called after qc_args_parse()");
     } else {
         return args->extras_index;
     }
@@ -251,7 +251,7 @@ int qc_args_extras_index(qc_args* args) {
 int qc_args_extras_count(qc_args* args) {
     assert(args != NULL);
     if (!args->parsed) {
-        die("qc_args_extras_count() should only be called after qc_args_parse()");
+        qc_die("qc_args_extras_count() should only be called after qc_args_parse()");
     } else {
         return args->extras_count;
     }
@@ -261,16 +261,16 @@ void qc_args_flag(qc_args* args, char shortname, char const* longname, bool* dst
     assert(args != NULL);
     assert(longname != NULL);
     if (shortname == 'h') {
-        die("Flag -h is reserved for help");
+        qc_die("Flag -h is reserved for help");
     }
     if (strcmp(longname, "help") == 0) {
-        die("Flag --help is reserved for help");
+        qc_die("Flag --help is reserved for help");
     }
     array_push_back((void **) &args->flags, &args->flags_count, &args->flags_capacity, sizeof(struct short_flag));
     struct short_flag *flag = &args->flags[args->flags_count - 1];
     flag->name = shortname;
     if (hint != NULL) {
-        flag->hint = emalloc(strlen(hint) + 1);
+        flag->hint = qc_malloc(strlen(hint) + 1);
         strcpy(flag->hint, hint);
     } else {
         flag->hint = NULL;
@@ -284,7 +284,7 @@ void qc_args_unsigned(qc_args* args, char const* longname, size_t* dst, char con
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
-        die("Flag --help is reserved for help");
+        qc_die("Flag --help is reserved for help");
     } else {
         add_long_opt(args, OPT_UNSIGNED, longname, NULL, dst, hint);
     }
@@ -294,7 +294,7 @@ void qc_args_unsigned_default(qc_args* args, char const* longname, size_t defaul
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
-        die("Flag --help is reserved for help");
+        qc_die("Flag --help is reserved for help");
     } else {
         add_long_opt(args, OPT_UNSIGNED, longname, &default_value, dst, hint);
     }
@@ -304,7 +304,7 @@ void qc_args_signed(qc_args* args, char const* longname, ptrdiff_t* dst, char co
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
-        die("Flag --help is reserved for help");
+        qc_die("Flag --help is reserved for help");
     } else {
         add_long_opt(args, OPT_SIGNED, longname, NULL, dst, hint);
     }
@@ -314,7 +314,7 @@ void qc_args_signed_default(qc_args* args, char const* longname, ptrdiff_t defau
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
-        die("Flag --help is reserved for help");
+        qc_die("Flag --help is reserved for help");
     } else {
         add_long_opt(args, OPT_SIGNED, longname, &default_value, dst, hint);
     }
@@ -324,7 +324,7 @@ void qc_args_double(qc_args* args, char const* longname, double* dst, char const
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
-        die("Flag --help is reserved for help");
+        qc_die("Flag --help is reserved for help");
     } else {
         add_long_opt(args, OPT_DOUBLE, longname, NULL, dst, hint);
     }
@@ -334,7 +334,7 @@ void qc_args_double_default(qc_args* args, char const* longname, double default_
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
-        die("Flag --help is reserved for help");
+        qc_die("Flag --help is reserved for help");
     } else {
         add_long_opt(args, OPT_DOUBLE, longname, &default_value, dst, hint);
     }
@@ -344,7 +344,7 @@ void qc_args_string(qc_args* args, char const* longname, char const** dst, char 
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
-        die("Flag --help is reserved for help");
+        qc_die("Flag --help is reserved for help");
     } else {
         add_long_opt(args, OPT_STRING, longname, NULL, dst, hint);
     }
@@ -354,7 +354,7 @@ void qc_args_string_default(qc_args* args, char const* longname, char* default_v
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
-        die("Flag --help is reserved for help");
+        qc_die("Flag --help is reserved for help");
     } else {
         add_long_opt(args, OPT_STRING, longname, &default_value, dst, hint);
     }
@@ -399,7 +399,7 @@ static void auto_help(qc_args* args) {
                     fputs("=\"STRING\"", stderr);
                     break;
                 default:
-                    UNREACHABLE_CODE();
+                    QC_UNREACHABLE_CODE();
             }
             if (!opt->mandatory) {
                 switch (opt->type) {
@@ -416,7 +416,7 @@ static void auto_help(qc_args* args) {
                         fprintf(stderr, " (default = %s)", opt->default_value.string_default);
                         break;
                     default:
-                        UNREACHABLE_CODE();
+                        QC_UNREACHABLE_CODE();
                 }
             }
             if (opt->hint != NULL) {
@@ -432,10 +432,10 @@ static void add_long_opt(qc_args* args, int type, char const* longname, void* de
     struct long_opt* opt = &args->opts[args->opts_count - 1];
     opt->type = type;
     opt->provided = false;
-    opt->name = emalloc(strlen(longname) + 1);
+    opt->name = qc_malloc(strlen(longname) + 1);
     strcpy(opt->name, longname);
     if (hint != NULL) {
-        opt->hint = emalloc(strlen(hint) + 1);
+        opt->hint = qc_malloc(strlen(hint) + 1);
         strcpy(opt->hint, hint);
     } else {
         opt->hint = NULL;
@@ -456,7 +456,7 @@ static void add_long_opt(qc_args* args, int type, char const* longname, void* de
         case OPT_STRING:
             opt->dst.string_ptr = dst;
             break;
-        default: UNREACHABLE_CODE();
+        default: QC_UNREACHABLE_CODE();
     }
     if (default_value == NULL) {
         opt->mandatory = true;
@@ -473,10 +473,10 @@ static void add_long_opt(qc_args* args, int type, char const* longname, void* de
                 opt->default_value.double_default = *((double*) default_value);
                 break;
             case OPT_STRING:
-                opt->default_value.string_default = emalloc(strlen(*((char**) default_value)) + 1);
+                opt->default_value.string_default = qc_malloc(strlen(*((char **) default_value)) + 1);
                 strcpy(opt->default_value.string_default, *((char**) default_value));
                 break;
-            default: UNREACHABLE_CODE();
+            default: QC_UNREACHABLE_CODE();
         }
     }
 }
@@ -576,7 +576,7 @@ static int match_long_opt(qc_args* args, int argn, char* const* argv, qc_err* er
                     } else {
                         return 0;
                     }
-                default: UNREACHABLE_CODE();
+                default: QC_UNREACHABLE_CODE();
             }
         }
     }
@@ -652,11 +652,11 @@ static int parse_string(char* str, char** dst) {
     }
     if (val[0] == '"' && val[strlen(val) - 1] == '"') {
         ++val;
-        *dst = emalloc(strlen(val) + 1);
+        *dst = qc_malloc(strlen(val) + 1);
         strcpy(*dst, val);
         (*dst)[strlen(*dst) - 1] = '\0';
     } else {
-        *dst = emalloc(strlen(val) + 1);
+        *dst = qc_malloc(strlen(val) + 1);
         strcpy(*dst, val);
     }
     return 0;

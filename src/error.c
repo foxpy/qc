@@ -12,7 +12,7 @@ struct qc_err {
 };
 
 qc_err* qc_err_new() {
-    qc_err* ret = emalloc(sizeof(qc_err));
+    qc_err* ret = qc_malloc(sizeof(qc_err));
     ret->buf = NULL;
     return ret;
 }
@@ -46,7 +46,7 @@ void qc_err_set(qc_err* err, char const* format, ...) {
     assert(format != NULL);
     va_list args;
     va_start(args, format);
-    char* msg = vsprintf_alloc(format, args);
+    char* msg = qc_vsprintf_alloc(format, args);
     va_end(args);
     if (err->buf != NULL) {
         free(err->buf);
@@ -59,7 +59,7 @@ void qc_err_append_front(qc_err* err, char const* format, ...) {
     assert(format != NULL);
     va_list args;
     va_start(args, format);
-    char* msg = vsprintf_alloc(format, args);
+    char* msg = qc_vsprintf_alloc(format, args);
     va_end(args);
     size_t new_size = 0;
     if (err->buf != NULL) {
@@ -68,7 +68,7 @@ void qc_err_append_front(qc_err* err, char const* format, ...) {
     }
     new_size += strlen(msg);
     new_size += 1;
-    char* new_err_msg = emalloc(new_size);
+    char* new_err_msg = qc_malloc(new_size);
     strcpy(new_err_msg, msg);
     if (err->buf != NULL) {
         strcat(new_err_msg, delimiter);

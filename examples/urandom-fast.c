@@ -5,7 +5,7 @@
 #define BUFFER_SIZE 8096
 
 int main() {
-    reopen_stdin_stdout_binary();
+    qc_reopen_stdin_stdout_binary();
     qc_err* err = qc_err_new();
     uint64_t buf[BUFFER_SIZE];
     qc_rnd rnd;

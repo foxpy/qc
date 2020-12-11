@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
         fputs("Both arguments should not be 0 at the same time\n", stderr);
         exit(EXIT_FAILURE);
     } else {
-        printf("%zu\n", lcm(a, b));
+        printf("%zu\n", qc_lcm(a, b));
     }
     qc_err_free(err);
     qc_args_free(args);

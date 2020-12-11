@@ -5,7 +5,7 @@
 #endif
 #include "qc.h"
 
-void reopen_binary_read(FILE *stream) {
+void qc_reopen_binary_read(FILE *stream) {
 #   ifdef _WIN32
         _setmode(_fileno(stream), _O_BINARY);
 #   elif defined __ANDROID__
@@ -15,7 +15,7 @@ void reopen_binary_read(FILE *stream) {
 #   endif
 }
 
-void reopen_binary_write(FILE *stream) {
+void qc_reopen_binary_write(FILE *stream) {
 #   ifdef _WIN32
         _setmode(_fileno(stream), _O_BINARY);
 #   elif defined __ANDROID__
@@ -25,7 +25,7 @@ void reopen_binary_write(FILE *stream) {
 #   endif
 }
 
-void reopen_stdin_stdout_binary() {
-    reopen_binary_read(stdin);
-    reopen_binary_write(stdout);
+void qc_reopen_stdin_stdout_binary() {
+    qc_reopen_binary_read(stdin);
+    qc_reopen_binary_write(stdout);
 }

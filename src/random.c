@@ -74,7 +74,7 @@ static void qc_distr_normal_populate(qc_distr_normal* state) {
 }
 
 qc_distr_normal* qc_distr_normal_init(double mu, double sigma, qc_err* err) {
-    qc_distr_normal* ret = emalloc(sizeof(qc_distr_normal));
+    qc_distr_normal* ret = qc_malloc(sizeof(qc_distr_normal));
     if (qc_rnd_init(&ret->rnd, err) == QC_FAILURE) {
         qc_err_append_front(err, "Failed to obtain entropy for normal distribution generator");
         free(ret);

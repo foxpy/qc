@@ -39,7 +39,7 @@ static FILE* open_file(char const* path, char const* mode, FILE* fallback) {
 }
 
 int main(int argc, char* argv[]) {
-    reopen_stdin_stdout_binary();
+    qc_reopen_stdin_stdout_binary();
     FILE* input;
     FILE* output;
     qc_args* args = qc_args_new();
