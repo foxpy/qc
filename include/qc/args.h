@@ -1,5 +1,4 @@
 #pragma once
-#include <stdnoreturn.h>
 #include <stdbool.h>
 #include <stddef.h>
 

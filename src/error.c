@@ -88,7 +88,7 @@ void qc_err_append_front(qc_err* err, char const* format, ...) {
     va_end(args);
 }
 
-noreturn void qc_err_fatal(qc_err* err, char const* format, ...) {
+qc_noreturn void qc_err_fatal(qc_err* err, char const* format, ...) {
     assert(err != NULL);
     assert(format != NULL);
     va_list args;
