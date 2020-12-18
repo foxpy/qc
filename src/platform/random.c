@@ -36,7 +36,7 @@ qc_result qc_rnd_init(qc_rnd* state, qc_err* err) {
         }
 #   elif defined __ANDROID__
 #       if __ANDROID_API__ < 28
-            UNUSED(err);
+            QC_UNUSED(err);
             arc4random_buf(&state->s64, sizeof(uint64_t)); // always successful
             goto exit;
 #       else
@@ -53,7 +53,7 @@ qc_result qc_rnd_init(qc_rnd* state, qc_err* err) {
             goto exit;
         }
 #   elif defined(unix) || defined(__unix__) || defined(__unix) || defined(__APPLE__) || defined(__APPLE_CC__) || defined(__OSX__) || defined(__MACH__)
-        UNUSED(err);
+        QC_UNUSED(err);
         arc4random_buf(&state->s64, sizeof(uint64_t)); // always successful
         goto exit;
 #   else
