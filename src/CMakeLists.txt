@@ -6,6 +6,10 @@ add_library(qc
     qc_impl.c
     error.c
     string.c
+    endian/integer64.c
+    endian/integer32.c
+    endian/integer16.c
+    endian/floating-point.c
     platform/random.c
     platform/reopen-binary.c
 )

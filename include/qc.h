@@ -7,3 +7,4 @@
 #include "qc/error.h"
 #include "qc/args.h"
 #include "qc/string.h"
+#include "qc/endian.h"
