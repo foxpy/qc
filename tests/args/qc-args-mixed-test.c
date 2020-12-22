@@ -38,7 +38,7 @@ int main() {
         "-i", "--j", "another sample text", "yet another sample text",
         "--", "--some-unrelated-arg", "--help", NULL
     }, err);
-    qc_assert_format(result == QC_SUCCESS, "qc_args_parse has failed: %s", qc_err_get(err));
+    qc_assert(result == QC_SUCCESS, "qc_args_parse has failed: %s", qc_err_get(err));
     qc_assert(cfg.a == 25 &&
               cfg.b == 2 &&
               cfg.c == -200 &&

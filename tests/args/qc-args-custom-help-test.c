@@ -12,7 +12,7 @@ int main() {
     qc_result result = qc_args_parse(args, 3, (char*[]){
         "/path/to/exe", "hello", "--help", NULL
     }, err);
-    qc_assert_format(result == QC_SUCCESS, "qc_args_parse has failed: %s", qc_err_get(err));
+    qc_assert(result == QC_SUCCESS, "qc_args_parse has failed: %s", qc_err_get(err));
     qc_err_free(err);
     qc_args_free(args);
 

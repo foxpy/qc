@@ -31,7 +31,7 @@ static void test_64(int64_t low, int64_t high) {
 static void test_fp64(double low, double high) {
     qc_err* err = qc_err_new();
     qc_rnd s;
-    qc_assert_format(qc_rnd_init(&s, err) == QC_SUCCESS, "Failed to initialize random: %s", qc_err_get(err));
+    qc_assert(qc_rnd_init(&s, err) == QC_SUCCESS, "Failed to initialize random: %s", qc_err_get(err));
     for (size_t i = 0; i < ITERATIONS; ++i) {
         double val = qc_rnd_range_fp64(&s, low, high);
         qc_assert(((val >= low) && (val < high)),

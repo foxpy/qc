@@ -9,7 +9,7 @@ static void parse_unsigned_correct() {
     qc_assert(qc_str_to_unsigned(input, &parsed, &tail) == QC_SUCCESS,
               "qc_str_to_unsigned has failed");
     size_t expected = 567;
-    qc_assert_format(parsed == expected, "Expected: %zu, got: %zu", expected, parsed);
+    qc_assert(parsed == expected, "Expected: %zu, got: %zu", expected, parsed);
     qc_assert(tail == &input[strlen(input)], "Tail does not point to the end of input string");
 }
 
@@ -20,7 +20,7 @@ static void parse_unsigned_correct_with_garbage() {
     qc_assert(qc_str_to_unsigned(input, &parsed, &tail) == QC_SUCCESS,
               "qc_str_to_unsigned has failed");
     size_t expected = 567;
-    qc_assert_format(parsed == expected, "Expected: %zu, got: %zu", expected, parsed);
+    qc_assert(parsed == expected, "Expected: %zu, got: %zu", expected, parsed);
     qc_assert(tail == &input[3], "Tail does not point to the end of input string");
 }
 
@@ -31,7 +31,7 @@ static void parse_unsigned_zero() {
     qc_assert(qc_str_to_unsigned(input, &parsed, &tail) == QC_SUCCESS,
               "qc_str_to_unsigned has failed");
     size_t expected = 0;
-    qc_assert_format(parsed == expected, "Expected: %zu, got: %zu", expected, parsed);
+    qc_assert(parsed == expected, "Expected: %zu, got: %zu", expected, parsed);
     qc_assert(tail == &input[strlen(input)], "Tail does not point to the end of input string");
 }
 
@@ -41,7 +41,7 @@ static void parse_unsigned_ignore_null_tail() {
     qc_assert(qc_str_to_unsigned(input, &parsed, NULL) == QC_SUCCESS,
               "qc_str_to_unsigned has failed");
     size_t expected = 567;
-    qc_assert_format(parsed == expected, "Expected: %zu, got: %zu", expected, parsed);
+    qc_assert(parsed == expected, "Expected: %zu, got: %zu", expected, parsed);
 }
 
 static void parse_unsigned_negative_sign() {

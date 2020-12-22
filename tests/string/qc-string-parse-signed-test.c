@@ -8,7 +8,7 @@ static void parse_unsigned_correct() {
     qc_assert(qc_str_to_signed(input, &parsed, &tail) == QC_SUCCESS,
               "qc_str_to_signed has failed");
     ptrdiff_t expected = 567;
-    qc_assert_format(parsed == expected, "Expected: %td, got: %td", expected, parsed);
+    qc_assert(parsed == expected, "Expected: %td, got: %td", expected, parsed);
     qc_assert(tail == &input[strlen(input)], "Tail does not point to the end of input string");
 }
 
@@ -19,7 +19,7 @@ static void parse_signed_correct() {
     qc_assert(qc_str_to_signed(input, &parsed, &tail) == QC_SUCCESS,
               "qc_str_to_signed has failed");
     ptrdiff_t expected = -567;
-    qc_assert_format(parsed == expected, "Expected: %td, got: %td", expected, parsed);
+    qc_assert(parsed == expected, "Expected: %td, got: %td", expected, parsed);
     qc_assert(tail == &input[strlen(input)], "Tail does not point to the end of input string");
 }
 
@@ -30,7 +30,7 @@ static void parse_signed_zero() {
     qc_assert(qc_str_to_signed(input, &parsed, &tail) == QC_SUCCESS,
               "qc_str_to_signed has failed");
     ptrdiff_t expected = 0;
-    qc_assert_format(parsed == expected, "Expected: %td, got: %td", expected, parsed);
+    qc_assert(parsed == expected, "Expected: %td, got: %td", expected, parsed);
     qc_assert(tail == &input[strlen(input)], "Tail does not point to the end of input string");
 }
 
@@ -40,7 +40,7 @@ static void parse_signed_ignore_null_tail() {
     qc_assert(qc_str_to_signed(input, &parsed, NULL) == QC_SUCCESS,
               "qc_str_to_signed has failed");
     ptrdiff_t expected = 567;
-    qc_assert_format(parsed == expected, "Expected: %td, got: %td", expected, parsed);
+    qc_assert(parsed == expected, "Expected: %td, got: %td", expected, parsed);
 }
 
 static void parse_signed_garbage() {

@@ -16,11 +16,11 @@ int main() {
         fprintf(stderr, "Failed to parse arguments: %s", qc_err_to_owned_c_str(err));
         return EXIT_FAILURE;
     }
-    qc_assert_format(x == 5, "Wrong value for x, expected %zu, got %zu", (size_t) 5, x);
-    qc_assert_format(xx == 20, "Wrong value for xx, expected %zu, got %zu", (size_t) 20, xx);
-    qc_assert_format(y == 4, "Wrong value for y, expected %zu, got %zu", (size_t) 4, y);
-    qc_assert_format(z == 7, "Wrong value for z, expected %zu, got %zu", (size_t) 7, z);
-    qc_assert_format(w == 3, "Wrong value for w, expected %zu, got %zu", (size_t) 3, w);
+    qc_assert(x == 5, "Wrong value for x, expected %zu, got %zu", (size_t) 5, x);
+    qc_assert(xx == 20, "Wrong value for xx, expected %zu, got %zu", (size_t) 20, xx);
+    qc_assert(y == 4, "Wrong value for y, expected %zu, got %zu", (size_t) 4, y);
+    qc_assert(z == 7, "Wrong value for z, expected %zu, got %zu", (size_t) 7, z);
+    qc_assert(w == 3, "Wrong value for w, expected %zu, got %zu", (size_t) 3, w);
     qc_args_free(args);
     qc_err_free(err);
 }

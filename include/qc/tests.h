@@ -8,20 +8,11 @@
 // on NDEBUG macro definition
 // qc_assert_format also allows you to format error message if necessary
 
-#define qc_assert(cond, err_msg)                                          \
+#define qc_assert(cond, ...)                                              \
 do {                                                                      \
     if (!(cond)) {                                                        \
         fprintf(stderr, "Assertion failed: %s:%d, ", __FILE__, __LINE__); \
-        fprintf(stderr, "%s\n", err_msg);                                 \
-        abort();                                                          \
-    }                                                                     \
-} while (0)
-
-#define qc_assert_format(cond, format, ...)                               \
-do {                                                                      \
-    if (!(cond)) {                                                        \
-        fprintf(stderr, "Assertion failed: %s:%d, ", __FILE__, __LINE__); \
-        fprintf(stderr, format, __VA_ARGS__);                             \
+        fprintf(stderr, ##__VA_ARGS__);                                   \
         fputc('\n', stderr);                                              \
         abort();                                                          \
     }                                                                     \
