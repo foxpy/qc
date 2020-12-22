@@ -6,7 +6,6 @@
 // current filename and line. Has several advantages over
 // std assert: prints custom error message and does not depend
 // on NDEBUG macro definition
-// qc_assert_format also allows you to format error message if necessary
 
 #define QC_ASSERT_IMPL(fmt, ...) do {                      \
     fprintf(stderr, "Assertion failed: %s:%d, " fmt "%c",  \
