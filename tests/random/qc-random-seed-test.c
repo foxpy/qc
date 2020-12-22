@@ -4,7 +4,7 @@
 #define SEED UINT64_C(0x83401d53c3745176)
 #define ITERATIONS 1000
 
-int main() {
+int main(void) {
     qc_rnd rnd1, rnd2;
     qc_rnd_seed(&rnd1, SEED);
     qc_rnd_seed(&rnd2, SEED);

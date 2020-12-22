@@ -21,7 +21,7 @@ static size_t compare(struct test_random_data *t1, struct test_random_data *t2) 
            memcmp(&t1->f64, &t2->f64, sizeof(double)) != 0;
 }
 
-int main() {
+int main(void) {
     struct test_random_data t1, t2, t3;
     populate(&t1);
     populate(&t2);

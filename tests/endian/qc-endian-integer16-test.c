@@ -47,7 +47,7 @@ static void check_i16(int16_t x) {
     }
 }
 
-int main() {
+int main(void) {
     check_u16_to_be(((uint8_t[2]){0x01, 0x23}), UINT16_C(0x0123));
     check_u16_to_le(((uint8_t[2]){0x23, 0x01}), UINT16_C(0x0123));
     check_i16(INT16_C(512));

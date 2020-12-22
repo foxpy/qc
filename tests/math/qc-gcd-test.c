@@ -1,6 +1,6 @@
 #include "qc.h"
 
-int main() {
+int main(void) {
     qc_assert(qc_gcd(0, 0) == 0, "expected: qc_gcd(0, 0) == 0");
     qc_assert(qc_gcd(0, 2) == 2, "expected: qc_gcd(0, 2) == 2");
     qc_assert(qc_gcd(4, 6) == 2, "expected: qc_gcd(4, 6) == 2");

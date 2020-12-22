@@ -5,7 +5,7 @@ static void help(void* help_data) {
     fprintf(stderr, "Usage: %s The quick brown fox... just kidding, this program is useless\n", program_name);
 }
 
-int main() {
+int main(void) {
     qc_args* args = qc_args_new();
     qc_err* err = qc_err_new();
     qc_args_set_help(args, help, "/path/to/exe");

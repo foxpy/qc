@@ -25,7 +25,7 @@ void qc_reopen_binary_write(FILE *stream) {
 #   endif
 }
 
-void qc_reopen_stdin_stdout_binary() {
+void qc_reopen_stdin_stdout_binary(void) {
     qc_reopen_binary_read(stdin);
     qc_reopen_binary_write(stdout);
 }

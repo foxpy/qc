@@ -43,7 +43,7 @@ static void check_float(float x) {
     }
 }
 
-int main() {
+int main(void) {
     check_double(0.0);
     check_double(1.0);
     check_double(257.974);

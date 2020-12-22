@@ -40,7 +40,7 @@ static void test_fp64(double low, double high) {
     qc_err_free(err);
 }
 
-int main() {
+int main(void) {
     test_64_uniform(2);
     test_64_uniform(3);
     test_64_uniform(7);

@@ -1,7 +1,7 @@
 #include "qc.h"
 #include <stdint.h>
 
-int main() {
+int main(void) {
     qc_assert(QC_MAX(4, 8) == 8, "expected: MAX(4, 8) == 8");
     qc_assert(QC_MAX(4, 16) == 16, "expected: MAX(4, 16) == 16");
     qc_assert(QC_MAX(0, 16) == 16, "expected: MAX(0, 16) == 16");

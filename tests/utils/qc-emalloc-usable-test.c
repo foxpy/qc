@@ -10,7 +10,7 @@ static void iter(unsigned n) {
     free(a);
 }
 
-int main() {
+int main(void) {
     iter(20);
     iter(40);
     iter(80);

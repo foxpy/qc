@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include "qc.h"
 
-int main() {
+int main(void) {
     qc_assert(2 == 2, "constant does not equal constant");
     qc_assert(1, "1 is not truth");
     qc_assert(5, "5 is not truth");

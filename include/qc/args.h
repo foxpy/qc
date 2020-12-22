@@ -4,7 +4,7 @@
 
 // Argument parsing library, inspired by Golang's `flag` package
 typedef struct qc_args qc_args;
-qc_args* qc_args_new();
+qc_args* qc_args_new(void);
 void qc_args_free(qc_args* args);
 
 void qc_args_set_help(qc_args* args, void (*help) (void* help_data), void* help_data);

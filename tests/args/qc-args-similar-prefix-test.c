@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include "qc.h"
 
-int main() {
+int main(void) {
     qc_err* err = qc_err_new();
     qc_args* args = qc_args_new();
     size_t x, xx, y, z, w;

@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include "qc.h"
 
-int main() {
+int main(void) {
     {
         double d1 = 0.2;
         double d2 = 1.0 / sqrt(5.0) / sqrt(5.0);

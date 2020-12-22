@@ -17,7 +17,7 @@ struct config {
     bool j;
 } cfg = {0};
 
-int main() {
+int main(void) {
     qc_args* args = qc_args_new();
     qc_err* err = qc_err_new();
     qc_args_unsigned(args, "a", &cfg.a, NULL);

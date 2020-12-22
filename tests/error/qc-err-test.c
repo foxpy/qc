@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "qc.h"
 
-void basic_test() {
+void basic_test(void) {
     char const* sample_error = "UwU I made a fucky wucky";
     char const* chain = "Some function";
     char const* chain_error = "Some function: UwU I made a fucky wucky";
@@ -40,7 +40,7 @@ void basic_test() {
     }
 }
 
-void formatting_test() {
+void formatting_test(void) {
     qc_err* err = qc_err_new();
     {
         char const* expected_error = "Failed to open file: /path/to/file";
@@ -57,7 +57,7 @@ void formatting_test() {
     qc_err_free(err);
 }
 
-int main() {
+int main(void) {
     basic_test();
     formatting_test();
 }

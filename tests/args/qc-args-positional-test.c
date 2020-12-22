@@ -1,7 +1,7 @@
 #include <string.h>
 #include "qc.h"
 
-int main() {
+int main(void) {
     qc_args* args = qc_args_new();
     qc_err* err = qc_err_new();
     qc_result result = qc_args_parse(args, 3, (char*[]){

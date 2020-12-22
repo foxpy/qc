@@ -1,7 +1,7 @@
 #include <string.h>
 #include "qc.h"
 
-int main() {
+int main(void) {
     char const* first_name;
     char const* last_name;
     qc_args* args = qc_args_new();

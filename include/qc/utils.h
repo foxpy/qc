@@ -30,4 +30,4 @@ void* qc_realloc(void* ptr, size_t size);
 void qc_reopen_binary_read(FILE *stream);
 void qc_reopen_binary_write(FILE *stream);
 // shortcut for the most useful case of functions above
-void qc_reopen_stdin_stdout_binary();
+void qc_reopen_stdin_stdout_binary(void);

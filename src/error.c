@@ -35,7 +35,7 @@ static void qc_err_append_front_valist(qc_err* err, char const* format, va_list 
     err->buf = new_err_msg;
 }
 
-qc_err* qc_err_new() {
+qc_err* qc_err_new(void) {
     qc_err* ret = qc_malloc(sizeof(qc_err));
     ret->buf = NULL;
     return ret;

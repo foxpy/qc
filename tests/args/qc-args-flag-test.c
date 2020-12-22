@@ -43,7 +43,7 @@ void test_flag_none(qc_err* err) {
     qc_args_free(args);
 }
 
-int main() {
+int main(void) {
     qc_err* err = qc_err_new();
     test_flag_short(err);
     test_flag_short_multiple(err);

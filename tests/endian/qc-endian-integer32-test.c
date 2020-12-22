@@ -47,7 +47,7 @@ static void check_i32(int32_t x) {
     }
 }
 
-int main() {
+int main(void) {
     check_u32_to_be(((uint8_t[4]){0x01, 0x23, 0x45, 0x67}), UINT32_C(0x01234567));
     check_u32_to_le(((uint8_t[4]){0x67, 0x45, 0x23, 0x01}), UINT32_C(0x01234567));
     check_i32(INT32_C(512));

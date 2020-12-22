@@ -1,7 +1,7 @@
 #include "qc.h"
 #include <stdint.h>
 
-int main() {
+int main(void) {
     qc_assert(QC_MIN(4, 8) == 4, "expected: MIN(4, 8) == 4");
     qc_assert(QC_MIN(4, 16) == 4, "expected: MIN(4, 16) == 4");
     qc_assert(QC_MIN(0, 16) == 0, "expected: MIN(0, 16) == 0");

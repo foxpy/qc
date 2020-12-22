@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include "qc.h"
 
-static void asprintf_basic() {
+static void asprintf_basic(void) {
     char const* expected = "quick brown fox has jumped over dog";
     char* formatted = NULL;
     size_t len = qc_asprintf(&formatted, "quick brown %s has jumped over %s", "fox", "dog");
@@ -11,7 +11,7 @@ static void asprintf_basic() {
     free(formatted);
 }
 
-static void asnprintf_enough() {
+static void asnprintf_enough(void) {
     char const* expected = "test: 55";
     char* formatted = NULL;
     size_t len = qc_asnprintf(&formatted, 1024, "test: %s", "55");
@@ -20,7 +20,7 @@ static void asnprintf_enough() {
     free(formatted);
 }
 
-static void asnprintf_on_the_edge() {
+static void asnprintf_on_the_edge(void) {
     char const* expected = "test: 55";
     char* formatted = NULL;
     size_t len = qc_asnprintf(&formatted, strlen(expected) + 1, "test: %s", "55");
@@ -29,7 +29,7 @@ static void asnprintf_on_the_edge() {
     free(formatted);
 }
 
-static void asnprintf_overflow() {
+static void asnprintf_overflow(void) {
     char const* expected = "test: 5";
     char* formatted = NULL;
     size_t constraint = strlen(expected) + 1;
@@ -39,7 +39,7 @@ static void asnprintf_overflow() {
     free(formatted);
 }
 
-int main() {
+int main(void) {
     asprintf_basic();
     asnprintf_enough();
     asnprintf_on_the_edge();

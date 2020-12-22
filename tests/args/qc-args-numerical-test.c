@@ -51,7 +51,7 @@ void test_double(qc_err* err) {
     qc_args_free(args);
 }
 
-int main() {
+int main(void) {
     qc_err* err = qc_err_new();
     test_unsigned(err);
     test_signed(err);

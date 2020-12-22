@@ -70,7 +70,7 @@ static int parse_signed(char* str, ptrdiff_t* dst);
 static int parse_double(char* str, double* dst);
 static int parse_string(char* str, char** dst);
 
-qc_args* qc_args_new() {
+qc_args* qc_args_new(void) {
     qc_args* ret = qc_malloc(sizeof(qc_args));
     ret->flags = qc_malloc(sizeof(struct short_flag) * DEFAULT_ALLOC_SIZE);
     ret->flags_count = 0;

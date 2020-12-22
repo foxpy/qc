@@ -20,7 +20,7 @@ static void iter(unsigned n1, unsigned n2, unsigned n3) {
     free(a);
 }
 
-int main() {
+int main(void) {
     iter(20, 40, 80);
     iter(10, 11, 50);
     iter(200, 50, 150);
