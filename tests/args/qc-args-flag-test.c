@@ -1,5 +1,7 @@
 #include <stdbool.h>
-#include "qc.h"
+#include "qc/args.h"
+#include "qc/error.h"
+#include "qc/tests.h"
 
 void test_flag_short(qc_err* err) {
     bool verbose;

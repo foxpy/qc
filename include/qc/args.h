@@ -1,6 +1,7 @@
 #pragma once
 #include <stdbool.h>
 #include <stddef.h>
+#include "error.h"
 
 // Argument parsing library, inspired by Golang's `flag` package
 typedef struct qc_args qc_args;

@@ -1,5 +1,6 @@
 #include <stdlib.h>
-#include "qc.h"
+#include "qc/utils.h"
+#include "qc/tests.h"
 
 static void iter(unsigned n1, unsigned n2, unsigned n3) {
     unsigned *a = qc_malloc(sizeof(unsigned) * n1);

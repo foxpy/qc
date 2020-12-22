@@ -1,5 +1,7 @@
 #pragma once
+#include <stdarg.h>
 #include <stddef.h>
+#include "qc/error.h"
 
 // these functions act like [v]asprintf from GNU C standard library,
 // they allocate memory automatically

@@ -1,4 +1,6 @@
-#include "qc.h"
+#include <stdint.h>
+#include "qc/math.h"
+#include "qc/tests.h"
 
 int main(void) {
     qc_assert(qc_gcd(0, 0) == 0, "expected: qc_gcd(0, 0) == 0");

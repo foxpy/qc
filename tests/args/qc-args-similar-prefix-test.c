@@ -1,5 +1,9 @@
 #include <stddef.h>
-#include "qc.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include "qc/args.h"
+#include "qc/error.h"
+#include "qc/tests.h"
 
 int main(void) {
     qc_err* err = qc_err_new();
@@ -13,8 +17,7 @@ int main(void) {
     if (qc_args_parse(args, 5, (char*[]){
         "/path/to/exe", "--dim-y=4", "--dim-x=5", "--dim-xx=20", "--dim-z=7"
     }, err) == QC_FAILURE) {
-        fprintf(stderr, "Failed to parse arguments: %s", qc_err_to_owned_c_str(err));
-        return EXIT_FAILURE;
+        qc_err_fatal(err, "Failed to parse arguments");
     }
     qc_assert(x == 5, "Wrong value for x, expected %zu, got %zu", (size_t) 5, x);
     qc_assert(xx == 20, "Wrong value for xx, expected %zu, got %zu", (size_t) 20, xx);

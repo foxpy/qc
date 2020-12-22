@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include <string.h>
-#include "qc.h"
+#include "qc/error.h"
+#include "qc/random.h"
+#include "qc/tests.h"
 
 struct test_random_data {
     uint64_t u64;

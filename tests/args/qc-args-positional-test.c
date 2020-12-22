@@ -1,5 +1,6 @@
-#include <string.h>
-#include "qc.h"
+#include "qc/args.h"
+#include "qc/error.h"
+#include "qc/tests.h"
 
 int main(void) {
     qc_args* args = qc_args_new();

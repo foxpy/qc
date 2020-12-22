@@ -1,7 +1,9 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
-#include "qc.h"
+#include "qc/endian.h"
+#include "qc/tests.h"
+#include "qc/math.h"
 
 static void check_double(double x) {
     uint8_t be[8];

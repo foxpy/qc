@@ -1,6 +1,6 @@
 #include <float.h>
 #include <math.h>
-#include "qc.h"
+#include "qc/math.h"
 
 size_t qc_gcd(size_t a, size_t b) {
     if (a == 0 && b == 0) {

@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
-#include "qc.h"
+#include "qc/endian.h"
 
 void qc_u16_to_be(uint8_t dst[static 2], uint16_t src) {
     uint16_t extract_mask = UINT16_C(0xFF) << (16u - 8u);

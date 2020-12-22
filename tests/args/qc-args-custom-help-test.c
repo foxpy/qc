@@ -1,4 +1,7 @@
-#include "qc.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "qc/args.h"
+#include "qc/tests.h"
 
 static void help(void* help_data) {
     char* program_name = help_data;

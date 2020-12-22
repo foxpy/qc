@@ -1,6 +1,6 @@
 #include <string.h>
-#include <stdlib.h>
-#include "qc.h"
+#include "qc/error.h"
+#include "qc/tests.h"
 
 void basic_test(void) {
     char const* sample_error = "UwU I made a fucky wucky";

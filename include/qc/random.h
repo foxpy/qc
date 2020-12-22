@@ -1,6 +1,5 @@
 #pragma once
 #include <stdint.h>
-#include <stdbool.h>
 #include "qc/error.h"
 
 typedef union qc_rnd_state_t {

@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#include "qc.h"
+#include "qc/tests.h"
 
 int main(void) {
     qc_assert(2 == 2, "constant does not equal constant");

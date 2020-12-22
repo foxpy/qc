@@ -1,7 +1,7 @@
 #include <stdint.h>
-#include <stddef.h>
 #include <string.h>
-#include "qc.h"
+#include "qc/endian.h"
+#include "qc/tests.h"
 
 static void check_u64_from_be(uint64_t expected, uint8_t const src[static 8]) {
     uint64_t actual = qc_u64_from_be(src);

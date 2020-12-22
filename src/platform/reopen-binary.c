@@ -3,7 +3,7 @@
 #   include <io.h>
 #   include <fcntl.h>
 #endif
-#include "qc.h"
+#include "qc/utils.h"
 
 void qc_reopen_binary_read(FILE *stream) {
 #   ifdef _WIN32

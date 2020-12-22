@@ -1,7 +1,7 @@
 #include <stdint.h>
-#include <stddef.h>
 #include <string.h>
-#include "qc.h"
+#include "qc/endian.h"
+#include "qc/tests.h"
 
 static void check_u32_from_be(uint32_t expected, uint8_t const src[static 4]) {
     uint32_t actual = qc_u32_from_be(src);

@@ -1,5 +1,8 @@
+#include <stddef.h>
 #include <string.h>
-#include "qc.h"
+#include "qc/args.h"
+#include "qc/error.h"
+#include "qc/tests.h"
 
 int main(void) {
     char const* first_name;

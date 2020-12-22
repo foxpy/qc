@@ -1,5 +1,7 @@
+#include <stddef.h>
 #include <string.h>
-#include "qc.h"
+#include "qc/string.h"
+#include "qc/tests.h"
 
 static void parse_unsigned_correct(void) {
     char const* input = "567";

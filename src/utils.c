@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "qc.h"
+#include "qc/utils.h"
 
 void* qc_malloc(size_t size) {
     void *p;

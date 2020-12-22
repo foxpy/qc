@@ -1,4 +1,5 @@
-#include "qc.h"
+#include "qc/math.h"
+#include "qc/tests.h"
 
 int main(void) {
     qc_assert(qc_lcm(0, 2) == 0, "expected: qc_lcm(0, 2) == 0");

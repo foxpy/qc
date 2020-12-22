@@ -1,7 +1,9 @@
 #include <math.h>
-#include <float.h>
+#include <stdbool.h>
 #include <stddef.h>
-#include "qc.h"
+#include <float.h>
+#include "qc/math.h"
+#include "qc/tests.h"
 
 int main(void) {
     {

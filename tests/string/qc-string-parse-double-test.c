@@ -1,5 +1,6 @@
 #include <string.h>
-#include "qc.h"
+#include "qc/string.h"
+#include "qc/tests.h"
 
 static void parse_double_positive(void) {
     char const* input = "567.45";

@@ -10,7 +10,8 @@
 #   include <unistd.h>
 #endif
 
-#include "qc.h"
+#include "qc/random.h"
+#include "qc/error.h"
 #include <stdint.h>
 #include <stdlib.h>
 

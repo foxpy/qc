@@ -1,10 +1,12 @@
-#include "qc.h"
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
 #include <float.h>
 #include <math.h>
 #include <stdbool.h>
+#include "qc/random.h"
+#include "qc/math.h"
+#include "qc/utils.h"
 
 #define DOUBLE_ONE_EXPONENT (UINT64_C(0x3ff) << 52u)
 #define DOUBLE_FRACTION_SHIFT_LENGTH 12u

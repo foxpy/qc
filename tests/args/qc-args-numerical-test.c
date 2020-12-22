@@ -1,7 +1,8 @@
-#include <math.h>
-#include "qc.h"
-
-#define EPS 10e-9
+#include <stddef.h>
+#include "qc/args.h"
+#include "qc/error.h"
+#include "qc/tests.h"
+#include "qc/math.h"
 
 void test_unsigned(qc_err* err) {
     size_t length = 0, width = 0, depth = 0;
@@ -46,8 +47,10 @@ void test_double(qc_err* err) {
         "/path/to/exe", "--x=12.4", "--z=-13.557", "--y=0.00006", NULL
     }, err);
     qc_assert(result == QC_SUCCESS, "qc_args_parse has failed: %s", qc_err_get(err));
-    qc_assert(fabs(x - 12.4) < EPS && fabs(y - 0.00006) < EPS && fabs(z + 13.557) < EPS,
-              "Expected values don't match");
+    qc_assert(qc_almost_equal_fp64(x, 12.4, 100) &&
+              qc_almost_equal_fp64(y, 0.00006, 100) &&
+              qc_almost_equal_fp64(z, -13.557, 100),
+                      "Expected values don't match");
     qc_args_free(args);
 }
 

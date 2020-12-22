@@ -1,6 +1,8 @@
 #include <string.h>
 #include <stddef.h>
-#include "qc.h"
+#include <stdlib.h>
+#include "qc/string.h"
+#include "qc/tests.h"
 
 static void asprintf_basic(void) {
     char const* expected = "quick brown fox has jumped over dog";

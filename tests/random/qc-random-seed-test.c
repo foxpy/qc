@@ -1,5 +1,7 @@
 #include <stdint.h>
-#include "qc.h"
+#include <stddef.h>
+#include "qc/random.h"
+#include "qc/tests.h"
 
 #define SEED UINT64_C(0x83401d53c3745176)
 #define ITERATIONS 1000

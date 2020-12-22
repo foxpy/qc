@@ -1,5 +1,6 @@
-#include "qc.h"
 #include <stdint.h>
+#include "qc/math.h"
+#include "qc/tests.h"
 
 int main(void) {
     qc_assert(QC_MAX(4, 8) == 8, "expected: MAX(4, 8) == 8");

@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include <string.h>
-#include "qc.h"
+#include "qc/endian.h"
 
 void qc_fp64_to_be(uint8_t dst[static 8], double src) {
     uint64_t u;

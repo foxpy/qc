@@ -1,8 +1,10 @@
-#include "qc.h"
+#include <stddef.h>
+#include <stdbool.h>
 #include <string.h>
-#include <math.h>
-
-#define EPS 10e-9
+#include "qc/args.h"
+#include "qc/error.h"
+#include "qc/tests.h"
+#include "qc/math.h"
 
 struct config {
     size_t a;
@@ -43,8 +45,8 @@ int main(void) {
               cfg.b == 2 &&
               cfg.c == -200 &&
               cfg.d == 12500 &&
-              fabs(cfg.e - 156.75) < EPS &&
-              fabs(cfg.f + 213.666) < EPS &&
+              qc_almost_equal_fp64(cfg.e, 156.75, 100) &&
+              qc_almost_equal_fp64(cfg.f, -213.666, 100) &&
               strcmp(cfg.g, "sample") == 0 &&
               strcmp(cfg.h, "sample text") == 0 &&
               cfg.i == true &&

@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <stdarg.h>
 
 // print error message and exit with non-zero code
 #define qc_die(err_msg)                                                   \

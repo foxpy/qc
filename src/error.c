@@ -3,7 +3,9 @@
 #include <string.h>
 #include <assert.h>
 #include <stdarg.h>
-#include "qc.h"
+#include "qc/error.h"
+#include "qc/utils.h"
+#include "qc/string.h"
 
 static char const* delimiter = ": ";
 

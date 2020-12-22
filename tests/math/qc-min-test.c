@@ -1,5 +1,6 @@
-#include "qc.h"
 #include <stdint.h>
+#include "qc/math.h"
+#include "qc/tests.h"
 
 int main(void) {
     qc_assert(QC_MIN(4, 8) == 4, "expected: MIN(4, 8) == 4");

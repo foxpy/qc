@@ -1,5 +1,7 @@
 #include <stdint.h>
-#include "qc.h"
+#include <stddef.h>
+#include "qc/random.h"
+#include "qc/tests.h"
 
 // it is hard to make a reliable test of random, but we will try our best
 #define ITERATIONS 1000

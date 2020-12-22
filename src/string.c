@@ -1,10 +1,13 @@
 #include <stdarg.h>
 #include <limits.h>
-#include <string.h>
 #include <errno.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
 #include <assert.h>
 #include <ctype.h>
-#include "qc.h"
+#include "qc/string.h"
+#include "qc/utils.h"
 
 static ptrdiff_t qc_vasnprintf_impl(char** dst, size_t guess, size_t max, char const* format, va_list ap) {
     va_list args;
