@@ -3,7 +3,6 @@ add_library(qc
     math.c
     args.c
     utils.c
-    qc_impl.c
     error.c
     string.c
     endian/integer64.c

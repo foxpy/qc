@@ -1,9 +1,9 @@
 #include <stdbool.h>
 #include <assert.h>
-#include <errno.h>
 #include "qc.h"
-#include "qc_impl.h"
 #include "string.h"
+
+#define DEFAULT_ALLOC_SIZE 4
 
 enum {
     OPT_FLAG,
@@ -69,6 +69,7 @@ static int parse_unsigned(char* str, size_t* dst);
 static int parse_signed(char* str, ptrdiff_t* dst);
 static int parse_double(char* str, double* dst);
 static int parse_string(char* str, char** dst);
+static void array_push_back(void** array, size_t* count, size_t* capacity, size_t size);
 
 qc_args* qc_args_new(void) {
     qc_args* ret = qc_malloc(sizeof(qc_args));
@@ -643,4 +644,12 @@ static int parse_string(char* str, char** dst) {
         strcpy(*dst, val);
     }
     return 0;
+}
+
+static void array_push_back(void** array, size_t* count, size_t* capacity, size_t size) {
+    *count += 1;
+    if (*count == *capacity) {
+        *capacity *= 2;
+        *array = qc_realloc(*array, *capacity * size);
+    }
 }
