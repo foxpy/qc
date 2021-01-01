@@ -52,8 +52,7 @@ void qc_err_free(qc_err* err) {
 }
 
 char const* qc_err_get(qc_err const* err) {
-    assert(err != NULL);
-    if (err->buf == NULL) {
+    if (err == NULL || err->buf == NULL) {
         return "";
     } else {
         return err->buf;
@@ -61,37 +60,42 @@ char const* qc_err_get(qc_err const* err) {
 }
 
 char* qc_err_to_owned_c_str(qc_err* err) {
-    assert(err != NULL);
-    char* ret = err->buf;
-    free(err);
-    return ret;
+    if (err == NULL) {
+        return "";
+    } else {
+        char* ret = err->buf;
+        free(err);
+        return ret;
+    }
 }
 
 void qc_err_set(qc_err* err, char const* format, ...) {
-    assert(err != NULL);
-    assert(format != NULL);
-    va_list args;
-    va_start(args, format);
-    char* msg;
-    qc_vasprintf(&msg, format, args);
-    va_end(args);
-    if (err->buf != NULL) {
-        free(err->buf);
+    if (err != NULL) {
+        assert(format != NULL);
+        va_list args;
+        va_start(args, format);
+        char *msg;
+        qc_vasprintf(&msg, format, args);
+        va_end(args);
+        if (err->buf != NULL) {
+            free(err->buf);
+        }
+        err->buf = msg;
     }
-    err->buf = msg;
 }
 
 void qc_err_append_front(qc_err* err, char const* format, ...) {
     assert(err != NULL);
-    assert(format != NULL);
-    va_list args;
-    va_start(args, format);
-    qc_err_append_front_valist(err, format, args);
-    va_end(args);
+    if (err != NULL) {
+        assert(format != NULL);
+        va_list args;
+        va_start(args, format);
+        qc_err_append_front_valist(err, format, args);
+        va_end(args);
+    }
 }
 
 qc_noreturn void qc_err_fatal(qc_err* err, char const* format, ...) {
-    assert(err != NULL);
     assert(format != NULL);
     va_list args;
     va_start(args, format);
