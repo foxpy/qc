@@ -85,7 +85,6 @@ void qc_err_set(qc_err* err, char const* format, ...) {
 }
 
 void qc_err_append_front(qc_err* err, char const* format, ...) {
-    assert(err != NULL);
     if (err != NULL) {
         assert(format != NULL);
         va_list args;
