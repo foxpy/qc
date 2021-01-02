@@ -9,3 +9,4 @@
 #include "qc/string.h"
 #include "qc/endian.h"
 #include "qc/noreturn.h"
+#include "qc/config.h"
