@@ -21,18 +21,16 @@ qc_result qc_cfg_open_file(FILE* file, qc_cfg** dst, qc_err* err) {
         return QC_FAILURE;
     }
     rewind(file);
-    qc_cfg* cfg = qc_cfg_new();
-    cfg->len = file_len;
-    cfg->data = qc_malloc(file_len);
-    if (fread(cfg->data, sizeof(char), cfg->len, file) != cfg->len) {
-        free(cfg->data);
-        qc_cfg_free(cfg);
+    char* file_str = qc_malloc(file_len);
+    if (fread(file_str, sizeof(char), file_len, file) != (size_t) file_len) {
+        free(file_str);
         qc_err_set(err, "Failed to read config from file: unknown error (really)");
         return QC_FAILURE;
     }
     fseek(file, initial_file_position, SEEK_SET);
-    *dst = cfg;
-    return QC_SUCCESS;
+    qc_result ret = qc_cfg_open_string(file_str, dst, err);
+    free(file_str);
+    return ret;
 }
 
 qc_result qc_cfg_open_string(char const* str, qc_cfg** dst, qc_err* err) {
@@ -48,5 +46,5 @@ qc_result qc_cfg_open_string(char const* str, qc_cfg** dst, qc_err* err) {
 void qc_cfg_close(qc_cfg* cfg) {
     assert(cfg != NULL);
     free(cfg->data);
-    qc_cfg_free(cfg);
+    free(cfg);
 }

@@ -7,7 +7,3 @@ qc_cfg* qc_cfg_new() {
     qc_cfg* ret = qc_malloc(sizeof(qc_cfg));
     return ret;
 }
-
-void qc_cfg_free(qc_cfg* cfg) {
-    free(cfg);
-}
