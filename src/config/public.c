@@ -21,11 +21,13 @@ qc_result qc_cfg_open_file(FILE* file, qc_cfg** dst, qc_err* err) {
         return QC_FAILURE;
     }
     rewind(file);
-    char* file_str = qc_malloc(file_len);
+    char* file_str = qc_malloc(file_len + 1);
     if (fread(file_str, sizeof(char), file_len, file) != (size_t) file_len) {
         free(file_str);
         qc_err_set(err, "Failed to read config from file: unknown error (really)");
         return QC_FAILURE;
+    } else {
+        file_str[file_len] = '\0';
     }
     fseek(file, initial_file_position, SEEK_SET);
     qc_result ret = qc_cfg_open_string(file_str, dst, err);
