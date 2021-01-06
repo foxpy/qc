@@ -1,6 +1,7 @@
 #pragma once
 #include <stdbool.h>
 #include <stddef.h>
+#include "qc/args.h"
 #include "qc/error.h"
 
 #define DEFAULT_ALLOC_SIZE 4
