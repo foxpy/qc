@@ -24,6 +24,8 @@ qc_result qc_cfg_open_file(FILE* file, qc_cfg** dst, qc_err* err) {
     char* file_str = qc_malloc(file_len + 1);
     size_t nread = fread(file_str, sizeof(char), file_len, file);
     if (nread == 0) {
+        // TODO: actually, better implement a proper function "read whole file to memory"
+        //       and use it here instead of doing.. this
         free(file_str);
         qc_err_set(err, "Failed to read config from file: unknown error (really)");
         return QC_FAILURE;
