@@ -11,7 +11,7 @@ add_library(qc
     endian/floating-point.c
     platform/random.c
     platform/reopen-binary.c
-    config/public.c
-    config/private.c
+    config/config_public_api.c
+    config/config_impl.c
 )
 target_include_directories(qc PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
