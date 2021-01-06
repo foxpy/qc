@@ -41,15 +41,16 @@ qc_result qc_cfg_open_file(FILE* file, qc_cfg** dst, qc_err* err) {
 qc_result qc_cfg_open_string(char const* str, qc_cfg** dst, qc_err* err) {
     QC_UNUSED(err);
     qc_cfg* cfg = qc_cfg_new();
-    cfg->len = strlen(str);
-    cfg->data = qc_malloc(cfg->len);
-    memcpy(cfg->data, str, cfg->len);
+    char* no_comments = eat_comments(str);
+    cfg->data = no_comments;
     *dst = cfg;
     return QC_SUCCESS;
 }
 
 void qc_cfg_close(qc_cfg* cfg) {
     assert(cfg != NULL);
-    free(cfg->data);
+    if (cfg->data != NULL) {
+        free(cfg->data);
+    }
     free(cfg);
 }
