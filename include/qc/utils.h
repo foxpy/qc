@@ -2,14 +2,11 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include "qc/noreturn.h"
 
 // print error message and exit with non-zero code
-#define qc_die(err_msg)                                                   \
-do {                                                                      \
-    fprintf(stderr, "Fatal error: %s:%d, ", __FILE__, __LINE__);          \
-    fprintf(stderr, "%s\n", err_msg);                                     \
-    abort();                                                              \
-} while (0)
+qc_noreturn void qc_die_impl(char const* file, size_t line, char const* err_msg);
+#define qc_die(err_msg) qc_die_impl(__FILE__, __LINE__, err_msg)
 
 // use this whenever you are 100% sure about unreachable code branch
 // and you have to silence compiler warning
