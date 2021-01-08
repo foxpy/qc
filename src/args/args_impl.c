@@ -52,7 +52,7 @@ void auto_help(qc_args* args) {
             if (!opt->mandatory) {
                 switch (opt->type) {
                     case OPT_UNSIGNED:
-                        fprintf(stderr, " ( default = %zu)", opt->default_value.unsigned_default);
+                        fprintf(stderr, " (default = %zu)", opt->default_value.unsigned_default);
                         break;
                     case OPT_SIGNED:
                         fprintf(stderr, " (default = %ti)", opt->default_value.signed_default);
