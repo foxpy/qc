@@ -164,7 +164,7 @@ bool is_long_opt(char const* str) {
     return str[0] == '-' && str[1] == '-';
 }
 
-int match_short_opt(qc_args* args, int argn, char* const* argv, qc_err* err) {
+qc_result match_short_opt(qc_args* args, int argn, char* const* argv, qc_err* err) {
     for (size_t to = strlen(argv[argn]), i = 1; i < to; ++i) {
         char c = argv[argn][i];
         if (c == 'h') {
@@ -180,13 +180,13 @@ int match_short_opt(qc_args* args, int argn, char* const* argv, qc_err* err) {
         }
         if (!found) {
             qc_err_set(err, "Unknown flag: \"%c\"", argv[argn][i]);
-            return -1;
+            return QC_FAILURE;
         }
     }
-    return 0;
+    return QC_SUCCESS;
 }
 
-int match_long_opt(qc_args* args, int argn, char* const* argv, qc_err* err) {
+qc_result match_long_opt(qc_args* args, int argn, char* const* argv, qc_err* err) {
     for (size_t i = 0; i < args->opts_count; ++i) {
         size_t argname_length = strlen(args->opts[i].name);
         if (strncmp(&argv[argn][2], args->opts[i].name, argname_length) == 0 &&
@@ -195,89 +195,78 @@ int match_long_opt(qc_args* args, int argn, char* const* argv, qc_err* err) {
             switch (args->opts[i].type) {
                 case OPT_FLAG:
                     *args->opts[i].dst.flag_ptr = true;
-                    return 0;
+                    return QC_SUCCESS;
                 case OPT_UNSIGNED:
-                    if (parse_unsigned(argv[argn], args->opts[i].dst.unsigned_ptr) == -1) {
+                    if (parse_unsigned(argv[argn], args->opts[i].dst.unsigned_ptr) == QC_FAILURE) {
                         qc_err_set(err, "Could not parse \"%s\" as unsigned integer", argv[argn]);
-                        return -1;
+                        return QC_FAILURE;
                     } else {
-                        return 0;
+                        return QC_SUCCESS;
                     }
                 case OPT_SIGNED:
-                    if (parse_signed(argv[argn], args->opts[i].dst.signed_ptr) == -1) {
+                    if (parse_signed(argv[argn], args->opts[i].dst.signed_ptr) == QC_FAILURE) {
                         qc_err_set(err, "Could not parse \"%s\" as signed integer", argv[argn]);
-                        return -1;
+                        return QC_FAILURE;
                     } else {
-                        return 0;
+                        return QC_SUCCESS;
                     }
                 case OPT_DOUBLE:
-                    if (parse_double(argv[argn], args->opts[i].dst.double_ptr) == -1) {
+                    if (parse_double(argv[argn], args->opts[i].dst.double_ptr) == QC_FAILURE) {
                         qc_err_set(err, "Could not parse \"%s\" as floating point value", argv[argn]);
-                        return -1;
+                        return QC_FAILURE;
                     } else {
-                        return 0;
+                        return QC_SUCCESS;
                     }
                 case OPT_STRING:
-                    if (parse_string(argv[argn], args->opts[i].dst.string_ptr) == -1) {
+                    if (parse_string(argv[argn], args->opts[i].dst.string_ptr) == QC_FAILURE) {
                         qc_err_set(err, "Could not parse string from \"%s\"", argv[argn]);
-                        return -1;
+                        return QC_FAILURE;
                     } else {
-                        return 0;
+                        return QC_SUCCESS;
                     }
-                default: QC_UNREACHABLE_CODE();
+                default:
+                    QC_UNREACHABLE_CODE();
             }
         }
     }
     qc_err_set(err, "Unknown argument: \"%s\"", argv[argn]);
-    return -1;
+    return QC_FAILURE;
 }
 
-int parse_unsigned(char* str, size_t* dst) {
+qc_result parse_unsigned(char* str, size_t* dst) {
     char* val;
     if ((val = strchr(str, '=')) == NULL) {
         val = str;
     } else {
         ++val;
     }
-    if (qc_str_to_unsigned(val, dst, NULL) == QC_SUCCESS) {
-        return 0;
-    } else {
-        return -1;
-    }
+    return qc_str_to_unsigned(val, dst, NULL);
 }
 
-int parse_signed(char* str, ptrdiff_t* dst) {
+qc_result parse_signed(char* str, ptrdiff_t* dst) {
     char* val;
     if ((val = strchr(str, '=')) == NULL) {
         val = str;
     } else {
         ++val;
     }
-    if (qc_str_to_signed(val, dst, NULL) == QC_SUCCESS) {
-        return 0;
-    } else {
-        return -1;
-    }
+    return qc_str_to_signed(val, dst, NULL);
 }
 
-int parse_double(char* str, double* dst) {
+qc_result parse_double(char* str, double* dst) {
     char* val;
     if ((val = strchr(str, '=')) == NULL) {
         val = str;
     } else {
         ++val;
     }
-    if (qc_str_to_double(val, dst, NULL) == QC_SUCCESS) {
-        return 0;
-    } else {
-        return -1;
-    }
+    return qc_str_to_double(val, dst, NULL);
 }
 
-int parse_string(char* str, char** dst) {
+qc_result parse_string(char* str, char** dst) {
     char* val;
     if ((val = strchr(str, '=')) == NULL) {
-        return -1;
+        return QC_FAILURE;
     } else {
         ++val;
     }
@@ -290,7 +279,7 @@ int parse_string(char* str, char** dst) {
         *dst = qc_malloc(strlen(val) + 1);
         strcpy(*dst, val);
     }
-    return 0;
+    return QC_SUCCESS;
 }
 
 void array_push_back(void** array, size_t* count, size_t* capacity, size_t size) {

@@ -64,10 +64,10 @@ void add_long_opt(qc_args* args, int type, char const* longname, void* default_v
 bool asked_for_help(int argc, char* const* argv);
 bool is_short_opt(char const* str);
 bool is_long_opt(char const* str);
-int match_short_opt(qc_args* args, int argn, char* const* argv, qc_err* err);
-int match_long_opt(qc_args* args, int argn, char* const* argv, qc_err* err);
-int parse_unsigned(char* str, size_t* dst);
-int parse_signed(char* str, ptrdiff_t* dst);
-int parse_double(char* str, double* dst);
-int parse_string(char* str, char** dst);
+qc_result match_short_opt(qc_args* args, int argn, char* const* argv, qc_err* err);
+qc_result match_long_opt(qc_args* args, int argn, char* const* argv, qc_err* err);
+qc_result parse_unsigned(char* str, size_t* dst);
+qc_result parse_signed(char* str, ptrdiff_t* dst);
+qc_result parse_double(char* str, double* dst);
+qc_result parse_string(char* str, char** dst);
 void array_push_back(void** array, size_t* count, size_t* capacity, size_t size);

@@ -104,11 +104,11 @@ qc_result qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err)
         }
         if (args->positionals_count == 0) {
             if (is_short_opt(argv[i])) {
-                if (match_short_opt(args, i, argv, err) == -1) {
+                if (match_short_opt(args, i, argv, err) == QC_FAILURE) {
                     return QC_FAILURE;
                 }
             } else if (is_long_opt(argv[i])) {
-                if (match_long_opt(args, i, argv, err) == -1) {
+                if (match_long_opt(args, i, argv, err) == QC_FAILURE) {
                     return QC_FAILURE;
                 }
             } else {
