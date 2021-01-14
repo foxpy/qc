@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdlib.h>
 #include "qc/error.h"
 #include "qc/tests.h"
 
@@ -14,20 +15,18 @@ void basic_test(void) {
         {
             qc_err_set(err, sample_error);
             char const *ret_error = qc_err_get(err);
-            qc_assert(strcmp(ret_error, sample_error) == 0, "Expected \"%s\", got \"%s\"", sample_error,
-                             ret_error);
+            qc_assert(strcmp(ret_error, sample_error) == 0, "Expected \"%s\", got \"%s\"", sample_error, ret_error);
         }
         {
             qc_err_append_front(err, chain);
             char const *ret_error = qc_err_get(err);
-            qc_assert(strcmp(ret_error, chain_error) == 0, "Expected \"%s\", got \"%s\"", chain_error,
-                             ret_error);
+            qc_assert(strcmp(ret_error, chain_error) == 0, "Expected \"%s\", got \"%s\"", chain_error, ret_error);
         }
         {
             qc_err_append_front(err, big_chain);
             char const *ret_error = qc_err_get(err);
-            qc_assert(strcmp(ret_error, big_chain_error) == 0, "Expected \"%s\", got \"%s\"", big_chain_error,
-                             ret_error);
+            qc_assert(strcmp(ret_error, big_chain_error) == 0, "Expected \"%s\", got \"%s\"",
+                      big_chain_error, ret_error);
         }
         qc_err_free(err);
     }

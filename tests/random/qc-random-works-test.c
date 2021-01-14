@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdbool.h>
 #include <string.h>
 #include "qc/error.h"
 #include "qc/random.h"
@@ -18,9 +19,9 @@ static void populate(struct test_random_data *t) {
     qc_err_free(err);
 }
 
-static size_t compare(struct test_random_data *t1, struct test_random_data *t2) {
-    return memcmp(&t1->u64, &t2->u64, sizeof(uint64_t)) != 0 &&
-           memcmp(&t1->f64, &t2->f64, sizeof(double)) != 0;
+static bool equal(struct test_random_data *t1, struct test_random_data *t2) {
+    return memcmp(&t1->u64, &t2->u64, sizeof(uint64_t)) == 0 &&
+           memcmp(&t1->f64, &t2->f64, sizeof(double)) == 0;
 }
 
 int main(void) {
@@ -28,7 +29,7 @@ int main(void) {
     populate(&t1);
     populate(&t2);
     populate(&t3);
-    qc_assert(compare(&t1, &t2), "random is not seeded well");
-    qc_assert(compare(&t1, &t3), "random is not seeded well");
-    qc_assert(compare(&t2, &t3), "random is not seeded well");
+    qc_assert(equal(&t1, &t2) == false, "random is not seeded well");
+    qc_assert(equal(&t1, &t3) == false, "random is not seeded well");
+    qc_assert(equal(&t2, &t3) == false, "random is not seeded well");
 }

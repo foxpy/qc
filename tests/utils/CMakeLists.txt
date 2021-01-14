@@ -1,3 +1,3 @@
-qc_add_test(qc-emalloc-usable-test)
-qc_add_test(qc-erealloc-usable-test)
+qc_add_test(qc-malloc-usable-test)
+qc_add_test(qc-realloc-usable-test)
 qc_add_test(qc-assert-success-test)

@@ -4,6 +4,7 @@ add_library(qc
     utils.c
     error.c
     string.c
+    tests.c
     endian/integer64.c
     endian/integer32.c
     endian/integer16.c
