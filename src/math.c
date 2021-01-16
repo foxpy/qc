@@ -1,8 +1,34 @@
+#include <stddef.h>
+#include <stdint.h>
 #include <float.h>
 #include <math.h>
 #include "qc/math.h"
 
-size_t qc_gcd(size_t a, size_t b) {
+uintmax_t qc_min_u(uintmax_t a, uintmax_t b) {
+    return a < b ? a : b;
+}
+
+intmax_t qc_min_s(intmax_t a, intmax_t b) {
+    return a < b ? a : b;
+}
+
+double qc_min_d(double a, double b) {
+    return a < b ? a : b;
+}
+
+uintmax_t qc_max_u(uintmax_t a, uintmax_t b) {
+    return a > b ? a : b;
+}
+
+intmax_t qc_max_s(intmax_t a, intmax_t b) {
+    return a > b ? a : b;
+}
+
+double qc_max_d(double a, double b) {
+    return a > b ? a : b;
+}
+
+uintmax_t qc_gcd(uintmax_t a, uintmax_t b) {
     if (a == 0 && b == 0) {
         return 0;
     } else if (a == b || b == 0) {
@@ -24,7 +50,7 @@ size_t qc_gcd(size_t a, size_t b) {
     }
 }
 
-size_t qc_lcm(size_t a, size_t b) {
+uintmax_t qc_lcm(uintmax_t a, uintmax_t b) {
     return a * b / qc_gcd(a, b);
 }
 
