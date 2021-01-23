@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include "qc.h"
 
@@ -7,13 +6,14 @@
 int main(void) {
     qc_reopen_stdin_stdout_binary();
     qc_err* err = qc_err_new();
-    uint64_t buf[BUFFER_SIZE];
     qc_rnd rnd;
     if (qc_rnd_init(&rnd, err) == QC_FAILURE) {
-        fprintf(stderr, "Failed to seed random generator: %s", qc_err_get(err));
-        exit(EXIT_FAILURE);
+        qc_err_fatal(err, "Failed to seed random generator");
     }
-    while (true) {
+    qc_err_free(err);
+
+    uint64_t buf[BUFFER_SIZE];
+    for (;;) {
         for (size_t i = 0; i < BUFFER_SIZE; ++i) {
             buf[i] = qc_rnd64(&rnd);
         }
@@ -21,5 +21,4 @@ int main(void) {
             break;
         }
     }
-    qc_err_free(err);
 }
