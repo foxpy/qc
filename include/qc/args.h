@@ -8,9 +8,11 @@ typedef struct qc_args qc_args;
 qc_args* qc_args_new(void);
 void qc_args_free(qc_args* args);
 
-void qc_args_set_help(qc_args* args, void (*help) (void* help_data), void* help_data);
-void qc_args_set_brief(qc_args* args, char const* brief);
+typedef void (*help_function)(void*);
+void qc_args_set_help(qc_args* args, help_function help_cb, void* help_data);
 void qc_args_call_help(qc_args* args);
+void qc_args_set_brief(qc_args* args, char const* brief);
+
 qc_result qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err);
 int qc_args_positionals_index(qc_args* args);
 int qc_args_positionals_count(qc_args* args);

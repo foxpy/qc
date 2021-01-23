@@ -18,7 +18,8 @@ qc_args* qc_args_new(void) {
     ret->positionals_count = 0;
     ret->extras_index = 0;
     ret->extras_count = 0;
-    ret->help = NULL;
+    ret->help_cb = NULL;
+    ret->help_data = NULL;
     ret->program_name = NULL;
     ret->brief = NULL;
     ret->parsed = false;
@@ -57,9 +58,9 @@ void qc_args_free(qc_args* args) {
     free(args);
 }
 
-void qc_args_set_help(qc_args* args, void (*help) (void*), void* help_data) {
+void qc_args_set_help(qc_args* args, help_function help_cb, void* help_data) {
     assert(args != NULL);
-    args->help = help;
+    args->help_cb = help_cb;
     args->help_data = help_data;
 }
 
@@ -74,8 +75,8 @@ void qc_args_call_help(qc_args* args) {
     assert(args != NULL);
     if (!args->parsed) {
         qc_die("Fatal error: qc_args_call_help() should be called after qc_args_parse()");
-    } else if (args->help != NULL) {
-        args->help(args->help_data);
+    } else if (args->help_cb != NULL) {
+        args->help_cb(args->help_data);
     } else {
         auto_help(args);
     }

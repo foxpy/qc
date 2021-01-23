@@ -50,7 +50,7 @@ struct qc_args {
     size_t opts_capacity;
     char* program_name;
     char* brief;
-    void (*help) (void*);
+    help_function help_cb;
     void* help_data;
     int positionals_index;
     int positionals_count;
