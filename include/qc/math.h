@@ -49,8 +49,10 @@ uint16_t qc_rotr8(uint8_t a, size_t n);
 uint16_t qc_rotr16(uint16_t a, size_t n);
 uint32_t qc_rotr32(uint32_t a, size_t n);
 uint64_t qc_rotr64(uint64_t a, size_t n);
+size_t qc_rotr_usize(size_t a, size_t n);
 
 uint16_t qc_rotl8(uint8_t a, size_t n);
 uint16_t qc_rotl16(uint16_t a, size_t n);
 uint32_t qc_rotl32(uint32_t a, size_t n);
 uint64_t qc_rotl64(uint64_t a, size_t n);
+size_t qc_rotl_usize(size_t a, size_t n);
