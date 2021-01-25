@@ -23,8 +23,8 @@ uint64_t qc_rotr64(uint64_t a, size_t n) {
 }
 
 size_t qc_rotr_usize(size_t a, size_t n) {
-    assert(n < sizeof(size_t));
-    return a << (sizeof(size_t) - n) | a >> n;
+    assert(n < sizeof(size_t) * 8);
+    return a << (sizeof(size_t) * 8 - n) | a >> n;
 }
 
 uint16_t qc_rotl8(uint8_t a, size_t n) {
@@ -48,6 +48,6 @@ uint64_t qc_rotl64(uint64_t a, size_t n) {
 }
 
 size_t qc_rotl_usize(size_t a, size_t n) {
-    assert(n < sizeof(size_t));
-    return a << n | a >> (sizeof(size_t) - n);
+    assert(n < sizeof(size_t) * 8);
+    return a << n | a >> (sizeof(size_t) * 8 - n);
 }

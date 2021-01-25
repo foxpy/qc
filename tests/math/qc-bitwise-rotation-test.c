@@ -32,6 +32,13 @@ static void check_rotr64(uint64_t value, uint64_t expected, size_t shift) {
               value, shift, expected, value, shift, actual);
 }
 
+static void check_rotr_usize(size_t value, size_t expected, size_t shift) {
+    size_t actual = qc_rotr_usize(value, shift);
+    qc_assert(actual == expected,
+              "Expected: rotr_usize(0x%zx, %zu) == 0x%zx, got: rotr_usize(0x%zx, %zu) == 0x%zx",
+              value, shift, expected, value, shift, actual);
+}
+
 static void check_rotl8(uint8_t value, uint8_t expected, size_t shift) {
     uint8_t actual = qc_rotl8(value, shift);
     qc_assert(actual == expected,
@@ -60,6 +67,13 @@ static void check_rotl64(uint64_t value, uint64_t expected, size_t shift) {
               value, shift, expected, value, shift, actual);
 }
 
+static void check_rotl_usize(size_t value, size_t expected, size_t shift) {
+    size_t actual = qc_rotl_usize(value, shift);
+    qc_assert(actual == expected,
+              "Expected: rotl_usize(0x%zx, %zu) == 0x%zx, got: rotl_usize(0x%zx, %zu) == 0x%zx",
+              value, shift, expected, value, shift, actual);
+}
+
 static void check_zeroes(void) {
     for (size_t i = 0; i < 8; ++i) {
         check_rotr8(0, 0, i);
@@ -76,6 +90,10 @@ static void check_zeroes(void) {
     for (size_t i = 0; i < 64; ++i) {
         check_rotr64(0, 0, i);
         check_rotl64(0, 0, i);
+    }
+    for (size_t i = 0; i < sizeof(size_t) * 8; ++i) {
+        check_rotr_usize(0, 0, i);
+        check_rotl_usize(0, 0, i);
     }
 }
 
@@ -121,4 +139,6 @@ int main(void) {
     check_16();
     check_32();
     check_64();
+    check_rotr_usize(0x04, 0x02, 1);
+    check_rotl_usize(0x04, 0x08, 1);
 }
