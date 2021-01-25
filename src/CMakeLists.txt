@@ -1,10 +1,15 @@
 add_library(qc
     random.c
-    math.c
     utils.c
     error.c
     string.c
     tests.c
+    math/min.c
+    math/max.c
+    math/gcd.c
+    math/lcm.c
+    math/fp-comparison.c
+    math/bitwise-rotation.c
     endian/integer64.c
     endian/integer32.c
     endian/integer16.c
