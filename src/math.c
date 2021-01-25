@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <float.h>
 #include <math.h>
+#include <assert.h>
 #include "qc/math.h"
 
 uintmax_t qc_min_u(uintmax_t a, uintmax_t b) {
@@ -64,3 +65,42 @@ bool qc_almost_equal_fp32(float a, float b, size_t precision) {
            (fabsf(a - b) < FLT_MIN);
 }
 
+uint16_t rotr8(uint8_t a, size_t n) {
+    assert(n < 8);
+    return a << (8 - n) | a >> n;
+}
+
+uint16_t rotr16(uint16_t a, size_t n) {
+    assert(n < 16);
+    return a << (16 - n) | a >> n;
+}
+
+uint32_t rotr32(uint32_t a, size_t n) {
+    assert(n < 32);
+    return a << (32 - n) | a >> n;
+}
+
+uint64_t rotr64(uint64_t a, size_t n) {
+    assert(n < 64);
+    return a << (64 - n) | a >> n;
+}
+
+uint16_t rotl8(uint8_t a, size_t n) {
+    assert(n < 8);
+    return a << n | a >> (8 - n);
+}
+
+uint16_t rotl16(uint16_t a, size_t n) {
+    assert(n < 16);
+    return a << n | a >> (16 - n);
+}
+
+uint32_t rotl32(uint32_t a, size_t n) {
+    assert(n < 32);
+    return a << n | a >> (32 - n);
+}
+
+uint64_t rotl64(uint64_t a, size_t n) {
+    assert(n < 64);
+    return a << n | a >> (64 - n);
+}

@@ -44,3 +44,13 @@ uintmax_t qc_lcm(uintmax_t a, uintmax_t b);
 
 bool qc_almost_equal_fp64(double a, double b, size_t precision);
 bool qc_almost_equal_fp32(float a, float b, size_t precision);
+
+uint16_t rotr8(uint8_t a, size_t n);
+uint16_t rotr16(uint16_t a, size_t n);
+uint32_t rotr32(uint32_t a, size_t n);
+uint64_t rotr64(uint64_t a, size_t n);
+
+uint16_t rotl8(uint8_t a, size_t n);
+uint16_t rotl16(uint16_t a, size_t n);
+uint32_t rotl32(uint32_t a, size_t n);
+uint64_t rotl64(uint64_t a, size_t n);
