@@ -1,8 +1,7 @@
-#include <float.h>
-#include <math.h>
+#include <stdint.h>
 #include "qc/math.h"
 
-size_t qc_gcd(size_t a, size_t b) {
+uintmax_t qc_gcd(uintmax_t a, uintmax_t b) {
     if (a == 0 && b == 0) {
         return 0;
     } else if (a == b || b == 0) {
@@ -23,18 +22,3 @@ size_t qc_gcd(size_t a, size_t b) {
         }
     }
 }
-
-size_t qc_lcm(size_t a, size_t b) {
-    return a * b / qc_gcd(a, b);
-}
-
-bool qc_almost_equal_fp64(double a, double b, size_t precision) {
-    return (fabs(a - b) <= DBL_EPSILON * fabs(a + b) * precision) ||
-           (fabs(a - b) < DBL_MIN);
-}
-
-bool qc_almost_equal_fp32(float a, float b, size_t precision) {
-    return (fabsf(a - b) <= FLT_EPSILON * fabsf(a + b) * precision) ||
-           (fabsf(a - b) < FLT_MIN);
-}
-

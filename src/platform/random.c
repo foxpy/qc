@@ -12,6 +12,7 @@
 
 #include "qc/random.h"
 #include "qc/error.h"
+#include "qc/utils.h"
 #include <stdint.h>
 #include <stdlib.h>
 

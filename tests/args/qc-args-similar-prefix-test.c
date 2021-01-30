@@ -1,6 +1,4 @@
 #include <stddef.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "qc/args.h"
 #include "qc/error.h"
 #include "qc/tests.h"
