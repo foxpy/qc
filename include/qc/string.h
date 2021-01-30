@@ -1,6 +1,8 @@
 #pragma once
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include "qc/error.h"
 
 // these functions act like [v]asprintf from GNU C standard library,
@@ -15,3 +17,5 @@ ptrdiff_t qc_vasnprintf(char** dst, size_t mlimit, char const* format, va_list a
 qc_result qc_str_to_unsigned(char const* str, size_t* dst, char const** tail);
 qc_result qc_str_to_signed(char const* str, ptrdiff_t * dst, char const** tail);
 qc_result qc_str_to_double(char const* str, double* dst, char const** tail);
+
+qc_result qc_hexstr_to_bytes(char const* str, uint8_t** dst);
