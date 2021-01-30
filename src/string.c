@@ -169,16 +169,17 @@ static int char_to_num(char c) {
     }
 }
 
-qc_result qc_hexstr_to_bytes(char const* str, uint8_t** dst) {
+ptrdiff_t qc_hexstr_to_bytes(char const* str, uint8_t** dst) {
     if (strncmp(str, "0x", 2) == 0) {
         str += 2;
     }
     size_t len = strlen(str);
+    size_t alloc_size = (len + 1) / 2;
     if (len == 0) {
         *dst = NULL;
-        return QC_SUCCESS;
+        return 0;
     } else {
-        *dst = qc_malloc(len + 1 / 2);
+        *dst = qc_malloc(alloc_size);
         size_t src_index = 0, dst_index = 0;
         if (len % 2 == 1) {
             int a = char_to_num(str[0]);
@@ -200,11 +201,11 @@ qc_result qc_hexstr_to_bytes(char const* str, uint8_t** dst) {
             dst_index += 1;
         }
     }
-    return QC_SUCCESS;
+    return alloc_size;
 error:
     free(*dst);
     *dst = NULL;
-    return QC_FAILURE;
+    return -1;
 }
 
 static char num_to_char(uint8_t num, bool uppercase) {

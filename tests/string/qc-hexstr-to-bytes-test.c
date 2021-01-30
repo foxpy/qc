@@ -7,13 +7,13 @@
 
 static void check_empty(void) {
     uint8_t* output;
-    qc_assert(qc_hexstr_to_bytes("", &output) == QC_SUCCESS, "qc_hexstr_to_bytes fails on empty input");
+    qc_assert(qc_hexstr_to_bytes("", &output) == 0, "qc_hexstr_to_bytes fails on empty input");
     qc_assert(output == NULL, "qc_hexstr_to_bytes is expected to zero output on empty input");
 }
 
 static void check_valid(char const* input, size_t len, uint8_t expectation[static len]) {
     uint8_t* output;
-    qc_assert(qc_hexstr_to_bytes(input, &output) == QC_SUCCESS,
+    qc_assert(qc_hexstr_to_bytes(input, &output) == (ptrdiff_t) len,
               "qc_hexstr_to_bytes has failed on valid input: \"%s\"", input);
     qc_assert(memcmp(output, expectation, len) == 0,
               "qc_hexstr_to_bytes has parsed \"%s\" input incorrectly", input);
@@ -22,8 +22,9 @@ static void check_valid(char const* input, size_t len, uint8_t expectation[stati
 
 static void reject_garbage(char const* input) {
     uint8_t* output;
-    qc_assert(qc_hexstr_to_bytes(input, &output) == QC_FAILURE,
+    qc_assert(qc_hexstr_to_bytes(input, &output) == -1,
               "qc_hexstr_to_bytes has somehow accepted invalid input: \"%s\"", input);
+    qc_assert(output == NULL, "qc_hexstr_to_bytes is expected to zero output on garbage input");
 }
 
 int main(void) {
