@@ -206,3 +206,33 @@ error:
     *dst = NULL;
     return QC_FAILURE;
 }
+
+static char num_to_char(uint8_t num, bool uppercase) {
+    assert(num < 16);
+    char const lowercase_lookup_table[16] = {
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
+    };
+    char const uppercase_lookup_table[16] = {
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+    };
+    if (uppercase) {
+        return uppercase_lookup_table[num];
+    } else {
+        return lowercase_lookup_table[num];
+    }
+}
+
+void qc_bytes_to_hexstr(bool uppercase, size_t len, uint8_t const src[static len], char** dst) {
+    assert(len != 0);
+    assert(dst != NULL);
+    size_t alloc_size = (2 /* "0x" */) + (2 * len) + (1 /* null-terminator */);
+    *dst = qc_malloc(alloc_size);
+    (*dst)[0] = '0';
+    (*dst)[1] = 'x';
+    for (size_t i = 0; i < len; ++i) {
+        uint8_t num = src[i];
+        (*dst)[2 + 2*i + 0] = num_to_char(num >> 4u, uppercase);
+        (*dst)[2 + 2*i + 1] = num_to_char(num & 0x0Fu, uppercase);
+    }
+    (*dst)[2 + 2*len] = '\0';
+}
