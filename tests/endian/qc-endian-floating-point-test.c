@@ -13,7 +13,7 @@ static void check_double(double x) {
     {
         uint8_t tmp[8];
         for (size_t i = 0; i < 8; ++i) {
-            tmp[i] = le[8-1-i];
+            tmp[i] = le[8 - 1 - i];
         }
         qc_assert(memcmp(be, tmp, sizeof(be)) == 0, "qc_fp64 endianness functions damage data");
     }
@@ -33,7 +33,7 @@ static void check_float(float x) {
     {
         uint8_t tmp[4];
         for (size_t i = 0; i < 4; ++i) {
-            tmp[i] = le[4-1-i];
+            tmp[i] = le[4 - 1 - i];
         }
         qc_assert(memcmp(be, tmp, sizeof(be)) == 0, "qc_fp32 endianness functions damage data");
     }

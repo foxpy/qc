@@ -35,7 +35,7 @@ static void check_i16(int16_t x) {
     {
         uint8_t tmp[2];
         for (size_t i = 0; i < 2; ++i) {
-            tmp[i] = be[2-1-i];
+            tmp[i] = be[2 - 1 - i];
         }
         qc_assert(memcmp(tmp, le, sizeof(le)) == 0, "qc_i16 endianness functions damage data");
     }

@@ -132,20 +132,14 @@ qc_result qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err)
         } else if (!opt->mandatory) {
             if (!opt->provided) {
                 switch (opt->type) {
-                case OPT_UNSIGNED:
-                    *opt->dst.unsigned_ptr = opt->default_value.unsigned_default;
-                    break;
-                case OPT_SIGNED:
-                    *opt->dst.signed_ptr = opt->default_value.signed_default;
-                    break;
-                case OPT_DOUBLE:
-                    *opt->dst.double_ptr = opt->default_value.double_default;
-                    break;
-                case OPT_STRING:
-                    *opt->dst.string_ptr = qc_malloc(strlen(opt->default_value.string_default) + 1);
-                    strcpy(*opt->dst.string_ptr, opt->default_value.string_default);
-                    break;
-                default: QC_UNREACHABLE_CODE();
+                    case OPT_UNSIGNED: *opt->dst.unsigned_ptr = opt->default_value.unsigned_default; break;
+                    case OPT_SIGNED: *opt->dst.signed_ptr = opt->default_value.signed_default; break;
+                    case OPT_DOUBLE: *opt->dst.double_ptr = opt->default_value.double_default; break;
+                    case OPT_STRING:
+                        *opt->dst.string_ptr = qc_malloc(strlen(opt->default_value.string_default) + 1);
+                        strcpy(*opt->dst.string_ptr, opt->default_value.string_default);
+                        break;
+                    default: QC_UNREACHABLE_CODE();
                 }
             }
         } else {
@@ -203,8 +197,8 @@ void qc_args_flag(qc_args* args, char shortname, char const* longname, bool* dst
     if (strcmp(longname, "help") == 0) {
         qc_die("Flag --help is reserved for help");
     }
-    array_push_back((void **) &args->flags, &args->flags_count, &args->flags_capacity, sizeof(struct short_flag));
-    struct short_flag *flag = &args->flags[args->flags_count - 1];
+    array_push_back((void**) &args->flags, &args->flags_count, &args->flags_capacity, sizeof(struct short_flag));
+    struct short_flag* flag = &args->flags[args->flags_count - 1];
     flag->name = shortname;
     if (hint != NULL) {
         flag->hint = qc_malloc(strlen(hint) + 1);
@@ -227,7 +221,8 @@ void qc_args_unsigned(qc_args* args, char const* longname, size_t* dst, char con
     }
 }
 
-void qc_args_unsigned_default(qc_args* args, char const* longname, size_t default_value, size_t* dst, char const* hint) {
+void qc_args_unsigned_default(qc_args* args, char const* longname, size_t default_value, size_t* dst,
+                              char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -247,7 +242,8 @@ void qc_args_signed(qc_args* args, char const* longname, ptrdiff_t* dst, char co
     }
 }
 
-void qc_args_signed_default(qc_args* args, char const* longname, ptrdiff_t default_value, ptrdiff_t* dst, char const* hint) {
+void qc_args_signed_default(qc_args* args, char const* longname, ptrdiff_t default_value, ptrdiff_t* dst,
+                            char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {
@@ -287,7 +283,8 @@ void qc_args_string(qc_args* args, char const* longname, char const** dst, char 
     }
 }
 
-void qc_args_string_default(qc_args* args, char const* longname, char* default_value, char const** dst, char const* hint) {
+void qc_args_string_default(qc_args* args, char const* longname, char* default_value, char const** dst,
+                            char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
     if (strcmp(longname, "help") == 0) {

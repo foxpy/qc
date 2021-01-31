@@ -17,7 +17,7 @@ void auto_help(qc_args* args) {
     if (args->flags_count != 0) {
         fputs("\n Short flags:\n", stderr);
         for (size_t i = 0; i < args->flags_count; ++i) {
-            struct short_flag *flag = &args->flags[i];
+            struct short_flag* flag = &args->flags[i];
             if (flag->hint != NULL) {
                 fprintf(stderr, "  -%c %s\n", flag->name, flag->hint);
             } else {
@@ -29,42 +29,23 @@ void auto_help(qc_args* args) {
     if (args->opts_count != 0) {
         fputs("\n Long options:\n", stderr);
         for (size_t i = 0; i < args->opts_count; ++i) {
-            struct long_opt *opt = &args->opts[i];
+            struct long_opt* opt = &args->opts[i];
             fprintf(stderr, "  --%s", opt->name);
             switch (opt->type) {
-                case OPT_FLAG:
-                    break;
-                case OPT_UNSIGNED:
-                    fputs("=UNSIGNED", stderr);
-                    break;
-                case OPT_SIGNED:
-                    fputs("=SIGNED", stderr);
-                    break;
-                case OPT_DOUBLE:
-                    fputs("=REAL", stderr);
-                    break;
-                case OPT_STRING:
-                    fputs("=\"STRING\"", stderr);
-                    break;
-                default:
-                    QC_UNREACHABLE_CODE();
+                case OPT_FLAG: break;
+                case OPT_UNSIGNED: fputs("=UNSIGNED", stderr); break;
+                case OPT_SIGNED: fputs("=SIGNED", stderr); break;
+                case OPT_DOUBLE: fputs("=REAL", stderr); break;
+                case OPT_STRING: fputs("=\"STRING\"", stderr); break;
+                default: QC_UNREACHABLE_CODE();
             }
             if (!opt->mandatory) {
                 switch (opt->type) {
-                    case OPT_UNSIGNED:
-                        fprintf(stderr, " (default = %zu)", opt->default_value.unsigned_default);
-                        break;
-                    case OPT_SIGNED:
-                        fprintf(stderr, " (default = %ti)", opt->default_value.signed_default);
-                        break;
-                    case OPT_DOUBLE:
-                        fprintf(stderr, " (default = %f)", opt->default_value.double_default);
-                        break;
-                    case OPT_STRING:
-                        fprintf(stderr, " (default = %s)", opt->default_value.string_default);
-                        break;
-                    default:
-                        QC_UNREACHABLE_CODE();
+                    case OPT_UNSIGNED: fprintf(stderr, " (default = %zu)", opt->default_value.unsigned_default); break;
+                    case OPT_SIGNED: fprintf(stderr, " (default = %ti)", opt->default_value.signed_default); break;
+                    case OPT_DOUBLE: fprintf(stderr, " (default = %f)", opt->default_value.double_default); break;
+                    case OPT_STRING: fprintf(stderr, " (default = %s)", opt->default_value.string_default); break;
+                    default: QC_UNREACHABLE_CODE();
                 }
             }
             if (opt->hint != NULL) {
@@ -89,21 +70,11 @@ void add_long_opt(qc_args* args, int type, char const* longname, void* default_v
         opt->hint = NULL;
     }
     switch (type) {
-        case OPT_FLAG:
-            opt->dst.flag_ptr = dst;
-            break;
-        case OPT_UNSIGNED:
-            opt->dst.unsigned_ptr = dst;
-            break;
-        case OPT_SIGNED:
-            opt->dst.signed_ptr = dst;
-            break;
-        case OPT_DOUBLE:
-            opt->dst.double_ptr = dst;
-            break;
-        case OPT_STRING:
-            opt->dst.string_ptr = dst;
-            break;
+        case OPT_FLAG: opt->dst.flag_ptr = dst; break;
+        case OPT_UNSIGNED: opt->dst.unsigned_ptr = dst; break;
+        case OPT_SIGNED: opt->dst.signed_ptr = dst; break;
+        case OPT_DOUBLE: opt->dst.double_ptr = dst; break;
+        case OPT_STRING: opt->dst.string_ptr = dst; break;
         default: QC_UNREACHABLE_CODE();
     }
     if (default_value == NULL) {
@@ -111,17 +82,11 @@ void add_long_opt(qc_args* args, int type, char const* longname, void* default_v
     } else {
         opt->mandatory = false;
         switch (type) {
-            case OPT_UNSIGNED:
-                opt->default_value.unsigned_default = *((size_t*) default_value);
-                break;
-            case OPT_SIGNED:
-                opt->default_value.signed_default = *((ptrdiff_t*) default_value);
-                break;
-            case OPT_DOUBLE:
-                opt->default_value.double_default = *((double*) default_value);
-                break;
+            case OPT_UNSIGNED: opt->default_value.unsigned_default = *((size_t*) default_value); break;
+            case OPT_SIGNED: opt->default_value.signed_default = *((ptrdiff_t*) default_value); break;
+            case OPT_DOUBLE: opt->default_value.double_default = *((double*) default_value); break;
             case OPT_STRING:
-                opt->default_value.string_default = qc_malloc(strlen(*((char **) default_value)) + 1);
+                opt->default_value.string_default = qc_malloc(strlen(*((char**) default_value)) + 1);
                 strcpy(opt->default_value.string_default, *((char**) default_value));
                 break;
             default: QC_UNREACHABLE_CODE();
@@ -171,7 +136,7 @@ qc_result match_short_opt(qc_args* args, int argn, char* const* argv, qc_err* er
             continue;
         }
         bool found = false;
-        for (size_t j= 0; j < args->flags_count; ++j) {
+        for (size_t j = 0; j < args->flags_count; ++j) {
             if (args->flags[j].name == c) {
                 *args->flags[j].dst = true;
                 found = true;
@@ -193,9 +158,7 @@ qc_result match_long_opt(qc_args* args, int argn, char* const* argv, qc_err* err
             (argv[argn][2 + argname_length] == '\0' || argv[argn][2 + argname_length] == '=')) {
             args->opts[i].provided = true;
             switch (args->opts[i].type) {
-                case OPT_FLAG:
-                    *args->opts[i].dst.flag_ptr = true;
-                    return QC_SUCCESS;
+                case OPT_FLAG: *args->opts[i].dst.flag_ptr = true; return QC_SUCCESS;
                 case OPT_UNSIGNED:
                     if (parse_unsigned(argv[argn], args->opts[i].dst.unsigned_ptr) == QC_FAILURE) {
                         qc_err_set(err, "Could not parse \"%s\" as unsigned integer", argv[argn]);
@@ -224,8 +187,7 @@ qc_result match_long_opt(qc_args* args, int argn, char* const* argv, qc_err* err
                     } else {
                         return QC_SUCCESS;
                     }
-                default:
-                    QC_UNREACHABLE_CODE();
+                default: QC_UNREACHABLE_CODE();
             }
         }
     }

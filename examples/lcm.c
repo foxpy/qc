@@ -2,7 +2,7 @@
 #include "qc.h"
 
 int main(int argc, char* argv[]) {
-    size_t a , b;
+    size_t a, b;
     qc_args* args = qc_args_new();
     qc_err* err = qc_err_new();
     qc_args_set_brief(args, "Computes Least Common Multiple of two integers");

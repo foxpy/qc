@@ -7,8 +7,8 @@
 static void check_rotr8(uint8_t value, uint8_t expected, size_t shift) {
     uint8_t actual = qc_rotr8(value, shift);
     qc_assert(actual == expected,
-              "Expected: rotr8(0x%" PRIx8 ", %zu) == 0x%" PRIx8 ", got: rotr8(0x%" PRIx8 ", %zu) == 0x%" PRIx8,
-              value, shift, expected, value, shift, actual);
+              "Expected: rotr8(0x%" PRIx8 ", %zu) == 0x%" PRIx8 ", got: rotr8(0x%" PRIx8 ", %zu) == 0x%" PRIx8, value,
+              shift, expected, value, shift, actual);
 }
 
 static void check_rotr16(uint16_t value, uint16_t expected, size_t shift) {
@@ -34,16 +34,15 @@ static void check_rotr64(uint64_t value, uint64_t expected, size_t shift) {
 
 static void check_rotr_usize(size_t value, size_t expected, size_t shift) {
     size_t actual = qc_rotr_usize(value, shift);
-    qc_assert(actual == expected,
-              "Expected: rotr_usize(0x%zx, %zu) == 0x%zx, got: rotr_usize(0x%zx, %zu) == 0x%zx",
+    qc_assert(actual == expected, "Expected: rotr_usize(0x%zx, %zu) == 0x%zx, got: rotr_usize(0x%zx, %zu) == 0x%zx",
               value, shift, expected, value, shift, actual);
 }
 
 static void check_rotl8(uint8_t value, uint8_t expected, size_t shift) {
     uint8_t actual = qc_rotl8(value, shift);
     qc_assert(actual == expected,
-              "Expected: rotl8(0x%" PRIx8 ", %zu) == 0x%" PRIx8 ", got: rotl8(0x%" PRIx8 ", %zu) == 0x%" PRIx8,
-              value, shift, expected, value, shift, actual);
+              "Expected: rotl8(0x%" PRIx8 ", %zu) == 0x%" PRIx8 ", got: rotl8(0x%" PRIx8 ", %zu) == 0x%" PRIx8, value,
+              shift, expected, value, shift, actual);
 }
 
 static void check_rotl16(uint16_t value, uint16_t expected, size_t shift) {
@@ -69,8 +68,7 @@ static void check_rotl64(uint64_t value, uint64_t expected, size_t shift) {
 
 static void check_rotl_usize(size_t value, size_t expected, size_t shift) {
     size_t actual = qc_rotl_usize(value, shift);
-    qc_assert(actual == expected,
-              "Expected: rotl_usize(0x%zx, %zu) == 0x%zx, got: rotl_usize(0x%zx, %zu) == 0x%zx",
+    qc_assert(actual == expected, "Expected: rotl_usize(0x%zx, %zu) == 0x%zx, got: rotl_usize(0x%zx, %zu) == 0x%zx",
               value, shift, expected, value, shift, actual);
 }
 

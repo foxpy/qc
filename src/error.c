@@ -74,7 +74,7 @@ void qc_err_set(qc_err* err, char const* format, ...) {
         assert(format != NULL);
         va_list args;
         va_start(args, format);
-        char *msg;
+        char* msg;
         qc_vasprintf(&msg, format, args);
         va_end(args);
         if (err->buf != NULL) {

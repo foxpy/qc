@@ -15,7 +15,7 @@ qc_noreturn void qc_die_impl(char const* fmt, ...);
 // use this as a placeholder for API functions, it is
 // cleaner than just returning 0 or NULL
 #define QC_UNIMPLEMENTED() qc_die("Call to unimplemented function")
-#define QC_UNUSED(x) ((void)(x))
+#define QC_UNUSED(x) ((void) (x))
 
 // works just like malloc, but terminates program on OOM condition
 void* qc_malloc(size_t size);
@@ -24,7 +24,7 @@ void* qc_realloc(void* ptr, size_t size);
 
 // platform independent stream reopen in binary mode
 // these functions would not be needed without Microsoft <3
-void qc_reopen_binary_read(FILE *stream);
-void qc_reopen_binary_write(FILE *stream);
+void qc_reopen_binary_read(FILE* stream);
+void qc_reopen_binary_write(FILE* stream);
 // shortcut for the most useful case of functions above
 void qc_reopen_stdin_stdout_binary(void);

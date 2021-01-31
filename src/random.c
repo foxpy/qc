@@ -30,7 +30,8 @@ uint64_t qc_rnd64_uniform(qc_rnd* state, uint64_t upper) {
     uint64_t rand_excess = (UINT64_MAX % upper) + 1;
     uint64_t rand_limit = UINT64_MAX - rand_excess;
     uint64_t x;
-    while ((x = qc_rnd64(state)) > rand_limit);
+    while ((x = qc_rnd64(state)) > rand_limit)
+        ;
     return x % upper;
 }
 

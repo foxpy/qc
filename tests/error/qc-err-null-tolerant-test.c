@@ -4,8 +4,7 @@
 #include "qc/tests.h"
 
 int main() {
-    qc_assert(strcmp(qc_err_get(NULL), "") == 0,
-              "qc_err_get(NULL) is expected to return a pointer to empty string");
+    qc_assert(strcmp(qc_err_get(NULL), "") == 0, "qc_err_get(NULL) is expected to return a pointer to empty string");
     qc_assert(strcmp(qc_err_to_owned_c_str(NULL), "") == 0,
               "qc_err_to_owned_c_str(NULL) is expected to return a pointer to empty string");
 

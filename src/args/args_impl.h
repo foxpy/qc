@@ -6,7 +6,8 @@
 
 #define DEFAULT_ALLOC_SIZE 4
 
-enum {
+enum
+{
     OPT_FLAG,
     OPT_UNSIGNED,
     OPT_SIGNED,

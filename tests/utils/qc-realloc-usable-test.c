@@ -3,7 +3,7 @@
 #include "qc/tests.h"
 
 static void iter(unsigned n1, unsigned n2, unsigned n3) {
-    unsigned *a = qc_malloc(sizeof(unsigned) * n1);
+    unsigned* a = qc_malloc(sizeof(unsigned) * n1);
     for (unsigned i = 0; i < n1; ++i) {
         *a = i * i;
         qc_assert(*a == i * i, "qc_malloc gives bad memory");

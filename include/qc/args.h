@@ -23,8 +23,10 @@ void qc_args_flag(qc_args* args, char shortname, char const* longname, bool* dst
 void qc_args_unsigned(qc_args* args, char const* longname, size_t* dst, char const* hint);
 void qc_args_unsigned_default(qc_args* args, char const* longname, size_t default_value, size_t* dst, char const* hint);
 void qc_args_signed(qc_args* args, char const* longname, ptrdiff_t* dst, char const* hint);
-void qc_args_signed_default(qc_args* args, char const* longname, ptrdiff_t default_value, ptrdiff_t* dst, char const* hint);
+void qc_args_signed_default(qc_args* args, char const* longname, ptrdiff_t default_value, ptrdiff_t* dst,
+                            char const* hint);
 void qc_args_double(qc_args* args, char const* longname, double* dst, char const* hint);
 void qc_args_double_default(qc_args* args, char const* longname, double default_value, double* dst, char const* hint);
 void qc_args_string(qc_args* args, char const* longname, char const** dst, char const* hint);
-void qc_args_string_default(qc_args* args, char const* longname, char* default_value, char const** dst, char const* hint);
+void qc_args_string_default(qc_args* args, char const* longname, char* default_value, char const** dst,
+                            char const* hint);

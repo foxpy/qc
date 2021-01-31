@@ -3,7 +3,8 @@
 
 // Error handling abstraction
 // Makes error handling much easier
-typedef enum qc_result {
+typedef enum qc_result
+{
     QC_SUCCESS = 1,
     QC_FAILURE = 0,
 } qc_result;

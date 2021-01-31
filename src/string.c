@@ -38,7 +38,7 @@ static ptrdiff_t qc_vasnprintf_impl(char** dst, size_t guess, size_t max, char c
         *dst = qc_realloc(*dst, n + 1);
         return (ptrdiff_t) n;
     }
-    error:
+error:
     free(*dst);
     *dst = NULL;
     return -1;
@@ -97,7 +97,7 @@ error:
     return QC_FAILURE;
 }
 
-qc_result qc_str_to_signed(char const* str, ptrdiff_t * dst, char const** tail) {
+qc_result qc_str_to_signed(char const* str, ptrdiff_t* dst, char const** tail) {
     assert(str != NULL);
     assert(dst != NULL);
     if (!isdigit(str[0]) && str[0] != '-') {
@@ -134,7 +134,7 @@ qc_result qc_str_to_double(char const* str, double* dst, char const** tail) {
     if (errno != 0) {
         goto error;
     } else {
-        *dst =d ;
+        *dst = d;
         if (tail != NULL) {
             *tail = endptr;
         }
@@ -148,6 +148,7 @@ error:
 }
 
 static int char_to_num(char c) {
+    // clang-format off
     switch (c) {
         case '0': return 0;
         case '1': return 1;
@@ -167,6 +168,7 @@ static int char_to_num(char c) {
         case 'f': case 'F': return 15;
         default: return -1;
     }
+    // clang-format on
 }
 
 ptrdiff_t qc_hexstr_to_bytes(char const* str, uint8_t** dst) {
@@ -193,7 +195,7 @@ ptrdiff_t qc_hexstr_to_bytes(char const* str, uint8_t** dst) {
         }
         while (src_index < len) {
             int a, b;
-            if ((a = char_to_num(str[src_index])) == -1 || (b = char_to_num(str[src_index+1])) == -1) {
+            if ((a = char_to_num(str[src_index])) == -1 || (b = char_to_num(str[src_index + 1])) == -1) {
                 goto error;
             }
             (*dst)[dst_index] = ((((unsigned) a) << 4u) | ((unsigned) b)) & 0xFFu;
@@ -210,12 +212,14 @@ error:
 
 static char num_to_char(uint8_t num, bool uppercase) {
     assert(num < 16);
+    // clang-format off
     char const lowercase_lookup_table[16] = {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
     };
     char const uppercase_lookup_table[16] = {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
     };
+    // clang-format on
     if (uppercase) {
         return uppercase_lookup_table[num];
     } else {
@@ -232,8 +236,8 @@ void qc_bytes_to_hexstr(bool uppercase, size_t len, uint8_t const src[static len
     (*dst)[1] = 'x';
     for (size_t i = 0; i < len; ++i) {
         uint8_t num = src[i];
-        (*dst)[2 + 2*i + 0] = num_to_char(num >> 4u, uppercase);
-        (*dst)[2 + 2*i + 1] = num_to_char(num & 0x0Fu, uppercase);
+        (*dst)[2 + 2 * i + 0] = num_to_char(num >> 4u, uppercase);
+        (*dst)[2 + 2 * i + 1] = num_to_char(num & 0x0Fu, uppercase);
     }
-    (*dst)[2 + 2*len] = '\0';
+    (*dst)[2 + 2 * len] = '\0';
 }

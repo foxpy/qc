@@ -6,9 +6,8 @@
 int main(void) {
     qc_args* args = qc_args_new();
     qc_err* err = qc_err_new();
-    if (qc_args_parse(args, 5, (char*[]) {
-            "/path/to/exe", "--suspicious-flag", "-vhcn", "--", "--qwerty", NULL
-    }, err) == QC_FAILURE) {
+    if (qc_args_parse(args, 5, (char*[]){"/path/to/exe", "--suspicious-flag", "-vhcn", "--", "--qwerty", NULL}, err) ==
+        QC_FAILURE) {
         fprintf(stderr, "qc_args: %s\n", qc_err_get(err));
     }
     qc_err_free(err);

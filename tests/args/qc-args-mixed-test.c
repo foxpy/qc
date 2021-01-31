@@ -33,25 +33,18 @@ int main(void) {
     qc_args_flag(args, 'i', "i", &cfg.i, NULL);
     qc_args_flag(args, 'j', "j", &cfg.j, NULL);
 
-    qc_result result = qc_args_parse(args, 1 + 10 + 3, (char*[]){
-        "/path/to/exe",
-        "--a=25", "--c=-200", "--d=12500",
-        "--e=156.75", "--f=-213.666", "--h=\"sample text\"",
-        "-i", "--j", "another sample text", "yet another sample text",
-        "--", "--some-unrelated-arg", "--help", NULL
-    }, err);
+    qc_result result =
+            qc_args_parse(args, 1 + 10 + 3,
+                          (char*[]){"/path/to/exe", "--a=25", "--c=-200", "--d=12500", "--e=156.75", "--f=-213.666",
+                                    "--h=\"sample text\"", "-i", "--j", "another sample text",
+                                    "yet another sample text", "--", "--some-unrelated-arg", "--help", NULL},
+                          err);
     qc_assert(result == QC_SUCCESS, "qc_args_parse has failed: %s", qc_err_get(err));
-    qc_assert(cfg.a == 25 &&
-              cfg.b == 2 &&
-              cfg.c == -200 &&
-              cfg.d == 12500 &&
-              qc_almost_equal_fp64(cfg.e, 156.75, 100) &&
-              qc_almost_equal_fp64(cfg.f, -213.666, 100) &&
-              strcmp(cfg.g, "sample") == 0 &&
-              strcmp(cfg.h, "sample text") == 0 &&
-              cfg.i == true &&
-              cfg.j == true,
-                     "expected values don't match");
+    qc_assert(cfg.a == 25 && cfg.b == 2 && cfg.c == -200 && cfg.d == 12500 &&
+                      qc_almost_equal_fp64(cfg.e, 156.75, 100) && qc_almost_equal_fp64(cfg.f, -213.666, 100) &&
+                      strcmp(cfg.g, "sample") == 0 && strcmp(cfg.h, "sample text") == 0 && cfg.i == true &&
+                      cfg.j == true,
+              "expected values don't match");
     qc_assert(qc_args_positionals_index(args) == 9, "qc_args_positionals_index() returns wrong value");
     qc_assert(qc_args_positionals_count(args) == 2, "qc_args_positionals_count() returns wrong value");
     qc_assert(qc_args_extras_index(args) == 12, "qc_args_extras_index returns wrong value");

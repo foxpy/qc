@@ -35,7 +35,7 @@ static void check_i32(int32_t x) {
     {
         uint8_t tmp[4];
         for (size_t i = 0; i < 4; ++i) {
-            tmp[i] = be[4-1-i];
+            tmp[i] = be[4 - 1 - i];
         }
         qc_assert(memcmp(tmp, le, sizeof(le)) == 0, "qc_i32 endianness functions damage data");
     }
