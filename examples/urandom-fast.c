@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "qc.h"
 
-#define BUFFER_SIZE 8096
+#define BUFFER_SIZE 65536
 
 int main(void) {
     qc_reopen_stdin_stdout_binary();
@@ -12,12 +12,10 @@ int main(void) {
     }
     qc_err_free(err);
 
-    uint64_t buf[BUFFER_SIZE];
+    uint8_t buf[BUFFER_SIZE];
     for (;;) {
-        for (size_t i = 0; i < BUFFER_SIZE; ++i) {
-            buf[i] = qc_rnd64(&rnd);
-        }
-        if (fwrite(buf, sizeof(uint64_t), BUFFER_SIZE, stdout) != BUFFER_SIZE) {
+        qc_rnd_buf(&rnd, BUFFER_SIZE, buf);
+        if (fwrite(buf, sizeof(uint8_t), BUFFER_SIZE, stdout) != BUFFER_SIZE) {
             break;
         }
     }

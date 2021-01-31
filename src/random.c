@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdint.h>
+#include <stddef.h>
 #include <string.h>
 #include <float.h>
 #include <math.h>
@@ -49,6 +50,15 @@ double qc_rnd_fp64(qc_rnd* state) {
     tmp.fp64 -= 1.0;
     return tmp.fp64;
 }
+
+void qc_rnd_buf(qc_rnd* state, size_t len, uint8_t buf[static len]) {
+    assert(state != NULL);
+    for (size_t i = 0; i < len; i += sizeof(uint64_t)) {
+        uint64_t u = qc_rnd64(state );
+        memmove(&buf[i], &u, qc_min(sizeof(uint64_t), len - i));
+    }
+}
+
 
 double qc_rnd_range_fp64(qc_rnd* state, double low, double high) {
     assert(high > low);
@@ -110,4 +120,18 @@ double qc_distr_normal_gen(qc_distr_normal* state) {
 
 void qc_distr_normal_free(qc_distr_normal* state) {
     free(state);
+}
+
+qc_result qc_rnd_os_buf(size_t len, uint8_t buf[static len], qc_err* err) {
+    qc_rnd rnd;
+    for (size_t i = 0; i < len; i += sizeof(uint64_t)) {
+        if (qc_rnd_init(&rnd, err) == QC_FAILURE) {
+            qc_err_append_front(err, "Failed to obtain entropy from operating system");
+            return QC_FAILURE;
+        } else {
+            uint64_t u = qc_rnd64(&rnd);
+            memmove(&buf[i], &u, qc_min(sizeof(uint64_t), len - i));
+        }
+    }
+    return QC_SUCCESS;
 }

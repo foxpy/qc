@@ -1,3 +1,5 @@
 qc_add_test(qc-random-works-test)
 qc_add_test(qc-random-range-works-test)
 qc_add_test(qc-random-seed-test)
+qc_add_test(qc-random-crypto-test)
+qc_add_test(qc-random-buf-test)
