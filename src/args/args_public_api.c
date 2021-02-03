@@ -41,7 +41,9 @@ void qc_args_free(qc_args* args) {
             free(opt->hint);
         }
         if (opt->type == OPT_STRING) {
-            free(*opt->dst.string_ptr);
+            if (!opt->mandatory || opt->provided) {
+                free(*opt->dst.string_ptr);
+            }
             if (!opt->mandatory) {
                 free(opt->default_value.string_default);
             }
