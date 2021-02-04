@@ -22,9 +22,6 @@ void* qc_malloc(size_t size);
 // works just like realloc, but terminates program on OOM condition
 void* qc_realloc(void* ptr, size_t size);
 
-// platform independent stream reopen in binary mode
-// these functions would not be needed without Microsoft <3
-void qc_reopen_binary_read(FILE* stream);
-void qc_reopen_binary_write(FILE* stream);
-// shortcut for the most useful case of functions above
+// platform independent stdin and stdout reopen in binary mode
+// this function would not be needed without Microsoft <3
 void qc_reopen_stdin_stdout_binary(void);
