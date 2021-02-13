@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <assert.h>
 #include <string.h>
 #include "qc/args.h"

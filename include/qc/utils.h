@@ -1,20 +1,19 @@
 #pragma once
-#include <stdio.h>
 #include <stddef.h>
-#include <stdlib.h>
-#include "qc/noreturn.h"
+#include "macro_impl/utils-impl.h"
 
 // print error message and exit with non-zero code
-qc_noreturn void qc_die_impl(char const* fmt, ...);
-#define QC_DIE_IMPL(fmt, ...) qc_die_impl("Fatal error:\n  %s:%d\n  " fmt "%c", __FILE__, __LINE__, __VA_ARGS__)
 #define qc_die(...) QC_DIE_IMPL(__VA_ARGS__, '\n')
 
 // use this whenever you are 100% sure about unreachable code branch
 // and you have to silence compiler warning
 #define QC_UNREACHABLE_CODE() qc_die("Execution has reached unreachable code")
+
 // use this as a placeholder for API functions, it is
 // cleaner than just returning 0 or NULL
 #define QC_UNIMPLEMENTED() qc_die("Call to unimplemented function")
+
+// classic unused variable macro
 #define QC_UNUSED(x) ((void) (x))
 
 // works just like malloc, but terminates program on OOM condition

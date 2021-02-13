@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
 #include <float.h>
@@ -54,7 +55,7 @@ double qc_rnd_fp64(qc_rnd* state) {
 void qc_rnd_buf(qc_rnd* state, size_t len, uint8_t buf[static len]) {
     assert(state != NULL);
     for (size_t i = 0; i < len; i += sizeof(uint64_t)) {
-        uint64_t u = qc_rnd64(state );
+        uint64_t u = qc_rnd64(state);
         memmove(&buf[i], &u, qc_min(sizeof(uint64_t), len - i));
     }
 }

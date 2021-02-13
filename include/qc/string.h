@@ -18,5 +18,6 @@ qc_result qc_str_to_unsigned(char const* str, size_t* dst, char const** tail);
 qc_result qc_str_to_signed(char const* str, ptrdiff_t* dst, char const** tail);
 qc_result qc_str_to_double(char const* str, double* dst, char const** tail);
 
+// hexadecimal string <-> raw bytes conversion utilities
 ptrdiff_t qc_hexstr_to_bytes(char const* str, uint8_t** dst);
 void qc_bytes_to_hexstr(bool uppercase, size_t len, uint8_t const src[static len], char** dst);

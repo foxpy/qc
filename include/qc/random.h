@@ -8,9 +8,9 @@ typedef union qc_rnd_state_t {
     double fp64;
 } qc_rnd;
 
-// Use rnd_init to seed random generator, then get
-// random using qc_rnd64 and qc_rnd_fp64 functions.
-// qc_rnd_init returns true on success and zero on failure
+// Use rnd_init or qc_rnd_seed to seed random generator,
+// then get random using qc_rnd64, qc_rnd64_uniform,
+// qc_rnd_fp64 or qc_rnd_buf functions
 qc_result qc_rnd_init(qc_rnd* state, qc_err* err);
 void qc_rnd_seed(qc_rnd* state, uint64_t seed);
 uint64_t qc_rnd64(qc_rnd* state);
