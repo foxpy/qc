@@ -15,6 +15,7 @@ struct qc_err {
 };
 
 static void qc_err_append_front_valist(qc_err* err, char const* format, va_list ap) {
+    assert(format != NULL);
     va_list args;
     va_copy(args, ap);
     char* msg;
@@ -71,6 +72,7 @@ char* qc_err_to_owned_c_str(qc_err* err) {
 }
 
 void qc_err_set(qc_err* err, char const* format, ...) {
+    assert(format != NULL);
     if (err != NULL) {
         assert(format != NULL);
         va_list args;
@@ -86,6 +88,7 @@ void qc_err_set(qc_err* err, char const* format, ...) {
 }
 
 void qc_err_append_front(qc_err* err, char const* format, ...) {
+    assert(format != NULL);
     if (err != NULL) {
         assert(format != NULL);
         va_list args;

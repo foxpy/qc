@@ -20,15 +20,20 @@ static void xorshift64(uint64_t* s) {
 }
 
 void qc_rnd_seed(qc_rnd* state, uint64_t seed) {
+    assert(state != NULL);
     state->s64 = seed;
 }
 
 uint64_t qc_rnd64(qc_rnd* state) {
+    assert(state != NULL);
     xorshift64(&state->s64);
     return state->s64;
 }
 
 uint64_t qc_rnd64_uniform(qc_rnd* state, uint64_t upper) {
+    assert(state != NULL);
+    assert(upper != 0);
+    assert(upper != UINT64_MAX);
     uint64_t rand_excess = (UINT64_MAX % upper) + 1;
     uint64_t rand_limit = UINT64_MAX - rand_excess;
     uint64_t x;
@@ -38,11 +43,13 @@ uint64_t qc_rnd64_uniform(qc_rnd* state, uint64_t upper) {
 }
 
 int64_t qc_rnd_range64(qc_rnd* state, int64_t low, int64_t high) {
+    assert(state != NULL);
     assert(high > low);
     return (qc_rnd64_uniform(state, high - low)) + low;
 }
 
 double qc_rnd_fp64(qc_rnd* state) {
+    assert(state != NULL);
     xorshift64(&state->s64);
     qc_rnd tmp;
     memcpy(&tmp, state, sizeof(qc_rnd));
@@ -54,6 +61,7 @@ double qc_rnd_fp64(qc_rnd* state) {
 
 void qc_rnd_buf(qc_rnd* state, size_t len, uint8_t buf[static len]) {
     assert(state != NULL);
+    assert(buf != NULL);
     for (size_t i = 0; i < len; i += sizeof(uint64_t)) {
         uint64_t u = qc_rnd64(state);
         memmove(&buf[i], &u, qc_min(sizeof(uint64_t), len - i));
@@ -62,6 +70,7 @@ void qc_rnd_buf(qc_rnd* state, size_t len, uint8_t buf[static len]) {
 
 
 double qc_rnd_range_fp64(qc_rnd* state, double low, double high) {
+    assert(state != NULL);
     assert(high > low);
     return low + qc_rnd_fp64(state) * (high - low);
 }
@@ -100,6 +109,7 @@ qc_distr_normal* qc_distr_normal_init(double mu, double sigma, qc_err* err) {
 }
 
 void qc_distr_normal_settings(qc_distr_normal* state, double mu, double sigma) {
+    assert(state != NULL);
     state->mu = mu;
     state->sigma = sigma;
     state->z0 = 0.0;
@@ -108,6 +118,7 @@ void qc_distr_normal_settings(qc_distr_normal* state, double mu, double sigma) {
 }
 
 double qc_distr_normal_gen(qc_distr_normal* state) {
+    assert(state != NULL);
     double tmp;
     if (state->has_to_be_populated) {
         tmp = state->z1;
@@ -120,10 +131,12 @@ double qc_distr_normal_gen(qc_distr_normal* state) {
 }
 
 void qc_distr_normal_free(qc_distr_normal* state) {
+    assert(state != NULL);
     free(state);
 }
 
 qc_result qc_rnd_os_buf(size_t len, uint8_t buf[static len], qc_err* err) {
+    assert(buf != NULL);
     qc_rnd rnd;
     for (size_t i = 0; i < len; i += sizeof(uint64_t)) {
         if (qc_rnd_init(&rnd, err) == QC_FAILURE) {

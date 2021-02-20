@@ -62,7 +62,7 @@ struct qc_args {
 
 void auto_help(qc_args* args);
 void add_long_opt(qc_args* args, int type, char const* longname, void* default_value, void* dst, char const* hint);
-bool asked_for_help(int argc, char* const* argv);
+bool asked_for_help(int argc, char** argv);
 bool is_short_opt(char const* str);
 bool is_long_opt(char const* str);
 qc_result match_short_opt(qc_args* args, int argn, char* const* argv, qc_err* err);

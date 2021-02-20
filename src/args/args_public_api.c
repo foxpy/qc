@@ -63,6 +63,7 @@ void qc_args_free(qc_args* args) {
 
 void qc_args_set_help(qc_args* args, help_function help_cb, void* help_data) {
     assert(args != NULL);
+    assert(help_cb != NULL);
     args->help_cb = help_cb;
     args->help_data = help_data;
 }
@@ -85,8 +86,10 @@ void qc_args_call_help(qc_args* args) {
     }
 }
 
-qc_result qc_args_parse(qc_args* args, int argc, char* const* argv, qc_err* err) {
+qc_result qc_args_parse(qc_args* args, int argc, char** argv, qc_err* err) {
     assert(args != NULL);
+    assert(argc != 0);
+    assert(argv != NULL);
     if (args->parsed) {
         qc_die("qc_args_parse() should be called only once on a single `args' handle");
     } else {
@@ -194,6 +197,7 @@ int qc_args_extras_count(qc_args* args) {
 void qc_args_flag(qc_args* args, char shortname, char const* longname, bool* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
+    assert(dst != NULL);
     if (shortname == 'h') {
         qc_die("Flag -h is reserved for help");
     }
@@ -217,6 +221,7 @@ void qc_args_flag(qc_args* args, char shortname, char const* longname, bool* dst
 void qc_args_unsigned(qc_args* args, char const* longname, size_t* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
+    assert(dst != NULL);
     if (strcmp(longname, "help") == 0) {
         qc_die("Flag --help is reserved for help");
     } else {
@@ -228,6 +233,7 @@ void qc_args_unsigned_default(qc_args* args, char const* longname, size_t defaul
                               char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
+    assert(dst != NULL);
     if (strcmp(longname, "help") == 0) {
         qc_die("Flag --help is reserved for help");
     } else {
@@ -238,6 +244,7 @@ void qc_args_unsigned_default(qc_args* args, char const* longname, size_t defaul
 void qc_args_signed(qc_args* args, char const* longname, ptrdiff_t* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
+    assert(dst != NULL);
     if (strcmp(longname, "help") == 0) {
         qc_die("Flag --help is reserved for help");
     } else {
@@ -249,6 +256,7 @@ void qc_args_signed_default(qc_args* args, char const* longname, ptrdiff_t defau
                             char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
+    assert(dst != NULL);
     if (strcmp(longname, "help") == 0) {
         qc_die("Flag --help is reserved for help");
     } else {
@@ -259,6 +267,7 @@ void qc_args_signed_default(qc_args* args, char const* longname, ptrdiff_t defau
 void qc_args_double(qc_args* args, char const* longname, double* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
+    assert(dst != NULL);
     if (strcmp(longname, "help") == 0) {
         qc_die("Flag --help is reserved for help");
     } else {
@@ -269,6 +278,7 @@ void qc_args_double(qc_args* args, char const* longname, double* dst, char const
 void qc_args_double_default(qc_args* args, char const* longname, double default_value, double* dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
+    assert(dst != NULL);
     if (strcmp(longname, "help") == 0) {
         qc_die("Flag --help is reserved for help");
     } else {
@@ -279,6 +289,7 @@ void qc_args_double_default(qc_args* args, char const* longname, double default_
 void qc_args_string(qc_args* args, char const* longname, char const** dst, char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
+    assert(dst != NULL);
     if (strcmp(longname, "help") == 0) {
         qc_die("Flag --help is reserved for help");
     } else {
@@ -290,6 +301,7 @@ void qc_args_string_default(qc_args* args, char const* longname, char* default_v
                             char const* hint) {
     assert(args != NULL);
     assert(longname != NULL);
+    assert(dst != NULL);
     if (strcmp(longname, "help") == 0) {
         qc_die("Flag --help is reserved for help");
     } else {

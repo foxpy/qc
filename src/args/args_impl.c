@@ -94,7 +94,7 @@ void add_long_opt(qc_args* args, int type, char const* longname, void* default_v
     }
 }
 
-bool asked_for_help(int argc, char* const* argv) {
+bool asked_for_help(int argc, char** argv) {
     for (int i = 0; i < argc; ++i) {
         if (strcmp(argv[i], "--") == 0) {
             break;
@@ -104,7 +104,7 @@ bool asked_for_help(int argc, char* const* argv) {
                 return true;
             }
         } else if (is_short_opt(argv[i])) {
-            char* short_flags = &argv[i][1];
+            char const* short_flags = &argv[i][1];
             for (size_t j = 0; j < strlen(short_flags); ++j) {
                 if (short_flags[j] == 'h') {
                     return true;

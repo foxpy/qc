@@ -9,13 +9,12 @@
 #include <string.h>
 #include "qc/string.h"
 #include "qc/utils.h"
+#include "qc/math.h"
 
 static ptrdiff_t qc_vasnprintf_impl(char** dst, size_t guess, size_t max, char const* format, va_list ap) {
     va_list args;
     int n;
-    if (guess > max) {
-        guess = max;
-    }
+    guess = qc_min(qc_max(guess, 1), max);
     *dst = qc_malloc(guess);
     va_copy(args, ap);
     n = vsnprintf(*dst, guess, format, args);
@@ -45,6 +44,8 @@ error:
 }
 
 ptrdiff_t qc_asprintf(char** dst, char const* format, ...) {
+    assert(dst != NULL);
+    assert(format != NULL);
     va_list args;
     va_start(args, format);
     return qc_vasprintf(dst, format, args);
@@ -52,6 +53,8 @@ ptrdiff_t qc_asprintf(char** dst, char const* format, ...) {
 }
 
 ptrdiff_t qc_asnprintf(char** dst, size_t mlimit, char const* format, ...) {
+    assert(dst != NULL);
+    assert(format != NULL);
     va_list args;
     va_start(args, format);
     return qc_vasnprintf(dst, mlimit, format, args);
@@ -59,6 +62,8 @@ ptrdiff_t qc_asnprintf(char** dst, size_t mlimit, char const* format, ...) {
 }
 
 ptrdiff_t qc_vasprintf(char** dst, char const* format, va_list ap) {
+    assert(dst != NULL);
+    assert(format != NULL);
     va_list args;
     va_copy(args, ap);
     return qc_vasnprintf(dst, INT_MAX, format, args);
@@ -66,6 +71,8 @@ ptrdiff_t qc_vasprintf(char** dst, char const* format, va_list ap) {
 }
 
 ptrdiff_t qc_vasnprintf(char** dst, size_t mlimit, char const* format, va_list ap) {
+    assert(dst != NULL);
+    assert(format != NULL);
     va_list args;
     va_copy(args, ap);
     return qc_vasnprintf_impl(dst, 256, mlimit, format, args);
@@ -172,6 +179,8 @@ static int char_to_num(char c) {
 }
 
 ptrdiff_t qc_hexstr_to_bytes(char const* str, uint8_t** dst) {
+    assert(str != NULL);
+    assert(dst != NULL);
     if (strncmp(str, "0x", 2) == 0) {
         str += 2;
     }
@@ -229,6 +238,7 @@ static char num_to_char(uint8_t num, bool uppercase) {
 
 void qc_bytes_to_hexstr(bool uppercase, size_t len, uint8_t const src[static len], char** dst) {
     assert(len != 0);
+    assert(src != NULL);
     assert(dst != NULL);
     size_t alloc_size = (2 /* "0x" */) + (2 * len) + (1 /* null-terminator */);
     *dst = qc_malloc(alloc_size);
