@@ -28,10 +28,7 @@ target_link_libraries(hello-world PUBLIC qc)
 
 Currently there are no adequate docs (there is something in public headers).
 I have plans to add doxygen documentation though.
-For now, just chek out some [examples](examples/).
-Finally, check out
-[this project](https://github.com/foxpy/inaccurate-pi) (**outdated!!!**),
-it depends on qc.
+For now, just check out some [examples](examples/).
 
 
 ## The name
